@@ -6,13 +6,15 @@ does not reproduce the first closely enough to mix outputs, as that script recor
 """
 import numpy as np, sys, json, collections
 ROOT = Path(__file__).resolve().parents[1]
+import os
+ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ARTIFACTS))
 sys.path.insert(0,str(ROOT / 'experiments'))
 sys.path.insert(0,str(ROOT / 'src'))
 from gates_core import gate_row
 from guard import losses as _L, targets as _T, certify as _C
 from guard.pipeline import _select_beta
 from sklearn.metrics import f1_score
-D=str(ROOT / 'artifacts/opportunity_dcl_v2')
+D=str(ARTIFACTS / 'opportunity_dcl_v2')
 CFG=['low_cost_accels_only','no_imu_family','no_shoes','severe_three_sensors']
 RULES=['blanket','random','confidence','agreement','learned','GUARD']
 loss=_L.get('cross_entropy'); ALPHA,DELTA=0.2,0.05
