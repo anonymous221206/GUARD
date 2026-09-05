@@ -1,0 +1,21 @@
+{
+  "host": "data/raw/hosts/momke_iemocap4",
+  "pool": "train",
+  "alpha": 0.2,
+  "delta": 0.05,
+  "k": 50,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "masks": [
+    "a",
+    "v",
+    "t",
+    "av",
+    "at",
+    "tv",
+    "atv"
+  ]
+}

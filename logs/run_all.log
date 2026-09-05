@@ -1,0 +1,96 @@
+== dumping human_s42
+== guard  human_s42  pool=source
+0/10 cells exceed the harm budget -> results/drugban_human_random_s42_pool-source/guard.csv
+== guard  biosnap_s42  pool=source
+0/10 cells exceed the harm budget -> results/drugban_biosnap_random_s42_pool-source/guard.csv
+== dumping bindingdb_s42
+== guard  bindingdb_s42  pool=source
+0/10 cells exceed the harm budget -> results/drugban_bindingdb_random_s42_pool-source/guard.csv
+== dumping human_s1
+== guard  human_s1  pool=source
+0/10 cells exceed the harm budget -> results/drugban_human_random_s1_pool-source/guard.csv
+== dumping biosnap_s1
+== guard  biosnap_s1  pool=source
+0/10 cells exceed the harm budget -> results/drugban_biosnap_random_s1_pool-source/guard.csv
+== dumping bindingdb_s1
+== guard  bindingdb_s1  pool=source
+0/10 cells exceed the harm budget -> results/drugban_bindingdb_random_s1_pool-source/guard.csv
+== dumping human_s2
+== guard  human_s2  pool=source
+0/10 cells exceed the harm budget -> results/drugban_human_random_s2_pool-source/guard.csv
+== dumping biosnap_s2
+== guard  biosnap_s2  pool=source
+0/10 cells exceed the harm budget -> results/drugban_biosnap_random_s2_pool-source/guard.csv
+== dumping bindingdb_s2
+== guard  bindingdb_s2  pool=source
+0/10 cells exceed the harm budget -> results/drugban_bindingdb_random_s2_pool-source/guard.csv
+== dumping cluster_bindingdb_s42
+== guard  cluster_bindingdb_s42  pool=source
+0/10 cells exceed the harm budget -> results/drugban_bindingdb_cluster_s42_pool-source/guard.csv
+== guard  cluster_bindingdb_s42  pool=deployment
+0/10 cells exceed the harm budget -> results/drugban_bindingdb_cluster_s42_pool-deployment/guard.csv
+== dumping cluster_biosnap_s42
+== guard  cluster_biosnap_s42  pool=source
+0/10 cells exceed the harm budget -> results/drugban_biosnap_cluster_s42_pool-source/guard.csv
+== guard  cluster_biosnap_s42  pool=deployment
+0/10 cells exceed the harm budget -> results/drugban_biosnap_cluster_s42_pool-deployment/guard.csv
+skip cluster_bindingdb_s1: no checkpoint
+skip cluster_bindingdb_s1: no checkpoint
+== dumping cluster_biosnap_s1
+== guard  cluster_biosnap_s1  pool=source
+0/10 cells exceed the harm budget -> results/drugban_biosnap_cluster_s1_pool-source/guard.csv
+== guard  cluster_biosnap_s1  pool=deployment
+0/10 cells exceed the harm budget -> results/drugban_biosnap_cluster_s1_pool-deployment/guard.csv
+skip cluster_bindingdb_s2: no checkpoint
+skip cluster_bindingdb_s2: no checkpoint
+== dumping cluster_biosnap_s2
+== guard  cluster_biosnap_s2  pool=source
+0/10 cells exceed the harm budget -> results/drugban_biosnap_cluster_s2_pool-source/guard.csv
+== guard  cluster_biosnap_s2  pool=deployment
+0/10 cells exceed the harm budget -> results/drugban_biosnap_cluster_s2_pool-deployment/guard.csv
+
+== summary
+| run | condition | seeds | base | blanket | gate | apply | joint harm | cond harm |
+|---|---|---|---|---|---|---|---|---|
+| drugban_bindingdb_cluster_deployment | full | 1 | 0.5514 | +0.0911 | +0.0916 | 0.62 | 0.165 | 0.267 |
+| drugban_bindingdb_cluster_deployment | prot50 | 1 | 0.5368 | +0.1085 | +0.1085 | 0.61 | 0.144 | 0.238 |
+| drugban_bindingdb_cluster_deployment | scaffold | 1 | 0.5374 | +0.0967 | +0.0972 | 0.58 | 0.149 | 0.258 |
+| drugban_bindingdb_cluster_deployment | scaffold_prot50 | 1 | 0.5278 | +0.1034 | +0.1152 | 0.53 | 0.135 | 0.252 |
+| drugban_bindingdb_cluster_deployment | prot25 | 1 | 0.5289 | +0.1203 | +0.1107 | 0.61 | 0.137 | 0.225 |
+| drugban_bindingdb_cluster_source | full | 1 | 0.5514 | -0.0051 | -0.0022 | 0.73 | 0.036 | 0.049 |
+| drugban_bindingdb_cluster_source | prot50 | 1 | 0.5368 | +0.0101 | +0.0022 | 0.43 | 0.074 | 0.172 |
+| drugban_bindingdb_cluster_source | scaffold | 1 | 0.5374 | +0.0146 | -0.0034 | 0.56 | 0.066 | 0.118 |
+| drugban_bindingdb_cluster_source | scaffold_prot50 | 1 | 0.5278 | +0.0180 | -0.0034 | 0.44 | 0.092 | 0.208 |
+| drugban_bindingdb_cluster_source | prot25 | 1 | 0.5289 | +0.0118 | +0.0006 | 0.46 | 0.082 | 0.177 |
+| drugban_bindingdb_random_source | full | 3 | 0.9061 | +0.0009 | +0.0001±0.0002 | 0.57 | 0.001 | 0.003 |
+| drugban_bindingdb_random_source | prot50 | 3 | 0.8371 | +0.0111 | +0.0022±0.0020 | 0.33 | 0.006 | 0.017 |
+| drugban_bindingdb_random_source | scaffold | 3 | 0.7831 | +0.0526 | +0.0470±0.0049 | 0.33 | 0.021 | 0.065 |
+| drugban_bindingdb_random_source | scaffold_prot50 | 3 | 0.7218 | +0.0810 | +0.0803±0.0115 | 0.37 | 0.048 | 0.132 |
+| drugban_bindingdb_random_source | prot25 | 3 | 0.6782 | +0.0960 | +0.0974±0.0255 | 0.39 | 0.072 | 0.181 |
+| drugban_biosnap_cluster_deployment | full | 3 | 0.5560 | +0.0327 | +0.0147±0.0055 | 0.42 | 0.099 | 0.237 |
+| drugban_biosnap_cluster_deployment | prot50 | 3 | 0.5241 | +0.0544 | +0.0437±0.0304 | 0.34 | 0.093 | 0.277 |
+| drugban_biosnap_cluster_deployment | scaffold | 3 | 0.5605 | +0.0254 | +0.0173±0.0092 | 0.38 | 0.082 | 0.219 |
+| drugban_biosnap_cluster_deployment | scaffold_prot50 | 3 | 0.5039 | +0.0662 | +0.0452±0.0095 | 0.31 | 0.088 | 0.286 |
+| drugban_biosnap_cluster_deployment | prot25 | 3 | 0.5050 | +0.0698 | +0.0562±0.0050 | 0.26 | 0.077 | 0.297 |
+| drugban_biosnap_cluster_source | full | 3 | 0.5560 | +0.0254 | +0.0085±0.0045 | 0.44 | 0.099 | 0.225 |
+| drugban_biosnap_cluster_source | prot50 | 3 | 0.5241 | +0.0496 | +0.0386±0.0199 | 0.36 | 0.105 | 0.295 |
+| drugban_biosnap_cluster_source | scaffold | 3 | 0.5605 | +0.0048 | -0.0051±0.0034 | 0.46 | 0.094 | 0.209 |
+| drugban_biosnap_cluster_source | scaffold_prot50 | 3 | 0.5039 | +0.0794 | +0.0474±0.0083 | 0.35 | 0.096 | 0.272 |
+| drugban_biosnap_cluster_source | prot25 | 3 | 0.5050 | +0.0636 | +0.0401±0.0166 | 0.29 | 0.100 | 0.343 |
+| drugban_biosnap_random_source | full | 3 | 0.8292 | +0.0035 | +0.0010±0.0008 | 0.32 | 0.010 | 0.029 |
+| drugban_biosnap_random_source | prot50 | 3 | 0.7369 | +0.0535 | +0.0533±0.0102 | 0.31 | 0.047 | 0.149 |
+| drugban_biosnap_random_source | scaffold | 3 | 0.7542 | +0.0247 | +0.0237±0.0053 | 0.29 | 0.039 | 0.133 |
+| drugban_biosnap_random_source | scaffold_prot50 | 3 | 0.6750 | +0.0769 | +0.0763±0.0028 | 0.33 | 0.069 | 0.208 |
+| drugban_biosnap_random_source | prot25 | 3 | 0.5712 | +0.1434 | +0.1444±0.0110 | 0.38 | 0.094 | 0.249 |
+| drugban_human_random_source | full | 3 | 0.9306 | +0.0008 | +0.0003±0.0004 | 0.84 | 0.004 | 0.005 |
+| drugban_human_random_source | prot50 | 3 | 0.9156 | +0.0006 | +0.0006±0.0008 | 0.72 | 0.003 | 0.005 |
+| drugban_human_random_source | scaffold | 3 | 0.8764 | +0.0214 | +0.0111±0.0052 | 0.64 | 0.017 | 0.028 |
+| drugban_human_random_source | scaffold_prot50 | 3 | 0.8608 | +0.0269 | +0.0211±0.0085 | 0.61 | 0.026 | 0.043 |
+| drugban_human_random_source | prot25 | 3 | 0.8694 | +0.0175 | +0.0014±0.0004 | 0.61 | 0.009 | 0.016 |
+| hateful_memes | complete | 1 | 0.6090 | -0.0460 | -0.0070 | 0.33 | 0.048 | 0.146 |
+| hateful_memes | textmiss | 1 | 0.5100 | +0.0000 | +0.0000 | 1.00 | 0.000 | 0.000 |
+| hateful_memes | imgmiss | 1 | 0.5440 | +0.0090 | +0.0040 | 0.63 | 0.078 | 0.125 |
+
+**176 certified cells, 0 exceed the harm budget.**
+
+cross-mask minus hard-label over 88 cells: mean -0.0135, worst -0.1169, best +0.0187 (cross-mask uses no retrieval labels)

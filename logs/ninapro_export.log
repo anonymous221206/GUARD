@@ -1,0 +1,23 @@
+$WORKSPACE/pylibs/torch/cuda/__init__.py:64: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+exported seed 0 subject 01
+exported seed 0 subject 02
+exported seed 0 subject 03
+exported seed 0 subject 04
+exported seed 0 subject 05
+exported seed 0 subject 06
+exported seed 0 subject 07
+exported seed 0 subject 08
+exported seed 0 subject 09
+exported seed 0 subject 10
+exported seed 1 subject 01
+exported seed 1 subject 02
+exported seed 1 subject 03
+exported seed 1 subject 04
+exported seed 1 subject 05
+exported seed 1 subject 06
+exported seed 1 subject 07
+exported seed 1 subject 08
+exported seed 1 subject 09
+exported seed 1 subject 10
+NINAPRO_EXPORT_DONE

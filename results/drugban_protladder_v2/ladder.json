@@ -1,0 +1,159 @@
+{
+  "dataset_split": "bindingdb_s1 (BindingDB random split, seed 1)",
+  "environment_note": "All eleven fractions were regenerated on CPU in one environment; no stored GPU dump was reused.",
+  "checkpoint": "/vol/dl-nguyenb5-solar/users/hoangpc/guard-release/checkpoints/drugban/bindingdb_s1.pth",
+  "fractions_percent": [
+    100,
+    80,
+    70,
+    60,
+    50,
+    40,
+    30,
+    25,
+    20,
+    15,
+    10
+  ],
+  "per_fraction": {
+    "100": {
+      "test_auroc": 0.9620654937080589,
+      "test_accuracy": 0.9054878048780488,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "80": {
+      "test_auroc": 0.955410131948478,
+      "test_accuracy": 0.899390243902439,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "70": {
+      "test_auroc": 0.9478015412407744,
+      "test_accuracy": 0.8877032520325203,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "60": {
+      "test_auroc": 0.9375702512536459,
+      "test_accuracy": 0.8708333333333333,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "50": {
+      "test_auroc": 0.9167303940574912,
+      "test_accuracy": 0.8451219512195122,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "40": {
+      "test_auroc": 0.8795526345678143,
+      "test_accuracy": 0.8028455284552846,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "30": {
+      "test_auroc": 0.8005029994018055,
+      "test_accuracy": 0.7225609756097561,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "25": {
+      "test_auroc": 0.7571243349065527,
+      "test_accuracy": 0.6813008130081301,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "20": {
+      "test_auroc": 0.6962085054654006,
+      "test_accuracy": 0.6328252032520325,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "15": {
+      "test_auroc": 0.6407825970499623,
+      "test_accuracy": 0.5916666666666667,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    },
+    "10": {
+      "test_auroc": 0.5898180104078706,
+      "test_accuracy": 0.5634146341463414,
+      "pool_rows": 12000,
+      "calib_rows": 4920,
+      "test_rows": 9840
+    }
+  },
+  "stored_gpu_comparison": {
+    "100": {
+      "stored_gpu": {
+        "test_auroc": 0.9620675157862579,
+        "test_accuracy": 0.9054878048780488,
+        "pool_rows": 12000,
+        "calib_rows": 4920,
+        "test_rows": 9840
+      },
+      "regenerated_cpu": {
+        "test_auroc": 0.9620654937080589,
+        "test_accuracy": 0.9054878048780488,
+        "pool_rows": 12000,
+        "calib_rows": 4920,
+        "test_rows": 9840
+      },
+      "auroc_difference_cpu_minus_gpu": -2.022078198993249e-06,
+      "accuracy_difference_cpu_minus_gpu": 0.0,
+      "bitwise_identical": false,
+      "max_abs_difference": 0.012021541595458984
+    },
+    "50": {
+      "stored_gpu": {
+        "test_auroc": 0.9167336932377107,
+        "test_accuracy": 0.845020325203252,
+        "pool_rows": 12000,
+        "calib_rows": 4920,
+        "test_rows": 9840
+      },
+      "regenerated_cpu": {
+        "test_auroc": 0.9167303940574912,
+        "test_accuracy": 0.8451219512195122,
+        "pool_rows": 12000,
+        "calib_rows": 4920,
+        "test_rows": 9840
+      },
+      "auroc_difference_cpu_minus_gpu": -3.2991802194626274e-06,
+      "accuracy_difference_cpu_minus_gpu": 0.0001016260162601812,
+      "bitwise_identical": false,
+      "max_abs_difference": 0.010334014892578125
+    },
+    "25": {
+      "stored_gpu": {
+        "test_auroc": 0.75711586346315,
+        "test_accuracy": 0.6813008130081301,
+        "pool_rows": 12000,
+        "calib_rows": 4920,
+        "test_rows": 9840
+      },
+      "regenerated_cpu": {
+        "test_auroc": 0.7571243349065527,
+        "test_accuracy": 0.6813008130081301,
+        "pool_rows": 12000,
+        "calib_rows": 4920,
+        "test_rows": 9840
+      },
+      "auroc_difference_cpu_minus_gpu": 8.471443402768841e-06,
+      "accuracy_difference_cpu_minus_gpu": 0.0,
+      "bitwise_identical": false,
+      "max_abs_difference": 0.0066165924072265625
+    }
+  }
+}

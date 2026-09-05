@@ -1,0 +1,104 @@
+pre-flight on the deployment distribution: richer host 0.7324 vs poorer 0.6675 -> cross-mask applicable
+seed0 low_cost_accels_only   hard        base=0.5618 tgt=0.628 gate=+0.0777 harm=0.246
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 low_cost_accels_only   cross_mask  base=0.5618 tgt=0.610 gate=+0.0404 harm=0.198
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 no_shoes               hard        base=0.6471 tgt=0.653 gate=+0.0137 harm=0.254
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 no_shoes               cross_mask  base=0.6471 tgt=0.632 gate=+0.0168 harm=0.160
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 no_imu_family          hard        base=0.4416 tgt=0.631 gate=+0.1693 harm=0.114
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 no_imu_family          cross_mask  base=0.4416 tgt=0.593 gate=+0.0533 harm=0.021
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 severe_three_sensors   hard        base=0.5664 tgt=0.514 gate=-0.0256 harm=0.178
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 severe_three_sensors   cross_mask  base=0.5664 tgt=0.546 gate=-0.0138 harm=0.252
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 low_cost_accels_only   hard        base=0.6134 tgt=0.631 gate=+0.0236 harm=0.237
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 low_cost_accels_only   cross_mask  base=0.6134 tgt=0.617 gate=-0.0175 harm=0.207
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 no_shoes               hard        base=0.6220 tgt=0.645 gate=+0.0343 harm=0.242
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 no_shoes               cross_mask  base=0.6220 tgt=0.646 gate=+0.0219 harm=0.183
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 no_imu_family          hard        base=0.3996 tgt=0.633 gate=+0.2046 harm=0.102
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 no_imu_family          cross_mask  base=0.3996 tgt=0.590 gate=+0.0481 harm=0.028
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 severe_three_sensors   hard        base=0.5840 tgt=0.535 gate=-0.0481 harm=0.226
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 severe_three_sensors   cross_mask  base=0.5840 tgt=0.547 gate=+0.0154 harm=0.083
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 low_cost_accels_only   hard        base=0.6261 tgt=0.630 gate=+0.0139 harm=0.254
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 low_cost_accels_only   cross_mask  base=0.6261 tgt=0.634 gate=+0.0184 harm=0.213
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 no_shoes               hard        base=0.6466 tgt=0.651 gate=+0.0116 harm=0.248
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 no_shoes               cross_mask  base=0.6466 tgt=0.669 gate=+0.0487 harm=0.154
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 no_imu_family          hard        base=0.4584 tgt=0.631 gate=+0.1688 harm=0.118
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 no_imu_family          cross_mask  base=0.4584 tgt=0.611 gate=+0.1039 harm=0.024
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 severe_three_sensors   hard        base=0.5814 tgt=0.540 gate=-0.0423 harm=0.210
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 severe_three_sensors   cross_mask  base=0.5814 tgt=0.567 gate=+0.0067 harm=0.123
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+
+11/24 cells exceed the harm budget -> results/opportunity_cross_subject/guard.csv
+/usr/pkg/lib/python3.12/site-packages/torch/cuda/__init__.py:65: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+pre-flight on the deployment distribution: richer host 0.7327 vs poorer 0.6678 -> cross-mask applicable
+seed0 low_cost_accels_only   hard        base=0.5619 tgt=0.628 gate=+0.0776 harm=0.246
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 low_cost_accels_only   cross_mask  base=0.5619 tgt=0.606 gate=+0.0422 harm=0.202
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 no_shoes               hard        base=0.6488 tgt=0.653 gate=+0.0117 harm=0.255
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 no_shoes               cross_mask  base=0.6488 tgt=0.629 gate=-0.0085 harm=0.194
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 no_imu_family          hard        base=0.4415 tgt=0.631 gate=+0.1694 harm=0.114
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 no_imu_family          cross_mask  base=0.4415 tgt=0.588 gate=+0.0547 harm=0.024
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 severe_three_sensors   hard        base=0.5666 tgt=0.514 gate=-0.0257 harm=0.178
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed0 severe_three_sensors   cross_mask  base=0.5666 tgt=0.546 gate=-0.0124 harm=0.272
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 low_cost_accels_only   hard        base=0.6132 tgt=0.631 gate=+0.0237 harm=0.237
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 low_cost_accels_only   cross_mask  base=0.6132 tgt=0.617 gate=-0.0172 harm=0.206
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 no_shoes               hard        base=0.6233 tgt=0.645 gate=+0.0329 harm=0.243
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 no_shoes               cross_mask  base=0.6233 tgt=0.646 gate=+0.0206 harm=0.178
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 no_imu_family          hard        base=0.3994 tgt=0.633 gate=+0.2046 harm=0.102
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 no_imu_family          cross_mask  base=0.3994 tgt=0.590 gate=+0.0485 harm=0.028
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 severe_three_sensors   hard        base=0.5840 tgt=0.535 gate=-0.0481 harm=0.226
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed1 severe_three_sensors   cross_mask  base=0.5840 tgt=0.547 gate=+0.0156 harm=0.083
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 low_cost_accels_only   hard        base=0.6269 tgt=0.630 gate=+0.0131 harm=0.254
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 low_cost_accels_only   cross_mask  base=0.6269 tgt=0.634 gate=+0.0177 harm=0.213
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 no_shoes               hard        base=0.6473 tgt=0.651 gate=+0.0109 harm=0.248
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 no_shoes               cross_mask  base=0.6473 tgt=0.670 gate=+0.0484 harm=0.154
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 no_imu_family          hard        base=0.4579 tgt=0.631 gate=+0.1692 harm=0.118
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 no_imu_family          cross_mask  base=0.4579 tgt=0.611 gate=+0.1041 harm=0.024
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 severe_three_sensors   hard        base=0.5813 tgt=0.540 gate=-0.0422 harm=0.210
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+seed2 severe_three_sensors   cross_mask  base=0.5813 tgt=0.567 gate=+0.0068 harm=0.123
+    note: EXCHANGEABILITY: calibration comes from 'subject 3' but evaluation from 'subject 4'; the coverage guarantee does not apply across that shift
+
+12/24 cells exceed the harm budget -> results/opportunity_cross_subject/guard.csv

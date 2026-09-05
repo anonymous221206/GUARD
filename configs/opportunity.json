@@ -1,0 +1,125 @@
+{
+  "dataset": "OPPORTUNITY (UCI), reused from phase0f/opportunity_features.npz",
+  "representation": "per-sensor: train-standardize -> PCA(min(8,dim)) fit on TRAIN subjects only (task-agnostic, deployment-consistent); concat sensor tokens",
+  "splits": "Host training uses subjects S1+S2 (S1 contributes only ~30 complete-data windows, so training is effectively S2). The calibration protocol is selected at run time by experiments/exp_opportunity.py --protocol.",
+  "task": "locomotion (5-class: Null/Stand/Walk/Sit/Lie remapped 0..4)",
+  "sensor_order": [
+    "acc_RKN_up",
+    "acc_HIP",
+    "acc_LUA_up",
+    "acc_RUA_lo",
+    "acc_LH",
+    "acc_BACK_acc",
+    "acc_RKN_lo",
+    "acc_RWR",
+    "acc_RUA_up",
+    "acc_LUA_lo",
+    "acc_LWR",
+    "acc_RH",
+    "imu_BACK",
+    "imu_RUA",
+    "imu_RLA",
+    "imu_LUA",
+    "imu_LLA",
+    "shoe_L",
+    "shoe_R"
+  ],
+  "costs": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    3,
+    3,
+    3,
+    3,
+    3,
+    2,
+    2
+  ],
+  "fixed_deployment_configs": [
+    {
+      "name": "low_cost_accels_only",
+      "observed_idx": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "note": "observe the 12 cost-1 accelerometers; missing all 5 IMUs and 2 shoes"
+    },
+    {
+      "name": "no_shoes",
+      "observed_idx": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "note": "missing the 2 instrumented shoes"
+    },
+    {
+      "name": "no_imu_family",
+      "observed_idx": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        17,
+        18
+      ],
+      "note": "missing the entire 5-IMU family (expensive sensor family)"
+    },
+    {
+      "name": "severe_three_sensors",
+      "observed_idx": [
+        1,
+        5,
+        12
+      ],
+      "note": "observe only acc_HIP, acc_BACK_acc, imu_BACK; missing 16 sensors"
+    }
+  ],
+  "protocol": {
+    "deployment": "The paper's protocol. All four roles come from deployment subject S4 (8,548 windows): a random three quarters (6,411) is the labelled part, split into pool/fit/conf of 2,137 each, and the remaining 2,137 are test. Calibration and evaluation are therefore exchangeable by construction, which is what the certificate requires.",
+    "cross_subject": "A deliberate control that breaks exchangeability: pool/fit/conf are 3,793 windows each from subject S3, and the whole of S4 (8,548) is test. The gate is calibrated on one subject and deployed on another, and the harm budget fails, which is the point of running it.",
+    "host": "A small MLP trained on the masked features of S1+S2; --fixed-host selects its epoch on the full fit split at every label budget, so a budget sweep varies only what GUARD is given and not the host."
+  }
+}

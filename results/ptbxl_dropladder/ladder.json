@@ -1,0 +1,331 @@
+{
+  "checkpoint": "/vol/dl-nguyenb5-solar/users/hoangpc/results/ptbxl_wang/resnet1d_wang.pt",
+  "classes": [
+    "CD",
+    "HYP",
+    "MI",
+    "NORM",
+    "STTC"
+  ],
+  "train_split": "PTB-XL stratified folds 1--8; non-empty diagnostic superclass set",
+  "sess1_split": "PTB-XL stratified fold 10; non-empty diagnostic superclass set",
+  "normalisation": {
+    "mu": -0.000825253373477608,
+    "sd": 0.2322225719690323
+  },
+  "embedding": "flattened frozen pre-pooling trunk activation (128 x 250 = 32000 float32 values)",
+  "masking": "retained leads copied after scalar normalisation; all other channels zeroed",
+  "retained_order": [
+    "I",
+    "II",
+    "III",
+    "aVR",
+    "aVL",
+    "aVF",
+    "V1",
+    "V2",
+    "V3",
+    "V4",
+    "V5",
+    "V6"
+  ],
+  "removal_order": "V6, V5, V4, V3, V2, V1, aVF, aVL, aVR, III, II",
+  "removal_order_rationale": "Precordial electrodes are the ones a low-cost or field device omits first because they must be placed on the torso, whereas the limb leads need four extremity contacts.",
+  "reproduction": {
+    "train_rows": 17084,
+    "sess1_rows": 2158,
+    "drop12_test_macro_auc": 0.9271350323599817,
+    "reference_lead6_test_macro_auc": 0.7433568143774301,
+    "drop6_test_macro_auc": 0.7433568143774301
+  },
+  "configurations": {
+    "drop12": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR",
+        "aVL",
+        "aVF",
+        "V1",
+        "V2",
+        "V3",
+        "V4",
+        "V5",
+        "V6"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "num_leads": 12,
+      "test_macro_auc": 0.9271350323599817,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop12.npz"
+    },
+    "drop11": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR",
+        "aVL",
+        "aVF",
+        "V1",
+        "V2",
+        "V3",
+        "V4",
+        "V5"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "num_leads": 11,
+      "test_macro_auc": 0.9187831724271327,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop11.npz"
+    },
+    "drop10": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR",
+        "aVL",
+        "aVF",
+        "V1",
+        "V2",
+        "V3",
+        "V4"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "num_leads": 10,
+      "test_macro_auc": 0.8797866213123212,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop10.npz"
+    },
+    "drop9": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR",
+        "aVL",
+        "aVF",
+        "V1",
+        "V2",
+        "V3"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "num_leads": 9,
+      "test_macro_auc": 0.839967452895988,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop9.npz"
+    },
+    "drop8": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR",
+        "aVL",
+        "aVF",
+        "V1",
+        "V2"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "num_leads": 8,
+      "test_macro_auc": 0.8207097474656347,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop8.npz"
+    },
+    "drop7": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR",
+        "aVL",
+        "aVF",
+        "V1"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "num_leads": 7,
+      "test_macro_auc": 0.7979669774182986,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop7.npz"
+    },
+    "drop6": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR",
+        "aVL",
+        "aVF"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "num_leads": 6,
+      "test_macro_auc": 0.7433568143774301,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop6.npz"
+    },
+    "drop5": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR",
+        "aVL"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "num_leads": 5,
+      "test_macro_auc": 0.7214999318611431,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop5.npz"
+    },
+    "drop4": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III",
+        "aVR"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "num_leads": 4,
+      "test_macro_auc": 0.6890834797418953,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop4.npz"
+    },
+    "drop3": {
+      "retained_leads": [
+        "I",
+        "II",
+        "III"
+      ],
+      "retained_indices": [
+        0,
+        1,
+        2
+      ],
+      "num_leads": 3,
+      "test_macro_auc": 0.65630257092834,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop3.npz"
+    },
+    "drop2": {
+      "retained_leads": [
+        "I",
+        "II"
+      ],
+      "retained_indices": [
+        0,
+        1
+      ],
+      "num_leads": 2,
+      "test_macro_auc": 0.5762102392889139,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop2.npz"
+    },
+    "drop1": {
+      "retained_leads": [
+        "I"
+      ],
+      "retained_indices": [
+        0
+      ],
+      "num_leads": 1,
+      "test_macro_auc": 0.5050937084506889,
+      "train_rows": 17084,
+      "sess1_rows": 2158,
+      "path": "/vol/dl-nguyenb5-solar/users/hoangpc/GUARD/artifacts/ptbxl_dropladder/drop1.npz"
+    }
+  }
+}
