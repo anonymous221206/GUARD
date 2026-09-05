@@ -6,6 +6,10 @@ reproducing our numbers hits the same code we did.
 
 ## missing-aware prompts (Lee et al., CVPR 2023)
 
+*This host was retired: the submitted paper reports no vision-language
+experiment, and its driver now sits in `superseded/`. The findings below are kept
+because they concern the upstream repository, not ours.*
+
 The Hateful Memes preparation path has never been runnable:
 
 1. `vilt/utils/write_hatememes.py` reads an undefined name:
@@ -26,7 +30,7 @@ The Hateful Memes preparation path has never been runnable:
    on both sides and MM-IMDb uses `"plots"` on both sides; only Hateful Memes
    is inconsistent.
 
-The dataset's own `test.jsonl` carries no labels; as the repository's `DATA.md`
+The dataset's own `test.jsonl` carries no labels; as the upstream repository's `DATA.md`
 notes, the labelled test set is `test_seen.jsonl` from a different mirror.
 
 ## DrugBAN (Bai et al., Nature Machine Intelligence 2023)
