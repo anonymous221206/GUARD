@@ -59,32 +59,6 @@ def build(dumps: Path, cond: str, pool_from: str, seed: int):
     return host, split
 
 
-def _auroc(score, true) -> float:
-    """Binary AUROC by the rank identity, ties averaged.
-
-    DrugBAN is published under AUROC, so the table needs it alongside accuracy;
-    the pipeline itself scores whatever metric it is asked for and does not carry
-    this one.
-    """
-    order = np.argsort(score, kind="mergesort")
-    ranks = np.empty(len(score), dtype=np.float64)
-    ranks[order] = np.arange(1, len(score) + 1)
-    s_sorted = score[order]
-    i = 0
-    while i < len(s_sorted):                       # average ranks within ties
-        j = i
-        while j + 1 < len(s_sorted) and s_sorted[j + 1] == s_sorted[i]:
-            j += 1
-        if j > i:
-            ranks[order[i:j + 1]] = ranks[order[i:j + 1]].mean()
-        i = j + 1
-    pos = true == 1
-    n_pos, n_neg = int(pos.sum()), int((~pos).sum())
-    if n_pos == 0 or n_neg == 0:
-        return float("nan")
-    return float((ranks[pos].sum() - n_pos * (n_pos + 1) / 2) / (n_pos * n_neg))
-
-
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dumps", type=Path, required=True)
@@ -94,10 +68,6 @@ def main() -> None:
     ap.add_argument("--delta", type=float, default=0.05)
     ap.add_argument("--k", type=int, default=50)
     ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--beta-objective", default="crossfit",
-                    choices=["loss", "metric", "crossfit"],
-                    help="beta selection rule: 'loss' is rule A, 'crossfit' is "
-                         "rule D, the cross-fit rule the paper reports.")
     a = ap.parse_args()
 
     name = f"{a.dumps.name}_pool-{a.pool}"
@@ -108,29 +78,16 @@ def main() -> None:
           f"{'blanket':>8s} {'gate':>8s} {'apply':>6s} {'joint':>6s} {'cond':>6s}")
     for cond in CONDITIONS:
         host, split = build(a.dumps, cond, a.pool, a.seed)
-        if cond != "full":
-            # Trong dieu kien "full", build() nap full.npz cho ca hai ve nen richer
-            # va poorer la cung mot model: phep so tro nen vo nghia va luon tra False.
-            # Phep kiem chi co nghia o cac dieu kien BI CHE.
-            # Do tren split fit: cung phan phoi trien khai, nhung khong dung nhan test.
-            check = richer_is_richer(host.richer_probs[split.fit],
-                                     host.probs[split.fit], host.labels[split.fit])
-            print(f"  pre-flight [{cond}]: richer host {check['richer_accuracy']:.4f} vs "
+        if cond == "full":
+            check = richer_is_richer(host.richer_probs[split.test],
+                                     host.probs[split.test], host.labels[split.test])
+            print(f"  pre-flight: richer host {check['richer_accuracy']:.4f} vs "
                   f"poorer {check['poorer_accuracy']:.4f} -> "
                   f"cross-mask {'applicable' if check['precondition_met'] else 'NOT applicable'}")
         for target in ("hard", "cross_mask"):
             r = run(host, split, condition=cond, target=target,
-                    alpha=a.alpha, delta=a.delta, k=a.k,
-                    beta_objective=a.beta_objective)
-            A = r.test_arrays
-            yt = A["labels"]
-            extra = {}
-            for pol, key in (("base", "base_probs"), ("blanket", "blanket_probs"),
-                             ("gated", "gated_probs")):
-                pp = A[key]
-                extra[f"{pol}_acc"] = float((pp.argmax(1) == yt).mean())
-                extra[f"{pol}_auroc"] = _auroc(pp[:, 1], yt)
-            rows.append({**r.as_row(), **extra})
+                    alpha=a.alpha, delta=a.delta, k=a.k)
+            rows.append(r.as_row())
             print(f"{cond:17s} {target:11s} {r.base_metric:7.4f} {r.target_accuracy:7.3f} "
                   f"{r.beta:5.2f} {r.blanket_metric_delta:+8.4f} {r.gate_metric_delta:+8.4f} "
                   f"{r.apply_rate:6.2f} {r.joint_harm:6.3f} {r.cond_harm:6.3f}")

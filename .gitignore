@@ -1,10 +1,14 @@
-__pycache__/
-*.pyc
-.venv/
+*.arrow
+checkpoints/
+*.ckpt
+# data and artefacts are never committed: download scripts rebuild them
 data/processed/
 data/raw/
-artifacts/
+*.egg-info/
+logs/
 *.npz
-*.pt
-.superseded/
-egg-info/
+*.pth
+__pycache__/
+.venv*/
+artifacts/
+.venv/

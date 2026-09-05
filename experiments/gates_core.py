@@ -5,7 +5,6 @@ routine, so a difference between benchmarks cannot come from a difference in how
 the comparison was run.
 """
 import numpy as np, sys
-sys.path.insert(0,'/vol/dl-nguyenb5-solar/users/hoangpc/guard-release/src')
 from guard import losses as _L, targets as _T, certify as _C
 from guard.pipeline import _select_beta
 from sklearn.linear_model import LogisticRegression

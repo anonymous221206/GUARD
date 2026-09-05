@@ -58,6 +58,6 @@ for s in range(1,11):
         for o in cellrun(P,F,Yc,(np.arange(n),perm[:k],perm[k:2*k],perm[2*k:])):
             rows.append(dict(family='ninapro',dataset='ninapro_db5',condition=str(ne),target='hard',seed=s,exchangeable=True,**o))
     print('subject',s,'xong',flush=True)
-with open(f'{B}/alpha_ninapro.csv','w',newline='') as fh:
+with open(str(_ROOT / 'results/alpha/alpha_ninapro.csv'),'w',newline='') as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
 print('DA GHI',len(rows))

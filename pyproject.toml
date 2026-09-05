@@ -12,7 +12,6 @@ license = {text = "MIT"}
 dependencies = ["numpy>=1.21"]
 
 [project.optional-dependencies]
-artifacts = ["huggingface_hub>=0.20"]
 # only needed to re-run the host models; the method itself needs numpy alone
 hosts = ["torch>=1.10", "pandas>=1.3", "scikit-learn>=1.0"]
 drugban = ["dgl>=2.0", "dgllife>=0.3", "rdkit>=2022.3", "yacs", "prettytable"]

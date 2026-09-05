@@ -59,6 +59,7 @@ if want affective; then
   done
 fi
 
+
 # ---------------------------------------------------------- OPPORTUNITY ------
 if want opportunity; then
   say "OPPORTUNITY, both calibration protocols"
@@ -121,7 +122,7 @@ fi
 
 if want frontier; then
   say "alpha- and delta-frontiers behind the validity figure"
-  for fam in drugban affective opportunity; do
+  for fam in drugban vision affective opportunity; do
     for grid in alpha delta; do
       python experiments/exp_frontier.py --family "$fam" --grid "$grid" \
           >> "logs/frontier_${fam}_${grid}.log" 2>&1 \
@@ -145,51 +146,20 @@ if want groupwise; then
   done
 fi
 
-# ------------------------------------------------- artefact-only benchmarks ----
-# AVE, NinaPro and PTB-XL are consumed entirely through saved dumps: no model is
-# ever loaded, so these three need no GPU and no dataset download.  They do need
-# `bash data/download_artifacts.sh <pair>` to have run.
-
-if want ave; then
-  say "AVE (AV-att), 29-way event localisation"
-  if [ -d artifacts/ave_av_att ]; then
-    python experiments/exp_ave.py --hosts artifacts/ave_av_att >> logs/ave.log 2>&1 \
-      && ok "-> results/ave_*/" || ok "FAILED -> logs/ave.log"
-  else
-    ok "skip (bash data/download_artifacts.sh ave_av_att)"
-  fi
-fi
-
-if want ninapro; then
-  say "NinaPro DB5, 41-class sEMG, electrode ladder"
-  if [ -d artifacts/ninapro_cnn ]; then
-    python experiments/exp_ninapro.py --artifact artifacts/ninapro_cnn >> logs/ninapro.log 2>&1 \
-      && ok "-> results/ninapro_*/" || ok "FAILED -> logs/ninapro.log"
-  else
-    ok "skip (bash data/download_artifacts.sh ninapro_cnn)"
-  fi
-fi
-
-if want ptbxl; then
-  say "PTB-XL, resnet1d_wang, ECG lead groups"
-  if [ -d artifacts/ptbxl_resnet1d_wang ]; then
-    python experiments/exp_ptbxl.py --host artifacts/ptbxl_resnet1d_wang >> logs/ptbxl.log 2>&1 \
-      && ok "-> results/ptbxl_*/" || ok "FAILED -> logs/ptbxl.log"
-  else
-    ok "skip (bash data/download_artifacts.sh ptbxl_resnet1d_wang)"
-  fi
-fi
-
-if want iemocap; then
-  say "IEMOCAP (MoMKE), five-fold leave-one-session-out"
-  if [ -d artifacts/iemocap_momke ]; then
-    python experiments/exp_iemocap.py --artifact artifacts/iemocap_momke \
-        >> logs/iemocap.log 2>&1 \
-      && ok "-> results/iemocap_*/" || ok "FAILED -> logs/iemocap.log"
-  else
-    ok "skip (bash data/download_artifacts.sh iemocap_momke)"
-  fi
-fi
-
 say "tables"
 python scripts/build_tables.py results/
+
+# Archived frozen paper hosts (dump-backed; see docs/REPRODUCING.md).
+if want archived; then
+  say "Archived frozen paper hosts"
+  archive_root="${GUARD_ARCHIVED_DUMPS:-}"
+  [ -n "$archive_root" ] || { ok "set GUARD_ARCHIVED_DUMPS to run archived hosts"; archive_root=""; }
+  if [ -n "$archive_root" ]; then
+    py="${PYTHON:-python}"
+    [ -d "$archive_root/DCL_HOSTS2" ] && "$py" experiments/exp_opportunity_dcl.py --dumps "$archive_root/DCL_HOSTS2" >> logs/opportunity_dcl.log 2>&1 && ok "OPPORTUNITY DeepConvLSTM -> logs/opportunity_dcl.log"
+    [ -d "$archive_root/ave_av_att" ] && "$py" experiments/exp_ave.py --dumps "$archive_root/ave_av_att" >> logs/ave.log 2>&1 && ok "AVE -> logs/ave.log"
+    [ -d "$archive_root/ninapro_cnn" ] && "$py" experiments/exp_ninapro.py --dumps "$archive_root/ninapro_cnn" >> logs/ninapro.log 2>&1 && ok "NinaPro DB5 -> logs/ninapro.log"
+    [ -d "$archive_root/ptbxl_resnet1d_wang" ] && "$py" experiments/exp_ptbxl.py --dumps "$archive_root/ptbxl_resnet1d_wang" >> logs/ptbxl_resnet.log 2>&1 && ok "PTB-XL ResNet-1D -> logs/ptbxl_resnet.log"
+    [ -d "$archive_root/ptbxl_leadladder" ] && "$py" experiments/exp_ptbxl.py --variant leadladder --dumps "$archive_root/ptbxl_leadladder" >> logs/ptbxl_leads.log 2>&1 && ok "PTB-XL lead ladder -> logs/ptbxl_leads.log"
+  fi
+fi

@@ -220,8 +220,7 @@ def main() -> None:
     ap.add_argument("--data", type=Path, default=ROOT / "data/processed")
     ap.add_argument("--hosts", type=Path, default=ROOT / "data/raw/hosts")
     ap.add_argument("--dcl", type=Path,
-                    default=Path("/vol/dl-nguyenb5-solar/users/hoangpc/CURA/"
-                                 "results/rebuttal/DCL_HOSTS"),
+                    default=ROOT / "artifacts/opportunity_dcl_v2",
                     help="directory holding the saved DeepConvLSTM dumps")
     ap.add_argument("--out", type=Path, default=ROOT / "results/frontier")
     ap.add_argument("--seeds", type=int, nargs="+", default=None)

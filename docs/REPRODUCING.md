@@ -24,17 +24,20 @@ error is label noise shows neither.
 ## Tier 2 — saved host outputs, no GPU, about ten minutes
 
 ```bash
-export GUARD_ARTIFACT_URL=<release archive>
-bash data/download_artifacts.sh dumps      # ~1 GB
+bash data/download_artifacts.sh            # ~2.5 GB into ./artifacts
 bash scripts/run_all.sh
 ```
 
+`docs/PAPER_MAP.md` names, for every table and figure in the paper, the driver
+that produced it and the artefacts that driver reads.
+
 The dumps are the frozen hosts' outputs and representations under each
 deployment condition.  Everything downstream of a dump is pure numpy, so this
-tier reproduces **the certification numbers covered by the bundled artifact archive** on a laptop: the
-DrugBAN tables, the vision--language tables, OPPORTUNITY under both calibration
-protocols, the label-budget sweep, the selector and plug-in ablations, the
-label-efficiency and contraction study, and the three studies below.
+tier reproduces every certification number in the paper on a laptop: the
+per-benchmark tables for all seven benchmarks, the intervention-rule comparison,
+OPPORTUNITY under both calibration protocols, the budget sweep, the selector and
+plug-in ablations, the label-efficiency and contraction study, and the three
+studies below.
 
 ```bash
 bash scripts/run_all.sh frontier    # alpha and delta sweeps, the validity figure
@@ -68,9 +71,6 @@ method never sees a GPU.
 bash data/download_drugban.sh
 python hosts/drugban.py train --dataset biosnap --split random --seed 42
 
-bash data/download_vilt.sh                 # then fetch the three corpora by hand
-python hosts/vilt_prompts.py train --task hateful_memes --repo data/raw/missing_aware_prompts
-
 bash data/download_opportunity.sh
 python hosts/opportunity_prepare.py
 python hosts/opportunity.py --source data/processed/opportunity_features.npz \
@@ -79,9 +79,8 @@ python hosts/opportunity.py --source data/processed/opportunity_features.npz \
 
 Training calls each host's own entry point with its own configuration; we pass
 only the dataset, split and seed.  Expect small differences from our numbers:
-host training is stochastic, and one benchmark is badly so -- Hateful Memes
-moved between AUROC 0.526 and 0.642 across seeds under the released
-configuration.  See `docs/REPRODUCTION.md`.
+host training is stochastic.  `docs/REPRODUCTION.md` records each frozen host
+against its published numbers, including the check that failed.
 
 ## Licensed source data
 

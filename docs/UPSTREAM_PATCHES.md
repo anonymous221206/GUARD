@@ -1,8 +1,33 @@
 # Upstream patches
 
-The published repository below does not run as released on a current stack.
-The compatibility change does not alter results; we record it so that anyone
-reproducing our numbers uses the same environment.
+Two published repositories do not run as released on a current stack.  Both
+fixes are mechanical and change no result; we record them so that anyone
+reproducing our numbers hits the same code we did.
+
+## missing-aware prompts (Lee et al., CVPR 2023)
+
+The Hateful Memes preparation path has never been runnable:
+
+1. `vilt/utils/write_hatememes.py` reads an undefined name:
+
+   ```python
+   text_aug = text_aug_dir['{}.png'.format(data['id'])]   # NameError
+   ```
+
+   `text_aug` is assigned but not used on the next line
+   (`data = (binary, text, label, split)`), so the statement is dead code.  We
+   delete that one line.
+
+2. The same file writes the text column as `"text"`, but
+   `vilt/datasets/hatememes_dataset.py` reads `text_column_name="plots"`,
+   raising `KeyError: Field "plots" does not exist in table schema` three
+   seconds into training.  We rename the column in the *writer*, leaving the
+   model-path code exactly as released.  For comparison, Food-101 uses `"text"`
+   on both sides and MM-IMDb uses `"plots"` on both sides; only Hateful Memes
+   is inconsistent.
+
+The dataset's own `test.jsonl` carries no labels; as the repository's `DATA.md`
+notes, the labelled test set is `test_seen.jsonl` from a different mirror.
 
 ## DrugBAN (Bai et al., Nature Machine Intelligence 2023)
 
