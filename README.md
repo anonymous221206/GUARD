@@ -19,7 +19,12 @@ result.joint_harm          # <= alpha, the guarantee
 
 ## Install
 
+The editable install needs pip 21.3 or newer, which is later than the pip that
+ships with some system Pythons:
+
 ```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install --upgrade pip
 pip install -e .              # the method: numpy only
 pip install -e ".[hosts]"     # to re-run the frozen models
 pip install -e ".[dev]"       # tests
