@@ -43,23 +43,9 @@ def main() -> None:
     ap.add_argument("--delta", type=float, default=0.05)
     ap.add_argument("--k", type=int, default=50)
     ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
-    ap.add_argument("--beta-objective", default="crossfit",
-                    choices=["loss", "metric", "crossfit"],
-                    help="beta selection rule: 'loss' is rule A, 'crossfit' is rule D.")
-    ap.add_argument("--seed-offset", type=int, default=0,
-                    help="added to each seed before it is used.  The reported MOSEI "
-                         "rows were produced with offset 1000 over seeds 0..19; the "
-                         "split a seed selects depends on it, so it must match to "
-                         "reproduce them exactly.")
-    ap.add_argument("--non0", action="store_true",
-                    help="drop samples whose label is exactly zero: the CMU-MOSEI "
-                         "binary convention, required to match the paper's MOSEI "
-                         "rows.  Leave off for IEMOCAP, where 0 is a real class.")
     a = ap.parse_args()
 
-    tag = (f"affective_{a.host.name}_pool-{a.pool}"
-           + ("_non0" if a.non0 else "")
-           + ("" if a.beta_objective == "crossfit" else f"_{a.beta_objective}"))
+    tag = f"affective_{a.host.name}_pool-{a.pool}"
     out_dir = a.out / tag
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = []
@@ -67,11 +53,10 @@ def main() -> None:
           f"{'beta':>5s} {'gate acc':>9s} {'loss gain':>10s} {'apply':>6s} {'joint':>6s}")
 
     for mask in a.masks:
-        probs, feats, labels, richer, n_pool, n_dep = build(a.host, mask, a.pool,
-                                                           non0=a.non0)
+        probs, feats, labels, richer, n_pool, n_dep = build(a.host, mask, a.pool)
         host = HostOutputs(probs=probs, features=feats, labels=labels, richer_probs=richer)
         for seed in a.seeds:
-            perm = np.random.default_rng(a.seed_offset + seed).permutation(n_dep) + n_pool
+            perm = np.random.default_rng(seed).permutation(n_dep) + n_pool
             thirds = np.array_split(perm, 3)
             if a.pool == "deployment":
                 # the pool is part of the same population: carve it out of the
@@ -90,7 +75,6 @@ def main() -> None:
                                       "test": "deployment session"})
             for target in ("hard", "cross_mask"):
                 r = run(host, split, condition=mask, target=target,
-                    beta_objective=a.beta_objective,
                         alpha=a.alpha, delta=a.delta, k=a.k)
                 rows.append({**r.as_row(), "seed": seed, "host": a.host.name})
                 print(f"{mask:5s} {target:11s} {seed:4d} {r.base_metric:7.4f} "

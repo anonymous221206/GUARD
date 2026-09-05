@@ -34,10 +34,14 @@ from guard.splits import Split                             # noqa: E402
 from guard.targets import hard_label_values, knn_average, standardise  # noqa: E402
 
 
-def load_dumps(dumps: Path, condition: str, seed: int):
+def load_dumps(dumps: Path, kind: str, condition: str, seed: int):
     """Return (HostOutputs, Split) for one condition of a dumped host."""
-    d = np.load(dumps / f"{condition}.npz")
-    keys = ("pool", "calib", "test")
+    if kind == "drugban":
+        d = np.load(dumps / f"{condition}.npz")
+        keys = ("pool", "calib", "test")
+    else:
+        d = np.load(dumps / f"extract_{condition}.npz")
+        keys = ("src", "val", "test")
     p = [d[f"{k}_probs"].astype(np.float64) for k in keys]
     f = [d[f"{k}_feats"] for k in keys]
     y = [d[f"{k}_labels"] for k in keys]
@@ -77,7 +81,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--study", required=True, choices=["selectors", "plugins", "labels"])
     ap.add_argument("--dumps", type=Path, required=True)
-    ap.add_argument("--kind", default="drugban", choices=["drugban"])
+    ap.add_argument("--kind", default="drugban", choices=["drugban", "vilt"])
     ap.add_argument("--conditions", nargs="+", default=None)
     ap.add_argument("--out", type=Path, default=Path("results"))
     ap.add_argument("--alpha", type=float, default=0.2)
@@ -86,7 +90,9 @@ def main() -> None:
     ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     a = ap.parse_args()
 
-    conds = a.conditions or ["full", "prot50", "prot25", "scaffold", "scaffold_prot50"]
+    conds = a.conditions or (["full", "prot50", "prot25", "scaffold", "scaffold_prot50"]
+                             if a.kind == "drugban" else
+                             ["complete", "textmiss", "imgmiss"])
     out_dir = a.out / f"ablation_{a.study}_{a.dumps.name}"
     out_dir.mkdir(parents=True, exist_ok=True)
     loss = L.CROSS_ENTROPY
@@ -94,7 +100,7 @@ def main() -> None:
 
     for cond in conds:
         for seed in a.seeds:
-            host, split = load_dumps(a.dumps, cond, seed)
+            host, split = load_dumps(a.dumps, a.kind, cond, seed)
             y_test = host.labels[split.test]
             m_test = host.probs[split.test]
             base_loss = loss(m_test, y_test)
