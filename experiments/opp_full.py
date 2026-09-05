@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 _ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
+os.makedirs(_ROOT / 'results/gates', exist_ok=True)
 
 D=f'{ARTIFACTS}/opportunity_dcl_v2'
 CFG=['low_cost_accels_only','no_imu_family','no_shoes','severe_three_sensors']

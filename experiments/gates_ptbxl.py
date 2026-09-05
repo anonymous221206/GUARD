@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 _ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
+os.makedirs(_ROOT / 'results/gates', exist_ok=True)
 
 A=f'{ARTIFACTS}/ptbxl_resnet1d_wang'
 RULES=['blanket','random','confidence','agreement','learned','GUARD']
