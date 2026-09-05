@@ -1,0 +1,24 @@
+complete   hard       base=0.6090 target=0.5640 beta=1.00 gate=-0.0080 harm=0.050 apply=0.33
+complete   cross_mask base=0.6090 target=0.6050 beta=1.00 gate=-0.0010 harm=0.031 apply=0.80
+textmiss   hard       base=0.5100 target=0.5060 beta=0.00 gate=+0.0000 harm=0.000 apply=1.00
+           note: PH significantly negative: neighbours carry opposing labels, retrieval-based correction is not applicable here
+textmiss   cross_mask base=0.5100 target=0.5050 beta=0.00 gate=+0.0000 harm=0.000 apply=1.00
+           note: PH significantly negative: neighbours carry opposing labels, retrieval-based correction is not applicable here
+imgmiss    hard       base=0.5440 target=0.5500 beta=0.60 gate=+0.0040 harm=0.078 apply=0.62
+           note: PH significantly negative: neighbours carry opposing labels, retrieval-based correction is not applicable here
+imgmiss    cross_mask base=0.5440 target=0.5490 beta=0.00 gate=+0.0000 harm=0.000 apply=1.00
+           note: PH significantly negative: neighbours carry opposing labels, retrieval-based correction is not applicable here
+
+0/6 cells exceed the harm budget
+complete   hard       base=0.6090 target=0.5640 beta=1.00 gate=-0.0080 harm=0.050 apply=0.33
+complete   cross_mask base=0.6090 target=0.6050 beta=1.00 gate=-0.0010 harm=0.031 apply=0.80
+textmiss   hard       base=0.5100 target=0.5060 beta=0.00 gate=+0.0000 harm=0.000 apply=1.00
+           note: PH significantly negative: neighbours carry opposing labels, retrieval-based correction is not applicable here
+textmiss   cross_mask base=0.5100 target=0.5050 beta=0.00 gate=+0.0000 harm=0.000 apply=1.00
+           note: PH significantly negative: neighbours carry opposing labels, retrieval-based correction is not applicable here
+imgmiss    hard       base=0.5440 target=0.5500 beta=0.60 gate=+0.0040 harm=0.078 apply=0.62
+           note: PH significantly negative: neighbours carry opposing labels, retrieval-based correction is not applicable here
+imgmiss    cross_mask base=0.5440 target=0.5490 beta=0.00 gate=+0.0000 harm=0.000 apply=1.00
+           note: PH significantly negative: neighbours carry opposing labels, retrieval-based correction is not applicable here
+
+0/6 cells exceed the harm budget

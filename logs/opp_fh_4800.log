@@ -1,0 +1,29 @@
+/usr/pkg/lib/python3.12/site-packages/torch/cuda/__init__.py:65: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+pre-flight on the deployment distribution: richer host 0.4294 vs poorer 0.5775 -> cross-mask NOT applicable
+seed0 low_cost_accels_only   hard        base=0.5854 tgt=0.781 gate=+0.1905 harm=0.106
+seed0 low_cost_accels_only   cross_mask  base=0.5854 tgt=0.423 gate=-0.0023 harm=0.000
+seed0 no_shoes               hard        base=0.6626 tgt=0.796 gate=+0.1259 harm=0.080
+seed0 no_shoes               cross_mask  base=0.6626 tgt=0.419 gate=-0.0028 harm=0.000
+seed0 no_imu_family          hard        base=0.4319 tgt=0.773 gate=+0.3238 harm=0.052
+seed0 no_imu_family          cross_mask  base=0.4319 tgt=0.442 gate=+0.0000 harm=0.032
+seed0 severe_three_sensors   hard        base=0.6051 tgt=0.783 gate=+0.1774 harm=0.082
+seed0 severe_three_sensors   cross_mask  base=0.6051 tgt=0.409 gate=-0.0023 harm=0.002
+seed1 low_cost_accels_only   hard        base=0.6163 tgt=0.754 gate=+0.1315 harm=0.103
+seed1 low_cost_accels_only   cross_mask  base=0.6163 tgt=0.430 gate=+0.0014 harm=0.003
+seed1 no_shoes               hard        base=0.6439 tgt=0.765 gate=+0.1189 harm=0.097
+seed1 no_shoes               cross_mask  base=0.6439 tgt=0.441 gate=-0.0005 harm=0.000
+seed1 no_imu_family          hard        base=0.4076 tgt=0.750 gate=+0.3280 harm=0.067
+seed1 no_imu_family          cross_mask  base=0.4076 tgt=0.454 gate=+0.0042 harm=0.058
+seed1 severe_three_sensors   hard        base=0.6121 tgt=0.786 gate=+0.1759 harm=0.070
+seed1 severe_three_sensors   cross_mask  base=0.6121 tgt=0.409 gate=+0.0000 harm=0.015
+seed2 low_cost_accels_only   hard        base=0.6341 tgt=0.769 gate=+0.1455 harm=0.104
+seed2 low_cost_accels_only   cross_mask  base=0.6341 tgt=0.406 gate=+0.0000 harm=0.000
+seed2 no_shoes               hard        base=0.6696 tgt=0.791 gate=+0.1329 harm=0.095
+seed2 no_shoes               cross_mask  base=0.6696 tgt=0.401 gate=-0.0019 harm=0.000
+seed2 no_imu_family          hard        base=0.4595 tgt=0.760 gate=+0.2929 harm=0.057
+seed2 no_imu_family          cross_mask  base=0.4595 tgt=0.429 gate=+0.0005 harm=0.012
+seed2 severe_three_sensors   hard        base=0.5948 tgt=0.806 gate=+0.2101 harm=0.065
+seed2 severe_three_sensors   cross_mask  base=0.5948 tgt=0.366 gate=+0.0000 harm=0.010
+
+0/24 cells exceed the harm budget -> results/opportunity_deployment_nL4800_fixedhost/guard.csv

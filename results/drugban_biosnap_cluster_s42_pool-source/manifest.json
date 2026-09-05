@@ -1,0 +1,8 @@
+{
+  "dumps": "data/processed/drugban_biosnap_cluster_s42",
+  "pool": "source",
+  "alpha": 0.2,
+  "delta": 0.05,
+  "k": 50,
+  "seed": 0
+}

@@ -1,0 +1,14 @@
+source    strength  base acc        PH  loss gain  acc gain  apply  joint
+gap           0.20    0.6148   +0.0008    +0.0000   +0.0000   1.00  0.000
+gap           0.40    0.6148   +0.0096    +0.0118   -0.0003   0.73  0.108
+gap           0.60    0.6148   +0.0295    +0.0734   -0.0063   0.83  0.154
+noise         0.20    0.5580   +0.0002    +0.0004   +0.0005   1.00  0.001
+noise         0.40    0.4903   +0.0045    +0.0001   +0.0005   1.00  0.000
+noise         0.60    0.4132   +0.0064    +0.0001   +0.0008   1.00  0.001
+
+0/18 cells exceed the harm budget
+gap-sourced error : measured gap +0.0133, loss recovered +0.0284
+noise-sourced     : measured gap +0.0037, loss recovered +0.0002
+
+The skew used here preserves the arg-max, so the loss moves and the
+decisions do not -- the same loss/metric split the paper reports on real data.

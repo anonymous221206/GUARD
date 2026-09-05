@@ -1,0 +1,56 @@
+pre-flight on the deployment distribution: richer host 0.4300 vs poorer 0.5200 -> cross-mask NOT applicable
+seed0 low_cost_accels_only   hard        base=0.5817 tgt=0.417 gate=-0.0005 harm=0.000
+seed0 low_cost_accels_only   cross_mask  base=0.5817 tgt=0.436 gate=+0.0000 harm=0.000
+seed0 no_shoes               hard        base=0.6561 tgt=0.416 gate=+0.0000 harm=0.000
+seed0 no_shoes               cross_mask  base=0.6561 tgt=0.426 gate=-0.0005 harm=0.000
+seed0 no_imu_family          hard        base=0.4291 tgt=0.416 gate=+0.0805 harm=0.008
+seed0 no_imu_family          cross_mask  base=0.4291 tgt=0.452 gate=+0.0000 harm=0.000
+seed0 severe_three_sensors   hard        base=0.5812 tgt=0.421 gate=-0.0033 harm=0.006
+seed0 severe_three_sensors   cross_mask  base=0.5812 tgt=0.265 gate=+0.0000 harm=0.000
+seed1 low_cost_accels_only   hard        base=0.6149 tgt=0.471 gate=+0.0005 harm=0.001
+seed1 low_cost_accels_only   cross_mask  base=0.6149 tgt=0.451 gate=+0.0005 harm=0.082
+seed1 no_shoes               hard        base=0.6439 tgt=0.475 gate=+0.0000 harm=0.003
+seed1 no_shoes               cross_mask  base=0.6439 tgt=0.447 gate=+0.0009 harm=0.086
+seed1 no_imu_family          hard        base=0.3973 tgt=0.485 gate=+0.1385 harm=0.007
+seed1 no_imu_family          cross_mask  base=0.3973 tgt=0.465 gate=+0.0009 harm=0.007
+seed1 severe_three_sensors   hard        base=0.6055 tgt=0.562 gate=+0.0000 harm=0.000
+seed1 severe_three_sensors   cross_mask  base=0.6055 tgt=0.351 gate=+0.0000 harm=0.000
+seed2 low_cost_accels_only   hard        base=0.6341 tgt=0.426 gate=-0.0023 harm=0.000
+seed2 low_cost_accels_only   cross_mask  base=0.6341 tgt=0.482 gate=+0.0000 harm=0.000
+seed2 no_shoes               hard        base=0.6514 tgt=0.426 gate=+0.0000 harm=0.000
+seed2 no_shoes               cross_mask  base=0.6514 tgt=0.460 gate=+0.0000 harm=0.000
+seed2 no_imu_family          hard        base=0.4366 tgt=0.426 gate=+0.0229 harm=0.011
+seed2 no_imu_family          cross_mask  base=0.4366 tgt=0.519 gate=+0.0000 harm=0.003
+seed2 severe_three_sensors   hard        base=0.5625 tgt=0.433 gate=+0.0009 harm=0.009
+seed2 severe_three_sensors   cross_mask  base=0.5625 tgt=0.302 gate=+0.0000 harm=0.000
+
+0/24 cells exceed the harm budget -> results/opportunity_deployment_nL300/guard.csv
+/usr/pkg/lib/python3.12/site-packages/torch/cuda/__init__.py:65: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+pre-flight on the deployment distribution: richer host 0.4300 vs poorer 0.5200 -> cross-mask NOT applicable
+seed0 low_cost_accels_only   hard        base=0.5817 tgt=0.417 gate=-0.0005 harm=0.000
+seed0 low_cost_accels_only   cross_mask  base=0.5817 tgt=0.435 gate=+0.0000 harm=0.000
+seed0 no_shoes               hard        base=0.6565 tgt=0.416 gate=+0.0000 harm=0.000
+seed0 no_shoes               cross_mask  base=0.6565 tgt=0.426 gate=+0.0000 harm=0.000
+seed0 no_imu_family          hard        base=0.4291 tgt=0.416 gate=+0.0805 harm=0.008
+seed0 no_imu_family          cross_mask  base=0.4291 tgt=0.452 gate=+0.0000 harm=0.000
+seed0 severe_three_sensors   hard        base=0.5807 tgt=0.421 gate=-0.0033 harm=0.006
+seed0 severe_three_sensors   cross_mask  base=0.5807 tgt=0.264 gate=+0.0000 harm=0.000
+seed1 low_cost_accels_only   hard        base=0.6149 tgt=0.471 gate=+0.0005 harm=0.001
+seed1 low_cost_accels_only   cross_mask  base=0.6149 tgt=0.450 gate=+0.0000 harm=0.082
+seed1 no_shoes               hard        base=0.6439 tgt=0.475 gate=+0.0000 harm=0.003
+seed1 no_shoes               cross_mask  base=0.6439 tgt=0.447 gate=+0.0009 harm=0.085
+seed1 no_imu_family          hard        base=0.3978 tgt=0.485 gate=+0.1385 harm=0.007
+seed1 no_imu_family          cross_mask  base=0.3978 tgt=0.465 gate=+0.0009 harm=0.007
+seed1 severe_three_sensors   hard        base=0.6055 tgt=0.562 gate=+0.0000 harm=0.000
+seed1 severe_three_sensors   cross_mask  base=0.6055 tgt=0.351 gate=+0.0000 harm=0.000
+seed2 low_cost_accels_only   hard        base=0.6341 tgt=0.426 gate=-0.0023 harm=0.000
+seed2 low_cost_accels_only   cross_mask  base=0.6341 tgt=0.482 gate=+0.0000 harm=0.000
+seed2 no_shoes               hard        base=0.6514 tgt=0.426 gate=+0.0000 harm=0.000
+seed2 no_shoes               cross_mask  base=0.6514 tgt=0.461 gate=+0.0000 harm=0.000
+seed2 no_imu_family          hard        base=0.4366 tgt=0.426 gate=+0.0229 harm=0.011
+seed2 no_imu_family          cross_mask  base=0.4366 tgt=0.519 gate=+0.0000 harm=0.003
+seed2 severe_three_sensors   hard        base=0.5625 tgt=0.433 gate=+0.0009 harm=0.009
+seed2 severe_three_sensors   cross_mask  base=0.5625 tgt=0.302 gate=+0.0000 harm=0.000
+
+0/24 cells exceed the harm budget -> results/opportunity_deployment_nL300/guard.csv

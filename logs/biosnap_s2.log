@@ -1,0 +1,8 @@
+$WORKSPACE/external/DrugBAN/.venv_db/lib/python3.10/site-packages/torch/nn/utils/weight_norm.py:30: UserWarning: torch.nn.utils.weight_norm is deprecated in favor of torch.nn.utils.parametrizations.weight_norm.
+  warnings.warn("torch.nn.utils.weight_norm is deprecated in favor of torch.nn.utils.parametrizations.weight_norm.")
+  full             test accuracy 0.8287
+  prot50           test accuracy 0.7380
+  prot25           test accuracy 0.5840
+  scaffold         test accuracy 0.7488
+  scaffold_prot50  test accuracy 0.6774
+dumps written to data/processed/drugban_biosnap_random_s2

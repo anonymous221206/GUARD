@@ -1,0 +1,40 @@
+$WORKSPACE/pylibs/torch/cuda/__init__.py:64: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+  chu the 1: 41 lop 0.7807 | can bang 0.5186 | 40 cu dong 0.5016 | lop da so 0.5687 | 6712 cua so
+  chu the 1: thang xong
+  chu the 2: 41 lop 0.8243 | can bang 0.5494 | 40 cu dong 0.5436 | lop da so 0.6386 | 7650 cua so
+  chu the 2: thang xong
+  chu the 3: 41 lop 0.8346 | can bang 0.5939 | 40 cu dong 0.5849 | lop da so 0.6171 | 6783 cua so
+  chu the 3: thang xong
+  chu the 4: 41 lop 0.8059 | can bang 0.4991 | 40 cu dong 0.4873 | lop da so 0.6285 | 7712 cua so
+  chu the 4: thang xong
+  chu the 5: 41 lop 0.8278 | can bang 0.5844 | 40 cu dong 0.5714 | lop da so 0.6121 | 7905 cua so
+  chu the 5: thang xong
+  chu the 6: 41 lop 0.7911 | can bang 0.5184 | 40 cu dong 0.5087 | lop da so 0.5878 | 7703 cua so
+  chu the 6: thang xong
+  chu the 7: 41 lop 0.8119 | can bang 0.5614 | 40 cu dong 0.5463 | lop da so 0.6113 | 7831 cua so
+  chu the 7: thang xong
+  chu the 8: 41 lop 0.8047 | can bang 0.5115 | 40 cu dong 0.4985 | lop da so 0.6232 | 7721 cua so
+  chu the 8: thang xong
+  chu the 9: 41 lop 0.8288 | can bang 0.5561 | 40 cu dong 0.5430 | lop da so 0.6509 | 7685 cua so
+  chu the 9: thang xong
+  chu the 10: 41 lop 0.8268 | can bang 0.5732 | 40 cu dong 0.5655 | lop da so 0.6239 | 7754 cua so
+  chu the 10: thang xong
+
+=== tai tao tren 41 lop ===
+trung binh 10 chu the : 0.8137
+Pizzolato 2017        : 0.6904  (mDWT + SVM)
+san mot phia          : 0.6654  -> DAT
+can bang (macro)      : 0.5466
+chi 40 cu dong        : 0.5351
+lop da so (rest)      : 0.6162   <- 41 lop la bai de hon 12 cu dong (0.1181)
+sai so chuan tb       : 0.0058
+
+dien cuc     host_A   target    margin  tren da so
+ 16 kenh     0.8137   0.8261   +0.0125     +0.1974
+ 12 kenh     0.7115   0.7748   +0.0634     +0.0953
+  8 kenh     0.6624   0.7361   +0.0737     +0.0462
+  6 kenh     0.6454   0.7097   +0.0642     +0.0292
+  4 kenh     0.6325   0.6706   +0.0381     +0.0163
+
+NINAPRO41_DONE

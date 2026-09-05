@@ -1,0 +1,6 @@
+arm                        d_acc  loss gain  apply   joint    cond  cells over budget
+kernel                   +0.0019    +0.0096   0.04   0.002   0.049  0/15
+knn                      +0.0651    +0.3125   0.34   0.057   0.165  0/15
+ridge                    +0.0614    +0.2136   0.34   0.043   0.125  0/15
+
+-> results/ablation_plugins_drugban_biosnap_random_s42/guard.csv

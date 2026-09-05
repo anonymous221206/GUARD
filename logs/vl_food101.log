@@ -1,0 +1,8 @@
+complete   hard       base=0.8963 target=0.8729 beta=0.28 gate=+0.0000 harm=0.007 apply=0.75
+complete   cross_mask base=0.8963 target=0.8716 beta=0.38 gate=+0.0000 harm=0.006 apply=0.74
+textmiss   hard       base=0.6201 target=0.5916 beta=0.33 gate=+0.0000 harm=0.004 apply=0.16
+textmiss   cross_mask base=0.6201 target=0.5914 beta=0.43 gate=+0.0000 harm=0.002 apply=0.12
+imgmiss    hard       base=0.8253 target=0.8124 beta=0.18 gate=+0.0000 harm=0.011 apply=0.77
+imgmiss    cross_mask base=0.8253 target=0.8120 beta=0.28 gate=+0.0000 harm=0.008 apply=0.76
+
+0/6 cells exceed the harm budget

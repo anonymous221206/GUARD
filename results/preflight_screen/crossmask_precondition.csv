@@ -1,0 +1,36 @@
+dataset,row,seed,richer_acc,poorer_acc,precondition_met,gain_hard,gain_cross
+DrugBAN,biosnap_random source prot25,1,0.81646,0.562272,True,0.141089,0.140543
+DrugBAN,biosnap_random source prot25,2,0.831755,0.580481,True,0.134535,0.13144
+DrugBAN,biosnap_random source prot25,42,0.847779,0.546249,True,0.159476,0.158383
+DrugBAN,biosnap_random source scaffold_prot50,1,0.81646,0.672251,True,0.07992,0.079556
+DrugBAN,biosnap_random source scaffold_prot50,2,0.831755,0.683904,True,0.074458,0.073002
+DrugBAN,biosnap_random source scaffold_prot50,42,0.847779,0.685361,True,0.070999,0.072092
+DrugBAN,biosnap_cluster deployment prot25,1,0.546733,0.507031,True,0.052922,-0.002205
+DrugBAN,biosnap_cluster deployment prot25,2,0.583954,0.53598,True,0.041896,0.003308
+DrugBAN,biosnap_cluster deployment prot25,42,0.599669,0.523573,True,0.054024,-0.00441
+DrugBAN,bindingdb_random source prot25,1,0.910976,0.682927,True,0.079776,0.07876
+DrugBAN,bindingdb_random source prot25,2,0.904065,0.647561,True,0.135569,0.136179
+DrugBAN,bindingdb_random source prot25,42,0.899187,0.689837,True,0.073171,0.067378
+DrugBAN,bindingdb_random source scaffold_prot50,1,0.910976,0.74187,True,0.05874,0.056911
+DrugBAN,bindingdb_random source scaffold_prot50,2,0.904065,0.732927,True,0.088923,0.088313
+DrugBAN,bindingdb_random source scaffold_prot50,42,0.899187,0.713821,True,0.085264,0.079472
+DrugBAN,bindingdb_cluster deployment prot25,42,0.52636,0.517503,True,0.115233,0.003373
+DrugBAN,bindingdb_cluster deployment scaffold_prot50,42,0.52636,0.520456,True,0.103991,0.006183
+DrugBAN,human_random source prot25,1,0.956667,0.89,True,0.001667,0.0
+DrugBAN,human_random source prot25,2,0.913333,0.863333,True,0.001667,0.001667
+DrugBAN,human_random source prot25,42,0.93,0.87,True,0.0,0.0
+DrugBAN,human_random source scaffold_prot50,1,0.956667,0.866667,True,0.009167,0.009167
+DrugBAN,human_random source scaffold_prot50,2,0.913333,0.81,True,0.021667,0.0225
+DrugBAN,human_random source scaffold_prot50,42,0.93,0.843333,True,0.015,0.014167
+OPPORTUNITY,low_cost_accels_only,0,0.622754,0.55988,True,0.189978,0.016455
+OPPORTUNITY,no_shoes,0,0.622754,0.642964,False,0.145849,0.00374
+OPPORTUNITY,no_imu_family,0,0.622754,0.531437,True,0.226627,-0.000748
+OPPORTUNITY,severe_three_sensors,0,0.622754,0.666168,False,0.1092,0.000748
+OPPORTUNITY,low_cost_accels_only,1,0.572605,0.491018,True,0.278983,0.004488
+OPPORTUNITY,no_shoes,1,0.572605,0.655689,False,0.108452,0.0
+OPPORTUNITY,no_imu_family,1,0.572605,0.511228,True,0.23635,0.0
+OPPORTUNITY,severe_three_sensors,1,0.572605,0.636976,False,0.166043,0.0
+OPPORTUNITY,low_cost_accels_only,2,0.637725,0.524701,True,0.288706,0.008975
+OPPORTUNITY,no_shoes,2,0.637725,0.621257,True,0.169783,0.008975
+OPPORTUNITY,no_imu_family,2,0.637725,0.50524,True,0.224383,0.035153
+OPPORTUNITY,severe_three_sensors,2,0.637725,0.657934,False,0.128646,0.014959
