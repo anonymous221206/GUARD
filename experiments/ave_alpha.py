@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 _ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
+os.makedirs(_ROOT / 'results/alpha', exist_ok=True)
 
 loss=_L.get('cross_entropy'); DELTA=0.05; ALPHAS=[0.05,0.10,0.20,0.30,0.50]
 KS=(5,10,20,35,50); SPACES=('standardise','cosine'); WTS=('uniform','distance')

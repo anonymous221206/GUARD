@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 _ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
+os.makedirs(_ROOT / 'results/gates', exist_ok=True)
 
 D=f'{ARTIFACTS}/mosei_cmad/dumps'
 p=np.load(f'{D}/student_preds.npz',allow_pickle=True); r=np.load(f'{D}/raw_features.npz',allow_pickle=True)

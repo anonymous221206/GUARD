@@ -6,6 +6,8 @@ sys.path.insert(0,str(ROOT / 'scripts'))
 from guard import losses as _L, targets as _T, certify as _C
 from guard.pipeline import _select_beta
 import train_ninapro_retrained as T
+import os
+os.makedirs(ROOT / 'results/alpha', exist_ok=True)
 B=str(ROOT / 'experiments')
 ALPHAS=[0.05,0.10,0.20,0.30,0.50]; DELTA=0.05
 KS=(5,10,20,35,50); SPACES=('standardise','cosine'); WTS=('uniform','distance')
