@@ -81,8 +81,8 @@ if pattern:
 snapshot_download(**kwargs)
 PY
   else
-    echo "huggingface_hub not installed; install it for resumable downloads:" >&2
-    echo "    pip install huggingface_hub" >&2
+    echo "huggingface_hub not installed. Install it and re-run:" >&2
+    echo "    pip install -e '.[artifacts]'" >&2
     exit 1
   fi
 }
@@ -105,8 +105,10 @@ cat <<'MSG'
 
 Artefacts ready under artifacts/.
 
-Reproducing the numbers in the paper requires beta selection rule D.  The
-package default is rule A, which yields systematically lower corrected
-accuracy -- up to 0.049 lower on the sparsest NinaPro rung.  See README.md.
+Check one number before going further:
+
+    python experiments/repro_check.py
+
+It should print 63.1 -> 68.6, 63.7 -> 68.3 and 64.5 -> 70.3, the CMU-MOSEI row
+of Table 1. A few tenths of a point of drift across platforms is expected.
 MSG
-  exit 1

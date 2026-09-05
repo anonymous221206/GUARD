@@ -1,3 +1,29 @@
+Metadata-Version: 2.4
+Name: guard
+Version: 1.0.0
+Summary: Certified post-hoc correction for frozen models under missing modalities
+License: MIT
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.21
+Provides-Extra: artifacts
+Requires-Dist: huggingface_hub>=0.20; extra == "artifacts"
+Provides-Extra: hosts
+Requires-Dist: torch>=1.10; extra == "hosts"
+Requires-Dist: pandas>=1.3; extra == "hosts"
+Requires-Dist: scikit-learn>=1.0; extra == "hosts"
+Provides-Extra: drugban
+Requires-Dist: dgl>=2.0; extra == "drugban"
+Requires-Dist: dgllife>=0.3; extra == "drugban"
+Requires-Dist: rdkit>=2022.3; extra == "drugban"
+Requires-Dist: yacs; extra == "drugban"
+Requires-Dist: prettytable; extra == "drugban"
+Provides-Extra: dev
+Requires-Dist: pytest>=7; extra == "dev"
+Requires-Dist: ruff>=0.1; extra == "dev"
+Dynamic: license-file
+
 # GUARD
 
 Certified post-hoc correction for a **frozen** model deployed with missing
