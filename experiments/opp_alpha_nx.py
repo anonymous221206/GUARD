@@ -2,13 +2,15 @@
 from pathlib import Path
 import numpy as np, sys, csv
 ROOT = Path(__file__).resolve().parents[1]
+import os
+ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ARTIFACTS))
 sys.path.insert(0,str(ROOT / 'experiments'))
 sys.path.insert(0,str(ROOT / 'src'))
 from gates_core import gate_row
 from guard import losses as _L, targets as _T, certify as _C
 from guard.pipeline import _select_beta
 from sklearn.metrics import f1_score
-D=str(ROOT / 'artifacts/opportunity_dcl_v2')
+D=str(ARTIFACTS / 'opportunity_dcl_v2')
 CFG=['low_cost_accels_only','no_imu_family','no_shoes','severe_three_sensors']
 loss=_L.get('cross_entropy'); DELTA=0.05; ALPHAS=[0.05,0.10,0.20,0.30,0.50]
 yd=np.load(f'{D}/deploy_y.npy'); yc=np.load(f'{D}/calib_y.npy')
