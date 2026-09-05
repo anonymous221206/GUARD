@@ -44,7 +44,7 @@ download.**  Artefacts are one directory per (dataset, model) pair, nine in all,
 one per row block of the paper's tables, so a single pair checks a single block.
 
 ```bash
-export GUARD_ARTIFACT_REPO=<org>/<repo>
+# defaults to anonymous221206/GUARD_checkpoint; override with GUARD_ARTIFACT_REPO
 bash data/download_artifacts.sh                  # list the nine pairs
 bash data/download_artifacts.sh ninapro_cnn      # one pair, ~1.6 GB
 bash data/download_artifacts.sh all              # everything, ~10 GB
