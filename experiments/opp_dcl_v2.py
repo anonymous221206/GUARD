@@ -7,7 +7,7 @@ does not reproduce the first closely enough to mix outputs, as that script recor
 import numpy as np, sys, json, collections
 ROOT = Path(__file__).resolve().parents[1]
 import os
-ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ARTIFACTS))
+ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts'))
 sys.path.insert(0,str(ROOT / 'experiments'))
 sys.path.insert(0,str(ROOT / 'src'))
 from gates_core import gate_row
