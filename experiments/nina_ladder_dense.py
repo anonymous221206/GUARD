@@ -2,10 +2,12 @@ import sys, json, argparse
 from pathlib import Path
 import numpy as np, torch
 ROOT = Path(__file__).resolve().parents[1]
+import os
+ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ARTIFACTS))
 sys.path.insert(0,str(ROOT / 'scripts'))
 import train_ninapro_retrained as T
 B=str(ROOT / 'experiments')
-ART=str(ROOT / 'artifacts/ninapro_cnn')
+ART=str(ARTIFACTS / 'ninapro_cnn')
 COUNTS=[16,14,12,10,8,7,6,5,4,3,2]
 dev='cuda' if torch.cuda.is_available() else 'cpu'
 order_ch=np.random.default_rng(1234).permutation(T.N_CH)

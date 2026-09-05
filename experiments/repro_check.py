@@ -2,11 +2,13 @@
 from pathlib import Path
 import sys, numpy as np
 ROOT = Path(__file__).resolve().parents[1]
+import os
+ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ARTIFACTS))
 sys.path.insert(0,str(ROOT / 'src'))
 from guard import HostOutputs, run
 from guard.pipeline import select_on_fit
 from guard.splits import Split
-D=str(ROOT / 'artifacts/mosei_cmad/dumps')
+D=str(ARTIFACTS / 'mosei_cmad/dumps')
 p=np.load(f'{D}/student_preds.npz',allow_pickle=True); r=np.load(f'{D}/raw_features.npz',allow_pickle=True)
 raw=r['test_y'].reshape(-1); y=(raw>0).astype(int)
 def probs(m):
