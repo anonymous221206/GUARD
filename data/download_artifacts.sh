@@ -19,7 +19,7 @@
 #   python hosts/drugban.py train --dataset biosnap --split random --seed 42
 set -euo pipefail
 
-REPO="${GUARD_ARTIFACT_REPO:-}"
+REPO="${GUARD_ARTIFACT_REPO:-anonymous221206/GUARD_checkpoint}"
 WHAT="${1:-}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$ROOT/artifacts"
@@ -34,7 +34,7 @@ No artefact repository configured.
 
 Set GUARD_ARTIFACT_REPO to the Hugging Face dataset repository, then re-run:
 
-    export GUARD_ARTIFACT_REPO=<org>/<repo>
+    export GUARD_ARTIFACT_REPO=anonymous221206/GUARD_checkpoint
     bash data/download_artifacts.sh ninapro_cnn
 
 Without it, reproduce from scratch instead:
@@ -109,3 +109,4 @@ Reproducing the numbers in the paper requires beta selection rule D.  The
 package default is rule A, which yields systematically lower corrected
 accuracy -- up to 0.049 lower on the sparsest NinaPro rung.  See README.md.
 MSG
+  exit 1
