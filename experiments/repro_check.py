@@ -3,7 +3,7 @@ from pathlib import Path
 import sys, numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 import os
-ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ARTIFACTS))
+ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts'))
 sys.path.insert(0,str(ROOT / 'src'))
 from guard import HostOutputs, run
 from guard.pipeline import select_on_fit
