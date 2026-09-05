@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np, sys, csv
 ROOT = Path(__file__).resolve().parents[1]
 import os
-ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ARTIFACTS))
+ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts'))
 sys.path.insert(0,str(ROOT / 'experiments'))
 sys.path.insert(0,str(ROOT / 'src'))
 from gates_core import gate_row

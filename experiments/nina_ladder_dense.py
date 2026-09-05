@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np, torch
 ROOT = Path(__file__).resolve().parents[1]
 import os
-ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ARTIFACTS))
+ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts'))
 sys.path.insert(0,str(ROOT / 'scripts'))
 import train_ninapro_retrained as T
 B=str(ROOT / 'experiments')
