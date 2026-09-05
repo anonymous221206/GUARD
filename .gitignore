@@ -7,3 +7,4 @@ artifacts/
 *.npz
 *.pt
 .superseded/
+egg-info/
