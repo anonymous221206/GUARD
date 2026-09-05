@@ -24,7 +24,7 @@ land under `results/`.
 | Table 3 | Intervention rules compared | `experiments/gates_ranges.py` | all dumps |
 | Figure 3 | IEMOCAP | `experiments/gates_iemocap.py` | `iemocap_momke/folds` |
 | Figure 4 | Severity ladders | `experiments/nina_sev_dense.py`, `experiments/ptbxl_sev_dense.py` | `ninapro_cnn`, `ptbxl_dropladder` |
-| Figure 5 | Budget sweep | the eight sweep drivers, then `make_fig_alpha2.py` | see below |
+| Figure 5 | Budget sweep | the eight sweep drivers, then `scripts/figures/make_fig_alpha2.py` | see below |
 
 `gates_ranges.py` runs the five per-benchmark gate drivers under one wrapper and
 writes `results/gates/gates_cells.json`, one row per (benchmark, condition, seed).
@@ -41,12 +41,12 @@ file, so they cannot disagree.
 | Table 8 | IEMOCAP per pattern | `experiments/gates_iemocap.py` | `iemocap_momke/folds` |
 | Table 9 | DrugBAN | `experiments/exp_drugban.py` | `drugban_processed` |
 | Table 10 | Gate ablation | `experiments/exp_ablations.py` | `drugban_processed` |
-| Table 11 | Per-condition results | `experiments/mosei_full.py`, `opp_full.py`, `nina_ladder_dense.py`, `ptbxl_sev_dense.py` | four dumps |
+| Table 11 | Per-condition results | `experiments/mosei_full.py`, `experiments/opp_full.py`, `experiments/nina_ladder_dense.py`, `experiments/ptbxl_sev_dense.py` | four dumps |
 | Table 12 | Cross-mask target | `experiments/gates_rest.py`, `experiments/gates_drugban.py` | `ave_av_att`, `ninapro_cnn`, `drugban_processed` |
 | Table 13 | CMU-MOSEI harm and apply rate | `experiments/mosei_full.py` | `mosei_cmad/dumps` |
 | Table 14 | Removing the certificate | `experiments/gates_ranges.py` | same file as Table 3 |
-| Figure 6 | Cross-mask accuracy screen | `make_fig_screen.py` | `results/` |
-| Figure 7 | Intervention rate | `make_fig_apply.py` | `results/alpha/` |
+| Figure 6 | Cross-mask accuracy screen | `scripts/figures/make_fig_screen.py` | `scripts/figures/ablation_data/` |
+| Figure 7 | Intervention rate | `scripts/figures/make_fig_apply.py` | `scripts/figures/ablation_data/` |
 | §D.1 | Calibration resampling spread | `experiments/fs_mosei.py` | `mosei_cmad/dumps` |
 
 ## The sweep behind Figure 5
@@ -81,3 +81,16 @@ rewrite the paper.
 `vilt` option. The paper reports no vision-language experiment; those code paths
 are inert without dumps that this repository does not ship. The host itself is in
 `superseded/`, which produces nothing in the paper.
+
+## Figures
+
+`scripts/figures/` holds the three generators and, under `ablation_data/`, the
+exact CSVs they read, so every figure redraws from a clean clone:
+
+```bash
+cd scripts/figures && python3 make_fig_alpha2.py   # Figure 5
+python3 make_fig_apply.py                          # Figure 7
+python3 make_fig_screen.py                         # Figure 6
+```
+
+Figures 1 and 2 are drawn by hand and are not generated.
