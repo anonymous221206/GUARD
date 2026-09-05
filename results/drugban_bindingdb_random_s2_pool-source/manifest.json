@@ -1,0 +1,8 @@
+{
+  "dumps": "data/processed/drugban_bindingdb_random_s2",
+  "pool": "source",
+  "alpha": 0.2,
+  "delta": 0.05,
+  "k": 50,
+  "seed": 0
+}

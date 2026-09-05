@@ -1,0 +1,42 @@
+condition         target         base     tgt  beta  blanket     gate  apply  joint   cond
+  pre-flight: richer host 0.5514 vs poorer 0.5514 -> cross-mask NOT applicable
+full              hard         0.5514   0.517  0.15  -0.0051  -0.0022   0.73  0.036  0.049
+full              cross_mask   0.5514   0.526  0.28  -0.0028  +0.0017   0.66  0.025  0.038
+prot50            hard         0.5368   0.546  0.38  +0.0101  +0.0022   0.43  0.074  0.172
+prot50            cross_mask   0.5368   0.531  0.55  +0.0062  +0.0039   0.43  0.063  0.147
+prot25            hard         0.5289   0.549  0.38  +0.0118  +0.0006   0.46  0.082  0.177
+prot25            cross_mask   0.5289   0.542  0.53  +0.0096  +0.0056   0.45  0.080  0.179
+scaffold          hard         0.5374   0.514  0.25  +0.0146  -0.0034   0.56  0.066  0.118
+scaffold          cross_mask   0.5374   0.535  0.58  +0.0101  -0.0017   0.41  0.053  0.129
+scaffold_prot50   hard         0.5278   0.528  0.43  +0.0180  -0.0034   0.44  0.092  0.208
+scaffold_prot50   cross_mask   0.5278   0.525  0.70  +0.0163  -0.0034   0.37  0.064  0.171
+
+0/10 cells exceed the harm budget -> results/drugban_bindingdb_cluster_s42_pool-source/guard.csv
+condition         target         base     tgt  beta  blanket     gate  apply  joint   cond
+  pre-flight: richer host 0.5514 vs poorer 0.5514 -> cross-mask NOT applicable
+full              hard         0.5514   0.517  0.15  -0.0051  -0.0022   0.73  0.036  0.049
+full              cross_mask   0.5514   0.526  0.28  -0.0028  +0.0017   0.66  0.025  0.038
+prot50            hard         0.5368   0.546  0.38  +0.0101  +0.0022   0.43  0.074  0.172
+prot50            cross_mask   0.5368   0.531  0.55  +0.0062  +0.0039   0.43  0.063  0.147
+prot25            hard         0.5289   0.549  0.38  +0.0118  +0.0006   0.46  0.082  0.177
+prot25            cross_mask   0.5289   0.542  0.53  +0.0096  +0.0056   0.45  0.080  0.179
+scaffold          hard         0.5374   0.514  0.25  +0.0146  -0.0034   0.56  0.066  0.118
+scaffold          cross_mask   0.5374   0.535  0.58  +0.0101  -0.0017   0.41  0.053  0.129
+scaffold_prot50   hard         0.5278   0.528  0.43  +0.0180  -0.0034   0.44  0.092  0.208
+scaffold_prot50   cross_mask   0.5278   0.525  0.70  +0.0163  -0.0034   0.37  0.064  0.171
+
+0/10 cells exceed the harm budget -> results/drugban_bindingdb_cluster_s42_pool-source/guard.csv
+condition         target         base     tgt  beta  blanket     gate  apply  joint   cond
+  pre-flight: richer host 0.5514 vs poorer 0.5514 -> cross-mask NOT applicable
+full              hard         0.5514   0.517  0.15  -0.0051  -0.0022   0.73  0.036  0.049
+full              cross_mask   0.5514   0.526  0.28  -0.0028  +0.0017   0.66  0.025  0.038
+prot50            hard         0.5368   0.546  0.38  +0.0101  +0.0022   0.43  0.074  0.172
+prot50            cross_mask   0.5368   0.531  0.55  +0.0062  +0.0039   0.43  0.063  0.147
+prot25            hard         0.5289   0.549  0.38  +0.0118  +0.0006   0.46  0.082  0.177
+prot25            cross_mask   0.5289   0.542  0.53  +0.0096  +0.0056   0.45  0.080  0.179
+scaffold          hard         0.5374   0.514  0.25  +0.0146  -0.0034   0.56  0.066  0.118
+scaffold          cross_mask   0.5374   0.535  0.58  +0.0101  -0.0017   0.41  0.053  0.129
+scaffold_prot50   hard         0.5278   0.528  0.43  +0.0180  -0.0034   0.44  0.092  0.208
+scaffold_prot50   cross_mask   0.5278   0.525  0.70  +0.0163  -0.0034   0.37  0.064  0.171
+
+0/10 cells exceed the harm budget -> results/drugban_bindingdb_cluster_s42_pool-source/guard.csv

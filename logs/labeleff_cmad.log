@@ -1,0 +1,15 @@
+S    richer  quality  contraction  transfer (0 lbl)  hard@full
+a    tav     good           0.230           +0.0495    +0.0522
+a    av      weak           0.251           +0.0267    +0.0522
+v    tav     good           0.264           +0.0290    +0.0317
+v    av      weak           0.251           +0.0303    +0.0317
+av   tav     good           0.264           +0.0493    +0.0507
+
+### label efficiency: MSE gain by hard-label budget (richer mask = good)
+| S | hard@50 | hard@100 | hard@200 | hard@500 | hard@1500 | hard@16265 | transfer (0 labels) |
+|---|---|---|---|---|---|---|---|
+| a | +0.0000 | -0.0039 | -0.0006 | +0.0015 | +0.0139 | +0.0522 | **+0.0495** |
+| v | +0.0084 | +0.0101 | +0.0095 | +0.0104 | +0.0160 | +0.0317 | **+0.0290** |
+| av | +0.0043 | +0.0055 | +0.0072 | +0.0118 | +0.0171 | +0.0507 | **+0.0493** |
+
+contraction ratio: max 0.264 over 5 settings -- every value below 1 confirms ||E[d_T|X_S]|| <= ||d_T||

@@ -1,0 +1,104 @@
+pre-flight on the deployment distribution: richer host 0.4800 vs poorer 0.6600 -> cross-mask NOT applicable
+seed0 low_cost_accels_only   hard        base=0.5700 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 low_cost_accels_only   cross_mask  base=0.5700 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 no_shoes               hard        base=0.6617 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 no_shoes               cross_mask  base=0.6617 tgt=0.414 gate=+0.0000 harm=0.002
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 no_imu_family          hard        base=0.4314 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 no_imu_family          cross_mask  base=0.4314 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 severe_three_sensors   hard        base=0.5905 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 severe_three_sensors   cross_mask  base=0.5905 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 low_cost_accels_only   hard        base=0.6079 tgt=0.417 gate=-0.0019 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 low_cost_accels_only   cross_mask  base=0.6079 tgt=0.219 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 no_shoes               hard        base=0.6420 tgt=0.417 gate=+0.0000 harm=0.001
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 no_shoes               cross_mask  base=0.6420 tgt=0.219 gate=-0.0005 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 no_imu_family          hard        base=0.3992 tgt=0.417 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 no_imu_family          cross_mask  base=0.3992 tgt=0.219 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 severe_three_sensors   hard        base=0.6051 tgt=0.417 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 severe_three_sensors   cross_mask  base=0.6051 tgt=0.219 gate=-0.0009 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 low_cost_accels_only   hard        base=0.5868 tgt=0.426 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 low_cost_accels_only   cross_mask  base=0.5868 tgt=0.094 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 no_shoes               hard        base=0.6650 tgt=0.426 gate=+0.0000 harm=0.010
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 no_shoes               cross_mask  base=0.6650 tgt=0.094 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 no_imu_family          hard        base=0.4595 tgt=0.426 gate=+0.0033 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 no_imu_family          cross_mask  base=0.4595 tgt=0.094 gate=-0.0005 harm=0.006
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 severe_three_sensors   hard        base=0.5915 tgt=0.426 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 severe_three_sensors   cross_mask  base=0.5915 tgt=0.094 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+
+0/24 cells exceed the harm budget -> results/opportunity_deployment_nL150/guard.csv
+/usr/pkg/lib/python3.12/site-packages/torch/cuda/__init__.py:65: FutureWarning: The pynvml package is deprecated. Please install nvidia-ml-py instead. If you did not install pynvml directly, please report this to the maintainers of the package that installed pynvml for you.
+  import pynvml  # type: ignore[import]
+pre-flight on the deployment distribution: richer host 0.4800 vs poorer 0.6600 -> cross-mask NOT applicable
+seed0 low_cost_accels_only   hard        base=0.5704 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 low_cost_accels_only   cross_mask  base=0.5704 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 no_shoes               hard        base=0.6612 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 no_shoes               cross_mask  base=0.6612 tgt=0.414 gate=+0.0000 harm=0.002
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 no_imu_family          hard        base=0.4314 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 no_imu_family          cross_mask  base=0.4314 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 severe_three_sensors   hard        base=0.5905 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed0 severe_three_sensors   cross_mask  base=0.5905 tgt=0.414 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 low_cost_accels_only   hard        base=0.6079 tgt=0.417 gate=-0.0019 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 low_cost_accels_only   cross_mask  base=0.6079 tgt=0.219 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 no_shoes               hard        base=0.6430 tgt=0.417 gate=+0.0000 harm=0.001
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 no_shoes               cross_mask  base=0.6430 tgt=0.219 gate=-0.0009 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 no_imu_family          hard        base=0.3987 tgt=0.417 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 no_imu_family          cross_mask  base=0.3987 tgt=0.219 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 severe_three_sensors   hard        base=0.6051 tgt=0.417 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed1 severe_three_sensors   cross_mask  base=0.6051 tgt=0.219 gate=-0.0014 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 low_cost_accels_only   hard        base=0.5868 tgt=0.426 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 low_cost_accels_only   cross_mask  base=0.5868 tgt=0.094 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 no_shoes               hard        base=0.6650 tgt=0.426 gate=+0.0000 harm=0.010
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 no_shoes               cross_mask  base=0.6650 tgt=0.094 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 no_imu_family          hard        base=0.4595 tgt=0.426 gate=+0.0033 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 no_imu_family          cross_mask  base=0.4595 tgt=0.094 gate=-0.0005 harm=0.006
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 severe_three_sensors   hard        base=0.5915 tgt=0.426 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+seed2 severe_three_sensors   cross_mask  base=0.5915 tgt=0.094 gate=+0.0000 harm=0.000
+    note: k reduced from 50 to 49: pool has 50 rows
+
+0/24 cells exceed the harm budget -> results/opportunity_deployment_nL150/guard.csv

@@ -1,0 +1,9 @@
+arm                        d_acc  loss gain  apply   joint    cond  cells over budget
+conformal gate           +0.0651    +0.3125   0.34   0.057   0.165  0/15
+selector:agreement       +0.0022    +0.0733   0.32   0.132   0.401  3/15
+selector:margin          +0.0066    +0.3650   0.33   0.214   0.634  9/15
+selector:maxprob         +0.0066    +0.3650   0.33   0.214   0.634  9/15
+selector:negentropy      +0.0066    +0.3650   0.33   0.214   0.634  9/15
+selector:random          +0.0244    +0.2592   0.33   0.182   0.553  1/15
+
+-> results/ablation_selectors_drugban_biosnap_random_s42/guard.csv
