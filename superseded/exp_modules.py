@@ -41,7 +41,7 @@ sys.path.insert(0, str(ROOT / "experiments"))
 
 from exp_ablations import load_dumps                      # noqa: E402
 from guard import losses as L                             # noqa: E402
-from guard.certify import certify, harm_accounting        # noqa: E402
+from guard.action import harm_accounting        # noqa: E402
 from guard.pipeline import BETA_GRID                      # noqa: E402
 from guard.targets import hard_label_values, knn_average, standardise  # noqa: E402
 

@@ -1,9 +1,9 @@
 """OPPORTUNITY on the DeepConvLSTM hosts the paper actually corrects.
-from pathlib import Path
 
 Reads the dumps left by dcl_hosts2.py rather than retraining: a second training run
 does not reproduce the first closely enough to mix outputs, as that script records.
 """
+from pathlib import Path
 import numpy as np, sys, json, collections
 ROOT = Path(__file__).resolve().parents[1]
 import os
@@ -11,7 +11,8 @@ ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts'))
 sys.path.insert(0,str(ROOT / 'experiments'))
 sys.path.insert(0,str(ROOT / 'src'))
 from gates_core import gate_row
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
+from guard import action as _A
 from guard.pipeline import _select_beta
 from sklearn.metrics import f1_score
 D=str(ARTIFACTS / 'opportunity_dcl_v2')
@@ -45,7 +46,7 @@ for cfg in CFG:
         b=_select_beta(P[fit],tf,y[fit],loss,'loss')
         tc=_T.knn_average(fc,fp,vals,k_,weighting=wt); tt=_T.knn_average(ft,fp,vals,k_,weighting=wt)
         cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
-        g=_C.certify(cc,y[conf],ct,P[test],loss,ALPHA,DELTA); ap=g['apply']
+        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit], loss), P[conf], tc, cc, y[conf], P[test], tt, loss, ALPHA, DELTA); ap=g['apply']
         blo=loss(P[test],y[test]); cl=loss(ct,y[test])
         gp=np.where(ap[:,None],ct,P[test])
         wf_=lambda Q: f1_score(y[test],Q.argmax(1),average='weighted')

@@ -5,7 +5,8 @@ LTT policies see the same frozen model, the same retrieval target and the same b
 The LTT policies then calibrate one threshold on D_conf instead of screening per sample.
 """
 import numpy as np, sys
-from guard import losses as _L, targets as _T, certify as _C
+from guard import action as _A
+from guard import losses as _L, targets as _T
 from guard.pipeline import _select_beta
 from gates_core import _score, _at_rate, KS, TS, SPACES, WTS, ALPHA, DELTA
 from ltt_core import ltt_threshold
@@ -21,6 +22,39 @@ def _scores(m,t,multilabel):
     conf = -np.abs(m-0.5).mean(1) if multilabel else -m.max(1)
     agree = -np.abs(m-t).mean(1)
     return {'LTT-confidence':conf,'LTT-agreement':agree}
+
+
+ETAS = (0.05, 0.1, 0.2, 0.3, 0.4)
+
+def _auroc(score, pos):
+    """Rank quality of `score` for predicting `pos`; ties get half credit."""
+    import numpy as _np
+    pos = _np.asarray(pos, bool)
+    if pos.all() or not pos.any():
+        return 0.5
+    r = _np.argsort(_np.argsort(score, kind='mergesort'), kind='mergesort').astype(float) + 1
+    npos, nneg = int(pos.sum()), int((~pos).sum())
+    return float((r[pos].sum() - npos * (npos + 1) / 2) / (npos * nneg))
+
+
+def crc_threshold(score_c, harm_c, alpha):
+    """Largest apply set whose calibration risk stays under the CRC level.
+
+    Angelopoulos et al. (2023): with a loss bounded by B=1 and n calibration
+    points, picking the most permissive lambda whose empirical risk is at most
+    alpha - (1 - alpha)/n gives E[risk] <= alpha over calibration and test.
+    """
+    import numpy as _np
+    n = len(score_c)
+    level = alpha - (1.0 - alpha) / n
+    if level <= 0:
+        return None
+    order = _np.argsort(-score_c, kind='mergesort')       # admit high score first
+    risk = _np.cumsum(harm_c[order]) / n
+    ok = _np.nonzero(risk <= level)[0]
+    if len(ok) == 0:
+        return None
+    return float(score_c[order[ok[-1]]])
 
 def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
              keep=None, targets=('hard',), richer=None, seeds=1, groups=None):
@@ -55,7 +89,8 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
     tt={n:_T.knn_average(f[n],f['pool'],vals,ke,weighting=wt) for n in ('fit','conf','test')}
     mc,mt=pr[conf],pr[test]
     cc=(1-b)*mc+b*tt['conf']; ct=(1-b)*mt+b*tt['test']
-    g=_C.certify(cc,labels[conf],ct,mt,loss,ALPHA,DELTA); apG=g['apply']
+    _sc=_A.fit_action_score(pr[fit],tt['fit'],(1-b)*pr[fit]+b*tt['fit'],labels[fit],loss)
+    g=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,ALPHA,DELTA); apG=g['apply']
     bl=loss(mt,labels[test]); cl=loss(ct,labels[test]); dl=cl-bl
     base=acc(mt,test); R=float(apG.mean())
     AP={}
@@ -87,6 +122,12 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
                             tt['conf'].max(1), (np.abs(mc-tt['conf']).mean(1)<0.1).astype(float),
                             np.abs(mc-tt['conf']).sum(1)])
         sc_c['LTT-learned']=lr.predict_proba(Xc)[:,1]; sc_t['LTT-learned']=lr.predict_proba(Xt)[:,1]
+    # confidence + CRC: the same calibration, without the learned score
+    _lmc = crc_threshold(sc_c['LTT-confidence'], harm_c, ALPHA)
+    _apc = np.zeros(len(test), bool) if _lmc is None else (sc_t['LTT-confidence'] >= _lmc)
+    out['CRC-confidence'] = row(_apc, 'CRC-confidence')
+    out['CRC-confidence-rate'] = float(_apc.mean())
+
     for name in list(sc_c):
         lam=ltt_threshold(sc_c[name],harm_c,ALPHA,0.05)
         ap = np.zeros(len(test),bool) if lam is None else (sc_t[name]>=lam)
@@ -103,16 +144,14 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
             if lm is not None: apm |= (gt==gv)&(sc_t[name]>=lm)
         mname=name.replace('LTT-','LTT-mask-')
         out[mname]=row(apm,mname); out[mname+'-rate']=float(apm.mean())
-    # symmetric comparator: GUARD calibrated per mask too (the group-conditional corollary)
-    if groups is not None:
-        gc,gt=np.asarray(groups)[conf],np.asarray(groups)[test]
-        apm=np.zeros(len(test),bool)
-        for gv in np.unique(gt):
-            sc,st=gc==gv,gt==gv
-            if sc.sum()<10 or st.sum()==0: continue
-            gg=_C.certify(cc[sc],labels[conf][sc],ct[st],mt[st],loss,ALPHA,DELTA)
-            apm[st]=gg['apply']
-        out['GUARD-mask']=row(apm,'GUARD-mask'); out['GUARD-mask-rate']=float(apm.mean())
+        # GUARD's own risk-utility frontier: same corrector, alpha swept
+    fr=[]
+    for a_ in (0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.5,0.6):
+        gg=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,a_,DELTA)
+        ap_=gg['apply']
+        fr.append((a_, acc(np.where(ap_[:,None],ct,mt),test)-base,
+                   float((ap_&(dl>DELTA)).mean()), float(ap_.mean())))
+    out['GUARD-frontier']=fr
     out['_apply']=AP; out['_harmful']=(dl>DELTA)
     out['_meta']=dict(base=base, apply=R, k=k, target=tg, space=sp, weighting=wt, temperature=T, beta=b)
     return out

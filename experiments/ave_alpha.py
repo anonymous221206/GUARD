@@ -1,5 +1,6 @@
 import numpy as np, sys, csv
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
+from guard import action as _A
 from guard.pipeline import _select_beta
 import os
 from pathlib import Path
@@ -31,7 +32,7 @@ def sweep(P,F,Y,split,rich=None):
     bl=loss(P[test],Y[test]); cl=loss(ct,Y[test]); hurt=(cl-bl)>DELTA
     a=lambda Q: float((Q.argmax(1)==Y[test]).mean()); base=a(P[test]); out=[]
     for al in ALPHAS:
-        g=_C.certify(cc,Y[conf],ct,P[test],loss,al,DELTA); ap=g['apply']
+        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, al, DELTA); ap=g['apply']
         gp=np.where(ap[:,None],ct,P[test])
         out.append(dict(alpha=al,target=tg,apply_rate=float(ap.mean()),joint_harm=float((ap&hurt).mean()),
                         acc_gain=a(gp)-base,blanket_joint_harm=float(hurt.mean()),blanket_acc_gain=a(ct)-base))

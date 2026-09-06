@@ -3,12 +3,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT / 'src'))
 sys.path.insert(0,str(ROOT / 'scripts'))
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
+from guard import action as _A
 from guard.pipeline import _select_beta
 import train_ninapro_retrained as T
 import os
 os.makedirs(ROOT / 'results/alpha', exist_ok=True)
-B=str(ROOT / 'experiments')
+B=str(ROOT)
 ALPHAS=[0.05,0.10,0.20,0.30,0.50]; DELTA=0.05
 KS=(5,10,20,35,50); SPACES=('standardise','cosine'); WTS=('uniform','distance')
 CE=_L.get('cross_entropy'); amax=lambda P,Y: float((P.argmax(1)==Y).mean())
@@ -30,7 +31,7 @@ def cellrun(P,F,Y,split):
     cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
     bl=CE(P[test],Y[test]); cl=CE(ct,Y[test]); hurt=(cl-bl)>DELTA; base=amax(P[test],Y[test]); out=[]
     for al in ALPHAS:
-        g=_C.certify(cc,Y[conf],ct,P[test],CE,al,DELTA); ap=g['apply']
+        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], CE), P[conf], tc, cc, Y[conf], P[test], tt, CE, al, DELTA); ap=g['apply']
         gp=np.where(ap[:,None],ct,P[test])
         out.append(dict(alpha=al,apply_rate=float(ap.mean()),joint_harm=float((ap&hurt).mean()),
                         acc_gain=amax(gp,Y[test])-base,blanket_joint_harm=float(hurt.mean()),

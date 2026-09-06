@@ -35,7 +35,7 @@ sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT))
 
 from guard import losses as L                             # noqa: E402
-from guard.certify import certify                         # noqa: E402
+from guard import action as _A                         # noqa: E402
 from guard.pipeline import BETA_GRID                      # noqa: E402
 from guard.splits import Split                            # noqa: E402
 from guard.targets import hard_label_values, knn_average, standardise  # noqa: E402

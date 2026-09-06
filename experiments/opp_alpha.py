@@ -6,7 +6,8 @@ ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts'))
 sys.path.insert(0,str(ROOT / 'experiments'))
 sys.path.insert(0,str(ROOT / 'src'))
 from gates_core import gate_row
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
+from guard import action as _A
 from guard.pipeline import _select_beta
 from sklearn.metrics import f1_score
 D=str(ARTIFACTS / 'opportunity_dcl_v2')
@@ -36,7 +37,7 @@ for cfg in CFG:
         wf=lambda Q: f1_score(y[test],Q.argmax(1),average='weighted')
         base=wf(P[test]); bl=wf(ct)
         for al in ALPHAS:
-            g=_C.certify(cc,y[conf],ct,P[test],loss,al,DELTA); ap=g['apply']
+            g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit], loss), P[conf], tc, cc, y[conf], P[test], tt, loss, al, DELTA); ap=g['apply']
             gp=np.where(ap[:,None],ct,P[test])
             rows.append(dict(family='opportunity',dataset='opportunity',condition=cfg,
                              target=r['_meta']['target'],seed=s,exchangeable=True,alpha=al,

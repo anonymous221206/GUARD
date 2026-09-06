@@ -2,7 +2,8 @@ import sys, json, numpy as np
 from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT / 'src'))
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
+from guard import action as _A
 from guard.pipeline import _select_beta
 B=str(ROOT)
 ALPHA,DELTA=0.2,0.05; KS=(5,10,20,35,50); SPACES=('standardise','cosine'); WTS=('uniform','distance')
@@ -21,7 +22,7 @@ def run(P,F,Y,split,loss,score):
     _,sp,wt,k,b=best; f=SP[sp]
     tc=_T.knn_average(f['conf'],f['pool'],vals,k,weighting=wt); tt=_T.knn_average(f['test'],f['pool'],vals,k,weighting=wt)
     cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
-    g=_C.certify(cc,Y[conf],ct,P[test],loss,ALPHA,DELTA); ap=g['apply']
+    g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, ALPHA, DELTA); ap=g['apply']
     bl=loss(P[test],Y[test]); cl=loss(ct,Y[test]); gp=np.where(ap[:,None],ct,P[test])
     return (score(P[test],Y[test]),score(ct,Y[test]),score(gp,Y[test]),float(ap.mean()),
             float((ap&((cl-bl)>DELTA)).mean()),float((((cl-bl)>DELTA)).mean()))

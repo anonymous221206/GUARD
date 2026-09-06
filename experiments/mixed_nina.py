@@ -14,7 +14,7 @@ _ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
 
 CONDS=('12','8','6','4')
-RULES=('blanket','confidence','GUARD','LTT-confidence','LTT-agreement','LTT-learned','LTT-mask-confidence','LTT-mask-agreement','LTT-mask-learned','GUARD-mask')
+RULES=('blanket','confidence','GUARD','LTT-confidence','LTT-agreement','LTT-learned','LTT-mask-confidence','LTT-mask-agreement','LTT-mask-learned','GUARD-mask','GUARD-LTT','GUARD-mask-LTT','GUARD-exp-LTT','GUARD-mask-exp-LTT','GUARD-phat-LTT','GUARD-mask-phat-LTT')
 res=collections.defaultdict(list); percond=collections.defaultdict(lambda: collections.defaultdict(list))
 subs=sorted(glob.glob('artifacts/ninapro_cnn/seed*/subject*'))[:10]
 for si,sub in enumerate(subs):

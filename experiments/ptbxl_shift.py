@@ -3,9 +3,10 @@ from pathlib import Path
 import numpy as np, sys, csv
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT / 'src'))
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
+from guard import action as _A
 from guard.pipeline import _select_beta
-B=str(ROOT / 'experiments')
+B=str(ROOT)
 BE=_L.get('bernoulli'); ham=lambda P,Y: float((((P>0.5)==(Y>0.5)).mean(1)).mean())
 ALPHAS=[0.05,0.10,0.20,0.30,0.50]; DELTA=0.05
 KS=(5,10,20,35,50); SPACES=('standardise','cosine'); WTS=('uniform','distance')
@@ -41,7 +42,7 @@ for mild,severe in [(12,4),(12,2),(10,3),(9,2)]:
         blo=BE(Ps[test],Y[test]); cl=BE(ct,Y[test]); hurt=(cl-blo)>DELTA
         base=ham(Ps[test],Y[test])
         for al in ALPHAS:
-            g=_C.certify(cc,Y[conf],ct,Ps[test],BE,al,DELTA); ap=g['apply']
+            g=_A.certify_action(_A.fit_action_score(Ps[fit], tf, (1-b)*Ps[fit]+b*tf, Y[fit], BE), Ps[conf], tc, cc, Y[conf], Ps[test], tt, BE, al, DELTA); ap=g['apply']
             gp=np.where(ap[:,None],ct,Ps[test])
             rows.append(dict(family='ptbxl',dataset='ptbxl_severity_shift',
                              condition=f'calib{mild}_deploy{severe}',target='hard',seed=seed,

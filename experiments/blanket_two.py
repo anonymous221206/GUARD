@@ -3,7 +3,8 @@ from pathlib import Path
 import numpy as np, sys, json, collections
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT / 'src'))
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
+from guard import action as _A
 from guard.pipeline import _select_beta
 B=str(ROOT)
 loss=_L.get('cross_entropy'); ALPHA,DELTA=0.2,0.05
@@ -28,7 +29,7 @@ def three(P,F,Y,split,rich=None):
     tc=_T.knn_average(f['conf'],f['pool'],V[tg],k,weighting=wt)
     tt=_T.knn_average(f['test'],f['pool'],V[tg],k,weighting=wt)
     cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
-    g=_C.certify(cc,Y[conf],ct,P[test],loss,ALPHA,DELTA); ap=g['apply']
+    g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, ALPHA, DELTA); ap=g['apply']
     gp=np.where(ap[:,None],ct,P[test])
     a=lambda Q: float((Q.argmax(1)==Y[test]).mean())
     return a(P[test]), a(ct), a(gp)

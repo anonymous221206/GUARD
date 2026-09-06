@@ -5,7 +5,8 @@ trained whether-to-repair methods) and confidence gates are all held to the
 same apply rate as GUARD, so only the decision rule differs.
 """
 import numpy as np, sys, json, collections
-from guard import losses as _L, targets as _T, certify as _C
+from guard import action as _A
+from guard import losses as _L, targets as _T
 from sklearn.linear_model import LogisticRegression
 import os
 from pathlib import Path
@@ -76,7 +77,8 @@ for cond in ['a','v','av']:
             gp=np.where(ap[:,None],ct,mt)
             return dict(cond=cond,seed=seed,gate=name,gain=acc_nz(gp,test)-base,
                         apply=float(ap.mean()),harm=float((ap&(dl>DELTA)).mean()))
-        g=_C.certify(cc,y[conf],ct,mt,loss,ALPHA,DELTA); apG=g['apply']
+        _sc=_A.fit_action_score(mf,tf,(1-b)*mf+b*tf,y[fit],loss)
+        g=_A.certify_action(_sc,mc,tc,cc,y[conf],mt,tt,loss,ALPHA,DELTA); apG=g['apply']
         R=float(apG.mean())
         rows.append(score_row('GUARD',apG))
         rows.append(score_row('blanket',np.ones(len(test),bool)))

@@ -1,14 +1,15 @@
 """Alpha sweep for the benchmarks missing from alpha_frontier_all.csv.
-from pathlib import Path
 The kNN and blend are computed once per cell; only Certify depends on alpha."""
+from pathlib import Path
 import sys, json, csv, numpy as np, torch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT / 'src'))
 sys.path.insert(0,str(ROOT / 'scripts'))
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
+from guard import action as _A
 from guard.pipeline import _select_beta
 from sklearn.metrics import roc_auc_score
-B=str(ROOT / 'experiments')
+B=str(ROOT)
 ALPHAS=[0.05,0.10,0.20,0.30,0.50]; DELTA=0.05
 KS=(5,10,20,35,50); SPACES=('standardise','cosine'); WTS=('uniform','distance')
 def cell(P,F,Y,split,loss,score,tgt):
@@ -29,7 +30,7 @@ def cell(P,F,Y,split,loss,score,tgt):
     bl=loss(P[test],Y[test]); cl=loss(ct,Y[test]); hurt=(cl-bl)>DELTA
     base=score(P[test],Y[test]); out=[]
     for al in ALPHAS:
-        g=_C.certify(cc,Y[conf],ct,P[test],loss,al,DELTA); ap=g['apply']
+        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, al, DELTA); ap=g['apply']
         gp=np.where(ap[:,None],ct,P[test])
         out.append(dict(alpha=al,apply_rate=float(ap.mean()),joint_harm=float((ap&hurt).mean()),
                         acc_gain=score(gp,Y[test])-base,blanket_joint_harm=float(hurt.mean()),

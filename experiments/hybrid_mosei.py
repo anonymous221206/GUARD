@@ -1,4 +1,4 @@
-"""Mixed availability: one calibration set, many conditions at deployment.
+"""Hybrid scores: same certificate machinery, ranked by different aggregations.
 
 Every table so far calibrates and tests inside a single availability pattern, which is
 the friendliest possible setting for a rule that tunes one scalar. A deployed model does
@@ -32,7 +32,8 @@ for seed in range(10):
         if 'v' in c: F[m,A.shape[1]:]=V[m]
     perm=rng.permutation(n); sp=np.array_split(perm,4)
     row=gate_row(P,F,y,sp,keep=keep,targets=('hard','cross'),richer=RICH,groups=ci)
-    RULES=('blanket','confidence','GUARD','LTT-confidence','LTT-agreement','LTT-learned','LTT-mask-confidence','LTT-mask-agreement','LTT-mask-learned','GUARD-mask','GUARD-LTT','GUARD-mask-LTT','GUARD-soft-LTT')
+    RULES=('blanket','confidence','GUARD','LTT-confidence','LTT-agreement','LTT-learned','LTT-mask-confidence','LTT-mask-agreement','LTT-mask-learned','GUARD-mask','GUARD-LTT','GUARD-mask-LTT','GUARD-soft-LTT',
+       'GUARD-exp-LTT','GUARD-mask-exp-LTT','GUARD-phat-LTT','GUARD-mask-phat-LTT')
     for k in RULES:
         if k in row: res[k].append(row[k])
     diag.append((row.get('_eta'), row.get('_lambda'), row['_meta']['apply']))
@@ -59,4 +60,4 @@ pc={}
 for k in percond:
     v=[float(np.mean(percond[k][c])) for c in CONDS]; pc[k]=v
     print(f'{k:17}' + ''.join(f'{x:9.3f}' for x in v))
-json.dump({'pooled':out,'per_condition':pc},open('mixed_deploy.json','w'))
+json.dump({'pooled':out,'per_condition':pc},open('hybrid_mosei.json','w'))
