@@ -5,7 +5,8 @@ routine, so a difference between benchmarks cannot come from a difference in how
 the comparison was run.
 """
 import numpy as np, sys
-from guard import losses as _L, targets as _T, certify as _C
+from guard import action as _A
+from guard import losses as _L, targets as _T
 from guard.pipeline import _select_beta
 from sklearn.linear_model import LogisticRegression
 
@@ -56,7 +57,8 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
     tt={n:_T.knn_average(f[n],f['pool'],vals,ke,weighting=wt) for n in ('fit','conf','test')}
     mc,mt=pr[conf],pr[test]
     cc=(1-b)*mc+b*tt['conf']; ct=(1-b)*mt+b*tt['test']
-    g=_C.certify(cc,labels[conf],ct,mt,loss,ALPHA,DELTA); apG=g['apply']
+    _sc=_A.fit_action_score(pr[fit],tt['fit'],(1-b)*pr[fit]+b*tt['fit'],labels[fit],loss)
+    g=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,ALPHA,DELTA); apG=g['apply']
     bl=loss(mt,labels[test]); cl=loss(ct,labels[test]); dl=cl-bl
     base=acc(mt,test); R=float(apG.mean())
     def row(ap): return (acc(np.where(ap[:,None],ct,mt),test)-base, float((ap&(dl>DELTA)).mean()))

@@ -11,7 +11,7 @@ Thresholds are tested from the most conservative down, in fixed sequence, and te
 stops at the first threshold that fails, so the family-wise error is delta.
 """
 import numpy as np, sys
-from guard import losses as _L, targets as _T, certify as _C
+from guard import losses as _L, targets as _T
 from guard.pipeline import _select_beta
 from gates_core import _score, _at_rate, KS, TS, SPACES, WTS, ALPHA, DELTA
 from sklearn.linear_model import LogisticRegression

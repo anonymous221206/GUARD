@@ -13,7 +13,7 @@ from typing import Sequence
 
 import numpy as np
 
-from . import certify as _certify
+from . import action as _action
 from . import losses as _losses
 from . import measure as _measure
 from . import targets as _targets
@@ -57,7 +57,7 @@ class Result:
     apply_rate: float
     joint_harm: float
     cond_harm: float
-    q_hat: float
+    threshold: float | None    #: calibrated action threshold
     n_pool: int
     n_fit: int
     n_conf: int
@@ -151,8 +151,11 @@ def run(
     corrected_conf = (1 - beta) * m_conf + beta * t_conf
     corrected_test = (1 - beta) * m_test + beta * t_test
 
-    gate = _certify.certify(corrected_conf, y_conf, corrected_test, m_test,
-                            loss, alpha, delta)
+    corrected_fit = (1 - beta) * m_fit + beta * t_fit
+    scorer = _action.fit_action_score(m_fit, t_fit, corrected_fit, y_fit, loss)
+    gate = _action.certify_action(scorer, m_conf, t_conf, corrected_conf, y_conf,
+                                  m_test, t_test, loss, alpha, delta,
+                                  fit=(m_fit, t_fit, corrected_fit, y_fit))
     apply = gate["apply"]
 
     base_loss = loss(m_test, y_test)
@@ -195,8 +198,8 @@ def run(
         blanket_joint_harm=float((blanket_delta > delta).mean()),
         target_accuracy=_losses.accuracy(t_test, y_test, loss),
         ph=ph["ph"], ph_se=ph["ph_se"],
-        q_hat=gate["q_hat"],
-        **_certify.harm_accounting(delta_loss, apply, delta),
+        threshold=gate["lambda"],
+        **_action.harm_accounting(delta_loss, apply, delta),
         n_pool=len(split.pool), n_fit=len(split.fit),
         n_conf=len(split.conf), n_test=len(split.test),
         alpha=alpha, delta=delta, k=k_eff,

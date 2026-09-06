@@ -21,7 +21,7 @@ A=r['test_ac'].astype(np.float64); V=r['test_vis'].astype(np.float64)
 def probs(m):
     s=p[f'test_{m}'].astype(np.float64); e=1/(1+np.exp(-s)); return np.stack([1-e,e],1)
 CONDS=('a','v','av'); PR={c:probs(c) for c in CONDS}; RICH=probs('tav')
-n=len(y); res=collections.defaultdict(list); percond=collections.defaultdict(lambda: collections.defaultdict(list))
+n=len(y); diag=[]; res=collections.defaultdict(list); percond=collections.defaultdict(lambda: collections.defaultdict(list))
 for seed in range(10):
     rng=np.random.default_rng(seed)
     ci=rng.integers(0,3,n)                      # each sample gets its own pattern
@@ -32,9 +32,10 @@ for seed in range(10):
         if 'v' in c: F[m,A.shape[1]:]=V[m]
     perm=rng.permutation(n); sp=np.array_split(perm,4)
     row=gate_row(P,F,y,sp,keep=keep,targets=('hard','cross'),richer=RICH,groups=ci)
-    RULES=('blanket','confidence','GUARD','LTT-confidence','LTT-agreement','LTT-learned','LTT-mask-confidence','LTT-mask-agreement','LTT-mask-learned','GUARD-mask')
+    RULES=('blanket','confidence','GUARD','LTT-confidence','LTT-agreement','LTT-learned','LTT-mask-confidence','LTT-mask-agreement','LTT-mask-learned','GUARD-mask','GUARD-LTT','GUARD-mask-LTT','GUARD-soft-LTT')
     for k in RULES:
         if k in row: res[k].append(row[k])
+    diag.append((row.get('_eta'), row.get('_lambda'), row['_meta']['apply']))
     ct_=ci[sp[3]]; hm=row['_harmful']
     for k in RULES:
         if k not in row['_apply']: continue
@@ -47,6 +48,10 @@ out={}
 for k in [r for r in RULES if r in res]:
     g=np.nanmean([x[0] for x in res[k]]); h=np.nanmean([x[1] for x in res[k]])
     out[k]=(float(g),float(h)); print(f'{k:17}{g:+9.4f}{h:8.3f}')
+print()
+print('eta chon tren fit :', [d[0] for d in diag])
+print('lambda LTT chon   :', [None if d[1] is None else round(d[1],3) for d in diag])
+print('apply rate GUARD  :', [round(d[2],3) for d in diag])
 print()
 print('harm theo tung pattern trong cung mot hon hop (budget %.2f)'%ALPHA)
 print(f"{'rule':17}" + ''.join(f'{c:>9}' for c in CONDS))

@@ -1,10 +1,12 @@
 """Run every benchmark driver with the LTT-augmented gate, one cell per condition."""
 import sys, json, os
-import gates_core, gates_ltt
-import os
 from pathlib import Path
-_ROOT = Path(__file__).resolve().parents[1]
+
+_HERE = Path(__file__).resolve().parent
+_ROOT = _HERE.parent
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
+sys.path.insert(0, str(_HERE))
+import gates_core, gates_ltt
 
 gates_core.gate_row = gates_ltt.gate_row
 LOG=[]; CUR=['?']
@@ -24,8 +26,9 @@ gates_core.gate_row=_patched
 _real=json.dump; json.dump=lambda *a,**k: None
 for drv in ('gates_mosei2','gates_iemocap','gates_rest','gates_drugban','opp_dcl'):
     CUR[0]=drv; print('#####',drv,flush=True)
-    g={'__name__':'__main__','__file__':drv+'.py'}
-    exec(compile(open(drv+'.py').read(),drv+'.py','exec'),g)
-    _real(LOG,open('ltt_cells.json','w'))
-json.dump=_real; _real(LOG,open('ltt_cells.json','w'))
+    src=_HERE/(drv+'.py')
+    g={'__name__':'__main__','__file__':str(src)}
+    exec(compile(src.read_text(),str(src),'exec'),g)
+    _real(LOG,open(str(_HERE.parent / 'results/gates/ltt_cells.json'),'w'))
+json.dump=_real; _real(LOG,open(str(_HERE.parent / 'results/gates/ltt_cells.json'),'w'))
 print('##### DONE',len(LOG),'cells')
