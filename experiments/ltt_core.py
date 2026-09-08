@@ -35,10 +35,18 @@ def hb_pvalue(Rhat,n,alpha):
     ph=float(np.exp(-n*_h1(Rhat,alpha)))
     return float(min(1.0,min(pb,ph)))
 
-def ltt_threshold(score_c,harm_c,alpha,delta):
-    """Most permissive threshold whose risk is certified at level alpha."""
+def ltt_threshold(score_c,harm_c,alpha,delta,grid_scores=None):
+    """Most permissive threshold whose risk is certified at level alpha.
+
+    Learn-then-Test tests a family of hypotheses that has to be fixed before the
+    calibration data are read. Taking the candidate thresholds from quantiles of
+    the calibration scores makes every hypothesis a function of that data, which
+    the fixed-sequence correction does not cover, so ``grid_scores`` should carry
+    the fit-split scores instead.
+    """
     n=len(score_c)
-    lams=np.quantile(score_c,np.linspace(1.0,0.0,NLAM))
+    lams=np.quantile(score_c if grid_scores is None else grid_scores,
+                     np.linspace(1.0,0.0,NLAM))
     chosen=None
     for lam in lams:
         ap=score_c>=lam

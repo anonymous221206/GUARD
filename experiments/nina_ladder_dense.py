@@ -47,7 +47,7 @@ def cell(seed,s,counts):
         r[ne]['_pred']=tp
     return r,Y[te]
 if __name__=='__main__':
-    ap=argparse.ArgumentParser(); ap.add_argument('--gate',action='store_true'); ap.add_argument('--out')
+    ap=argparse.ArgumentParser(); ap.add_argument('--gate',action='store_true'); ap.add_argument('--out', default=str(ROOT / 'results/ninapro/ladder_dense.json'))
     a=ap.parse_args()
     if a.gate:
         for seed,s in ((0,1),(1,1)):
@@ -67,4 +67,5 @@ if __name__=='__main__':
                 r,_=cell(seed,s,COUNTS)
                 out[f'seed{seed}_subject{s:02d}']={str(k):{kk:vv for kk,vv in v.items() if kk!='_pred'} for k,v in r.items()}
                 print(f'seed{seed} subject{s:02d} xong',flush=True)
+        import os as _os; _os.makedirs(_os.path.dirname(a.out), exist_ok=True)
         json.dump(out,open(a.out,'w'),indent=1); print('DA GHI',a.out)

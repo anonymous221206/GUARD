@@ -42,7 +42,7 @@ for d,cond in CELLS:
         blo=loss(P[test],Y[test]); cl=loss(ct,Y[test]); hurt=(cl-blo)>DELTA
         base=acc(P[test],Y[test]); bl=acc(ct,Y[test])
         for al in ALPHAS:
-            g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, al, DELTA); ap=g['apply']
+            g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, al, DELTA, fit=(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit])); ap=g['apply']
             gp=np.where(ap[:,None],ct,P[test])
             rows.append(dict(family='drugban',dataset=d,condition=cond,target=r['_meta']['target'],
                              seed=seed,exchangeable=exch,alpha=al,apply_rate=float(ap.mean()),

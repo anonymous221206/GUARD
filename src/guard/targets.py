@@ -43,6 +43,11 @@ def knn_average(
         raise ValueError(f"pool has {len(pool)} rows but k={k}")
     pool_sq = (pool ** 2).sum(1)
     out = np.empty((len(query), values.shape[1]), dtype=np.float64)
+    # The kernel width is a property of the pool, not of whichever queries happen
+    # to share a batch. Taking it from the query batch made the corrector depend
+    # on its neighbours in the batch, so the same X got different targets in
+    # calibration and at deployment and p_corr was not a fixed pointwise map.
+    tau = _pool_scale(pool, pool_sq, k) if weighting == "distance" else None
     for i in range(0, len(query), chunk):
         q = query[i:i + chunk]
         d2 = (q ** 2).sum(1)[:, None] + pool_sq[None, :] - 2.0 * (q @ pool.T)
@@ -51,13 +56,29 @@ def knn_average(
             out[i:i + chunk] = values[idx].mean(1)
         elif weighting == "distance":
             d = np.sqrt(np.maximum(np.take_along_axis(d2, idx, 1), 0.0))
-            tau = np.median(d.max(1)) + 1e-12
             w = np.exp(-d / tau)
             w /= w.sum(1, keepdims=True)
             out[i:i + chunk] = (values[idx] * w[:, :, None]).sum(1)
         else:
             raise ValueError(f"unknown weighting {weighting!r}")
     return out
+
+
+def _pool_scale(pool, pool_sq, k, sample=2048, seed=0):
+    """Kernel width from the pool alone: the median k-th neighbour distance.
+
+    Computed once from the retrieval pool, which is fixed before any calibration
+    or deployment point is read, so the weighting it induces is a function of the
+    query and the pool only.
+    """
+    n = len(pool)
+    idx = (np.arange(n) if n <= sample
+           else np.random.default_rng(seed).choice(n, sample, replace=False))
+    q = pool[idx]
+    d2 = (q ** 2).sum(1)[:, None] + pool_sq[None, :] - 2.0 * (q @ pool.T)
+    kk = min(k, n - 1)
+    part = np.partition(d2, kk, axis=1)[:, :kk + 1]     # includes the self hit
+    return float(np.median(np.sqrt(np.maximum(part.max(1), 0.0)))) + 1e-12
 
 
 def standardise(reference: np.ndarray):
@@ -102,18 +123,25 @@ def retrieval_space(reference: np.ndarray, kind: str = "standardise"):
     raise ValueError(f"unknown retrieval space {kind!r}")
 
 
-def temper(probs: np.ndarray, temperature: float) -> np.ndarray:
+def temper(probs: np.ndarray, temperature: float, simplex: bool = True) -> np.ndarray:
     """Raise or flatten a host's confidence before it is blended.
 
     A host calibrated for one deployment is rarely calibrated for a degraded
     one, and the blend weight cannot fix a scale error on its own. Temperature
     is chosen on the fit split like every other choice here.
+
+    ``simplex`` says which output space the host lives in. A softmax head is
+    tempered across its classes; a multi-label head is a row of independent
+    Bernoulli probabilities, and tempering it as a softmax would force the row
+    to sum to one, which on PTB-XL collapses nearly every positive prediction.
     """
-    p = np.clip(np.asarray(probs, dtype=np.float64), 1e-12, None)
-    logits = np.log(p) / float(temperature)
-    logits -= logits.max(1, keepdims=True)
-    e = np.exp(logits)
-    return e / e.sum(1, keepdims=True)
+    p = np.clip(np.asarray(probs, dtype=np.float64), 1e-12, 1.0 - 1e-12)
+    if simplex:
+        logits = np.log(p) / float(temperature)
+        logits -= logits.max(1, keepdims=True)
+        e = np.exp(logits)
+        return e / e.sum(1, keepdims=True)
+    return 1.0 / (1.0 + np.exp(-np.log(p / (1.0 - p)) / float(temperature)))
 
 
 def hard_label_values(pool_labels: np.ndarray, n_out: int, simplex: bool) -> np.ndarray:
@@ -146,8 +174,10 @@ def richer_is_richer(
     tests only that it is more accurate -- a strictly weaker property. Read the
     result accordingly:
 
-    * ``precondition_met=False`` is decisive. The richer host cannot be
-      conditionally correct if it is not even more accurate, and cross-mask
+    * ``precondition_met=False`` is evidence, not proof. A conditionally correct
+      richer host cannot be *less* accurate in population, but this compares one
+      finite split, where sampling noise can flip the sign; equal accuracy is
+      not a failure and is admitted. Cross-mask
       lost essentially all of the label-based gain in every run where this
       fired (5 of 5 in our measurements).
     * ``precondition_met=True`` clears the necessary condition and nothing
@@ -175,5 +205,5 @@ def richer_is_richer(
         "richer_accuracy": a_rich,
         "poorer_accuracy": a_poor,
         "margin": a_rich - a_poor,
-        "precondition_met": bool(a_rich > a_poor),
+        "precondition_met": bool(a_rich >= a_poor),
     }

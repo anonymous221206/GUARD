@@ -12,3 +12,4 @@ __pycache__/
 .venv*/
 artifacts/
 .venv/
+data/ninapro/

@@ -3,7 +3,6 @@
 The per-benchmark drivers average over conditions before printing, so the summary
 table and the per-condition ranges could drift apart. This runs the same drivers
 with gate_row wrapped, records every (condition, seed) cell, and writes one file
-from which both the means and the ranges are read.
 """
 import sys, json, os
 import gates_core

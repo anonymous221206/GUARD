@@ -5,9 +5,9 @@
 # so they can be redistributed.  They exist so that every certification result can
 # be reproduced without a GPU: everything downstream of a dump is pure numpy.
 #
-#   bash data/download_artifacts.sh              # everything (~2.5 GB)
-#   bash data/download_artifacts.sh dumps        # host outputs only (~2.2 GB)
-#   bash data/download_artifacts.sh checkpoints  # host weights only (~330 MB)
+#   bash data/download_artifacts.sh              # everything (~2.9 GB)
+#   bash data/download_artifacts.sh dumps        # host outputs only (~2.5 GB)
+#   bash data/download_artifacts.sh checkpoints  # host weights only (~336 MB)
 #
 # Files land in ./artifacts, which is where every driver in experiments/ looks.
 # Set GUARD_ARTIFACTS to put them elsewhere.
@@ -19,8 +19,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="${GUARD_ARTIFACTS:-$ROOT/artifacts}"
 
 case "$WHAT" in
-  dumps)       PATTERNS="mosei_cmad/* iemocap_momke/* ave_av_att/* ptbxl_dropladder/* ptbxl_resnet1d_wang/* ninapro_cnn/seed*/* opportunity_dcl_v2/* drugban_processed/*" ;;
-  checkpoints) PATTERNS="ninapro_cnn/checkpoints/* ninapro_specialist/* ptbxl_resnet1d_wang.pt" ;;
+  dumps)       PATTERNS="mosei_cmad/* iemocap_momke/* ave_av_att/dumps/* ptbxl_dropladder/* ptbxl_resnet1d_wang/* ninapro_cnn/seed*/* opportunity_dcl_v2/* drugban_processed/* drugban_protladder_v2/*" ;;
+  checkpoints) PATTERNS="ninapro_cnn/checkpoints/* ninapro_specialist/* ptbxl_resnet1d_wang.pt ave_av_att/checkpoints/*" ;;
   all)         PATTERNS="*" ;;
   *) echo "unknown selection: $WHAT (use all | dumps | checkpoints)" >&2; exit 1 ;;
 esac

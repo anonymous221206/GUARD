@@ -36,10 +36,10 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
         SP[sp]={n:z(feats[i]) for n,i in (('pool',pool),('fit',fit),('conf',conf),('test',test))}
     best=None
     for T in TS:
-        pr = probs if T==1.0 else _T.temper(probs,T)
+        pr = probs if T==1.0 else _T.temper(probs,T,loss.simplex)
         for tg in targets:
             vals=(_T.hard_label_values(labels[pool],n_out,loss.simplex) if tg=='hard'
-                  else _T.cross_mask_values((richer if T==1.0 else _T.temper(richer,T))[pool]))
+                  else _T.cross_mask_values((richer if T==1.0 else _T.temper(richer,T,loss.simplex))[pool]))
             for sp in SPACES:
                 for wt in WTS:
                     for k in KS:
@@ -50,30 +50,39 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
                         if best is None or s>best[0]: best=(s,T,tg,sp,wt,k,b)
     _,T,tg,sp,wt,k,b=best
     f=SP[sp]
-    pr = probs if T==1.0 else _T.temper(probs,T)
+    pr = probs if T==1.0 else _T.temper(probs,T,loss.simplex)
     vals=(_T.hard_label_values(labels[pool],n_out,loss.simplex) if tg=='hard'
-          else _T.cross_mask_values((richer if T==1.0 else _T.temper(richer,T))[pool]))
+          else _T.cross_mask_values((richer if T==1.0 else _T.temper(richer,T,loss.simplex))[pool]))
     ke=min(k,len(pool)-1)
     tt={n:_T.knn_average(f[n],f['pool'],vals,ke,weighting=wt) for n in ('fit','conf','test')}
-    mc,mt=pr[conf],pr[test]
-    cc=(1-b)*mc+b*tt['conf']; ct=(1-b)*mt+b*tt['test']
-    _sc=_A.fit_action_score(pr[fit],tt['fit'],(1-b)*pr[fit]+b*tt['fit'],labels[fit],loss)
-    g=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,ALPHA,DELTA); apG=g['apply']
+    # temperature is part of the correction, so it goes into the blend only; the
+    # baseline and the output a declined query gets are the host's own
+    mc,mt=probs[conf],probs[test]
+    cc=(1-b)*pr[conf]+b*tt['conf']; ct=(1-b)*pr[test]+b*tt['test']
+    cf=(1-b)*pr[fit]+b*tt['fit']
+    _sc=_A.fit_action_score(probs[fit],tt['fit'],cf,labels[fit],loss)
+    g=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,ALPHA,DELTA,fit=(probs[fit], tt['fit'], cf, labels[fit])); apG=g['apply']
     bl=loss(mt,labels[test]); cl=loss(ct,labels[test]); dl=cl-bl
     base=acc(mt,test); R=float(apG.mean())
     def row(ap): return (acc(np.where(ap[:,None],ct,mt),test)-base, float((ap&(dl>DELTA)).mean()))
     out={'GUARD':row(apG), 'blanket':row(np.ones(len(test),bool))}
+    # what conformal risk control alone would apply, before the fit-split
+    # tightening: the price of that step is the difference between the two
+    _lc = g['lambda_crc']
+    out['GUARD-untightened'] = row(
+        np.zeros(len(test), bool) if _lc is None else g['score_test'] > _lc)
     ent=-(mt*np.log(np.clip(mt,1e-12,None))).sum(1)
     out['confidence']=row(_at_rate(-np.abs(mt-0.5).mean(1) if mt.shape[1]>2 and np.ndim(labels)==2 else -mt.max(1),R))
     out['agreement']=row(_at_rate((np.abs(mt-tt['test']).mean(1)<0.1).astype(float),R))
     out['random']=row(_at_rate(np.random.default_rng(0).random(len(test)),R))
-    Xf=np.column_stack([pr[fit].max(1), -(pr[fit]*np.log(np.clip(pr[fit],1e-12,None))).sum(1),
-                        tt['fit'].max(1), (np.abs(pr[fit]-tt['fit']).mean(1)<0.1).astype(float),
-                        np.abs(pr[fit]-tt['fit']).sum(1)])
+    pf=probs[fit]
+    Xf=np.column_stack([pf.max(1), -(pf*np.log(np.clip(pf,1e-12,None))).sum(1),
+                        tt['fit'].max(1), (np.abs(pf-tt['fit']).mean(1)<0.1).astype(float),
+                        np.abs(pf-tt['fit']).sum(1)])
     Xt=np.column_stack([mt.max(1), ent, tt['test'].max(1),
                         (np.abs(mt-tt['test']).mean(1)<0.1).astype(float),
                         np.abs(mt-tt['test']).sum(1)])
-    zf=(loss((1-b)*pr[fit]+b*tt['fit'],labels[fit])<loss(pr[fit],labels[fit])).astype(int)
+    zf=(loss(cf,labels[fit])<loss(pf,labels[fit])).astype(int)
     out['learned']=(row(_at_rate(LogisticRegression(max_iter=2000).fit(Xf,zf).predict_proba(Xt)[:,1],R))
                     if len(set(zf))>1 else (np.nan,np.nan))
     out['_meta']=dict(base=base, apply=R, k=k, target=tg, space=sp, weighting=wt, temperature=T, beta=b)

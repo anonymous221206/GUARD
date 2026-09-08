@@ -50,8 +50,13 @@ class Split:
         """True when calibration and evaluation are declared to share an origin.
 
         This is a *declaration*, not a test: exchangeability cannot be verified
-        from data.  Experiments must set ``origin`` honestly.
+        from data.  Experiments must set ``origin`` honestly.  A split that
+        declares nothing is not exchangeable by default: ``origin.get`` would
+        return ``None`` on both sides and silently report a declaration that was
+        never made.
         """
+        if not self.origin:
+            return False
         return self.origin.get("conf") == self.origin.get("test")
 
     def warn_if_not_exchangeable(self) -> str | None:

@@ -124,14 +124,14 @@ def run(
     f_conf, f_test = z(host.features[split.conf]), z(host.features[split.test])
 
     probs = (host.probs if temperature == 1.0
-             else _targets.temper(host.probs, temperature))
+             else _targets.temper(host.probs, temperature, loss.simplex))
     if target == "hard":
         values = _targets.hard_label_values(host.labels[split.pool], n_out, loss.simplex)
     elif target == "cross_mask":
         if host.richer_probs is None:
             raise ValueError("cross_mask target needs richer_probs")
         richer = (host.richer_probs if temperature == 1.0
-                  else _targets.temper(host.richer_probs, temperature))
+                  else _targets.temper(host.richer_probs, temperature, loss.simplex))
         values = _targets.cross_mask_values(richer[split.pool])
     else:
         raise ValueError(f"unknown target {target!r}")
@@ -174,6 +174,10 @@ def run(
             raise ValueError("accuracy_nonzero needs raw_labels on HostOutputs")
         raw_test = np.asarray(host.raw_labels).reshape(-1)[split.test]
         score = lambda p: _losses.accuracy_nonzero(p, y_test, loss, raw_test)
+    elif metric == "auroc":
+        # ranking metric: it reads the positive-class score, not a decision, so a
+        # correction can move it without moving any label
+        score = lambda p: _losses.auroc(p[:, 1] if p.ndim == 2 else p, y_test)
     else:
         raise ValueError(f"unknown metric {metric!r}")
 
@@ -259,6 +263,8 @@ def select_on_fit(
             raise ValueError("accuracy_nonzero needs raw_labels on HostOutputs")
         raw_fit = np.asarray(host.raw_labels).reshape(-1)[split.fit]
         fit_score = lambda p: _losses.accuracy_nonzero(p, y_fit, loss, raw_fit)
+    elif metric == "auroc":
+        fit_score = lambda p: _losses.auroc(p[:, 1] if p.ndim == 2 else p, y_fit)
     else:
         raise ValueError(f"unknown metric {metric!r}")
     best = None
@@ -267,7 +273,7 @@ def select_on_fit(
         f_pool, f_fit = z(host.features[split.pool]), z(host.features[split.fit])
         for temperature in temperature_grid:
             probs = (host.probs if temperature == 1.0
-                     else _targets.temper(host.probs, temperature))
+                     else _targets.temper(host.probs, temperature, loss.simplex))
             m_fit = probs[split.fit]
             for target in target_grid:
                 if target == "hard":
@@ -277,7 +283,7 @@ def select_on_fit(
                     if host.richer_probs is None:
                         raise ValueError("cross_mask target needs richer_probs")
                     richer = (host.richer_probs if temperature == 1.0
-                              else _targets.temper(host.richer_probs, temperature))
+                              else _targets.temper(host.richer_probs, temperature, loss.simplex))
                     values = _targets.cross_mask_values(richer[split.pool])
                 else:
                     raise ValueError(f"unknown target {target!r}")

@@ -2,14 +2,15 @@
 
 Every table and figure in the paper is listed here with the driver that produced
 it and the artefacts that driver reads. Nothing reported in the paper comes from
-a script outside this repository.
+a script outside this repository. Figures 1 and 2 are drawn by hand in draw.io
+and are the only exception; their source is in the paper directory, not here.
 
 Before any of it runs:
 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
-pip install -e ".[dev]"
-bash data/download_artifacts.sh          # ~2.5 GB into ./artifacts
+pip install -e ".[dev,figures]"
+bash data/download_artifacts.sh          # ~2.9 GB into ./artifacts
 ```
 
 Drivers read `./artifacts`; set `GUARD_ARTIFACTS` to point elsewhere. Outputs
@@ -17,37 +18,52 @@ land under `results/`.
 
 ## Main text
 
-| # | Content | Driver | Artefacts |
+| # | Content | Driver | Reads |
 |---|---|---|---|
-| Table 1 | CMU-MOSEI, frozen vs certified | `experiments/mosei_full.py` | `mosei_cmad/dumps` |
-| Table 2 | All benchmarks, summary | the per-benchmark drivers below | all dumps |
-| Table 3 | Intervention rules compared | `experiments/gates_ranges.py` | all dumps |
-| Figure 3 | IEMOCAP | `experiments/gates_iemocap.py` | `iemocap_momke/folds` |
-| Figure 4 | Severity ladders | `experiments/nina_sev_dense.py`, `experiments/ptbxl_sev_dense.py` | `ninapro_cnn`, `ptbxl_dropladder` |
+| Table 1 | CMU-MOSEI against published methods | `experiments/mosei_hosts.py`, then `scripts/tables/mosei_rows.py` | `mosei_cmad`, `mosei_tmdc`, `mosei_momke` |
+| Table 2 | All benchmarks, summary | the per-benchmark drivers of Tables 9-11 | all dumps |
+| Table 3 | Intervention rules compared | `experiments/ltt_one.py <driver>` | all dumps |
+| Figure 3 | IEMOCAP against SIEVE | `experiments/iemocap_eta.py`, then `scripts/figures/make_fig_iemocap.py` | `iemocap_momke/folds` |
+| Figure 4 | Severity ladders | five ladder drivers (below), then `scripts/figures/make_fig_severity.py` | five dumps |
 | Figure 5 | Budget sweep | the eight sweep drivers, then `scripts/figures/make_fig_alpha2.py` | see below |
 
-`gates_ranges.py` runs the five per-benchmark gate drivers under one wrapper and
-writes `results/gates/gates_cells.json`, one row per (benchmark, condition, seed).
-Table 3 is the mean over those rows, Table 14 their range. They read the same
-file, so they cannot disagree.
+`ltt_one.py` wraps one gate driver and records every (condition, seed) cell to
+`results/gates/cells_<driver>.json`:
+
+```bash
+for d in gates_mosei2 gates_iemocap gates_rest gates_drugban opp_dcl; do
+  python experiments/ltt_one.py $d
+done
+```
+
+Table 3 is the mean over those cells and Table 14 their range. They read the same
+files, so they cannot disagree.
+
+The five panels of Figure 4 come from `experiments/ptbxl_sev_dense.py`,
+`experiments/nina_sev_dense.py`, `experiments/opp_dcl.py`,
+`scripts/drugban_protladder_guard.py` and `experiments/iemocap_eta.py`; the sixth
+comes from `experiments/ave_eta.py`.
 
 ## Appendix
 
-| # | Content | Driver | Artefacts |
+| # | Content | Driver | Reads |
 |---|---|---|---|
 | Table 5 | Benchmarks, hosts, degradations | descriptive; hosts listed in `docs/REPRODUCTION.md` | none |
 | Table 6 | Sample counts per role | `experiments/counts_splits.py` | `ave_av_att`, `ninapro_cnn`, `iemocap_momke` |
-| Table 7 | Synthetic study | `experiments/exp_synthetic.py` | none, generated in-process |
-| Table 8 | IEMOCAP per pattern | `experiments/gates_iemocap.py` | `iemocap_momke/folds` |
-| Table 9 | DrugBAN | `experiments/exp_drugban.py` | `drugban_processed` |
-| Table 10 | Gate ablation | `experiments/exp_ablations.py` | `drugban_processed` |
-| Table 11 | Per-condition results | `experiments/mosei_full.py`, `experiments/opp_full.py`, `experiments/nina_ladder_dense.py`, `experiments/ptbxl_sev_dense.py` | four dumps |
-| Table 12 | Cross-mask target | `experiments/gates_rest.py`, `experiments/gates_drugban.py` | `ave_av_att`, `ninapro_cnn`, `drugban_processed` |
-| Table 13 | CMU-MOSEI harm and apply rate | `experiments/mosei_full.py` | `mosei_cmad/dumps` |
-| Table 14 | Removing the certificate | `experiments/gates_ranges.py` | same file as Table 3 |
+| Table 7 | Synthetic study, matched raw error | `experiments/exp_synthetic_matched.py` | none, generated in-process |
+| Table 8 | IEMOCAP per missing rate | `experiments/iemocap_eta.py` | `iemocap_momke/folds` |
+| Table 9 | DrugBAN per condition | `experiments/exp_drugban.py`, then `scripts/tables/drugban_rows.py` | `drugban_processed` |
+| Table 10 | OPPORTUNITY under sensor loss | `experiments/opp_dcl.py` | `opportunity_dcl_v2` |
+| Table 11 | Per-condition results | `experiments/mosei_full.py`, `experiments/gates_iemocap.py`, `experiments/gates_ave.py`, `experiments/nina_sev_dense.py`, `experiments/ptbxl_sev_dense.py` | five dumps |
+| Table 12 | Cross-mask target | `scripts/tables/drugban_rows.py`, `experiments/opp_targets.py` | `drugban_processed`, `opportunity_dcl_v2` |
+| Table 13 | CMU-MOSEI harm and apply rate | `experiments/mosei_full.py` | `mosei_cmad` |
+| Table 14 | Removing the certificate | same cells as Table 3 | all dumps |
 | Figure 6 | Cross-mask accuracy screen | `scripts/figures/make_fig_screen.py` | `scripts/figures/ablation_data/` |
 | Figure 7 | Intervention rate | `scripts/figures/make_fig_apply.py` | `scripts/figures/ablation_data/` |
-| §D.1 | Calibration resampling spread | `experiments/fs_mosei.py` | `mosei_cmad/dumps` |
+
+`scripts/tables/alpha_stats.py` recomputes every counting claim in the
+budget-sweep subsection (how many runs, how many over budget, where the gain
+peaks) from the same CSVs Figure 5 reads.
 
 ## The sweep behind Figure 5
 
@@ -62,35 +78,55 @@ file, so they cannot disagree.
 | PTB-XL | `experiments/alpha_sweep_new.py` | `results/alpha/alpha_new.csv` |
 | PTB-XL, shifted calibration | `experiments/ptbxl_shift.py` | `results/alpha/alpha_ptbxl_shift.csv` |
 
+## Offline preparation
+
+Two artefacts are produced rather than downloaded, because they need a
+checkpoint and the original dataset:
+
+```bash
+# the AVE retrieval sidecars, one per condition including the intact one
+python hosts/ave.py export --host artifacts/ave_av_att --source <AVE_ECCV18> \
+       --conditions full --variant paper --cuda-device 0
+# the DrugBAN protein ladder: eleven frozen dumps, then the gate over them
+python scripts/drugban_protladder_v2.py          # needs dgl, dgllife
+python scripts/drugban_protladder_guard.py       # numpy only
+```
+
+The AVE exporter verifies itself: it refuses to write a sidecar whose posteriors
+do not reproduce the stored dump. The stored dumps were made on a GPU, so an
+exact reproduction needs one; on CPU the check fails at around `5e-3`.
+
+## Numbers quoted in the running text
+
+| Claim | Driver |
+|---|---|
+| the blend weight by mask in §5.1 ($0.70$ against $0.12$) | `experiments/beta_by_mask.py` |
+| what the fit-split tightening changes (§4.2) | `experiments/tighten_effect.py` |
+| the counting claims of the budget sweep (§5.4) | `scripts/tables/alpha_stats.py` |
+
+`scripts/rerun_all_results.sh` runs every driver behind a reported number in one
+pass; `scripts/tables/verify_paper.py` then checks the LaTeX against what they
+wrote, and `scripts/tables/rebuild_tables.py` prints the replacements for any
+cell that moved.
+
 ## Checked automatically
 
 ```bash
 pytest -q                          # ten tests on the certified decision rule
 python experiments/repro_check.py  # frozen-host numbers against the paper
+python experiments/audit_preflight.py
 ```
+
+`experiments/exp_synthetic.py` is a second, smaller synthetic check that shares
+no number with Table 7. Its skew preserves the arg-max, so it can move the loss
+but never the accuracy; it runs in seconds and doubles as an install test.
 
 ## Honest limits of this map
 
-The gate drivers print their tables to standard output and those numbers were
-transcribed into the LaTeX source; they are not written by a table generator.
-`scripts/build_tables.py` generates only the DrugBAN and OPPORTUNITY tables from
-`results/*/guard.csv`. Re-running a driver reproduces a number, it does not
-rewrite the paper.
+Three tables now have generators (`scripts/tables/`); the rest of the gate
+drivers print their numbers to standard output and those were transcribed into
+the LaTeX source. Re-running a driver reproduces a number, it does not rewrite
+the paper.
 
-`experiments/exp_modules.py` and `experiments/exp_ablations.py` still accept a
-`vilt` option. The paper reports no vision-language experiment; those code paths
-are inert without dumps that this repository does not ship. The host itself is in
-`superseded/`, which produces nothing in the paper.
-
-## Figures
-
-`scripts/figures/` holds the three generators and, under `ablation_data/`, the
-exact CSVs they read, so every figure redraws from a clean clone:
-
-```bash
-cd scripts/figures && python3 make_fig_alpha2.py   # Figure 5
-python3 make_fig_apply.py                          # Figure 7
-python3 make_fig_screen.py                         # Figure 6
-```
-
-Figures 1 and 2 are drawn by hand and are not generated.
+`superseded/` holds the code of the previous gate and the experiments that were
+dropped. Nothing in it produces a number in the paper.

@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "src"))
 
 from guard import HostOutputs, run                       # noqa: E402
-from guard.pipeline import select_beta                   # noqa: E402
+from guard.pipeline import _select_beta as select_beta                   # noqa: E402
 from guard.splits import Split                           # noqa: E402
 from guard import targets as _targets                    # noqa: E402
 

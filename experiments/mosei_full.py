@@ -27,7 +27,8 @@ for cond, feats in (('a',['test_ac']), ('v',['test_vis']), ('av',['test_vis','te
         pool,fit,conf,test=np.array_split(perm,4)
         sp=Split(pool,fit,conf,test,origin={k:'deployment' for k in ('pool','fit','conf','test')})
         c=select_on_fit(host,sp,k_grid=(3,5,8,12,20,35,50),target_grid=('hard','cross_mask'),
-                        space_grid=('cosine',),weighting_grid=('distance',),
+                        space_grid=('standardise','cosine'),
+                        weighting_grid=('uniform','distance'),
                         temperature_grid=(1.0,2.0),metric='accuracy_nonzero')
         res=run(host,sp,condition=cond,metric='accuracy_nonzero',
                 k=c['k'],target=c['target'],space=c['space'],

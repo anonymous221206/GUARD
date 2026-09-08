@@ -41,7 +41,7 @@ for cfg in CFG:
         base=wf(Pd[test]); bl=wf(ct)
         for al in ALPHAS:
             _sc=_A.fit_action_score(Pd[fit],tf,(1-b)*Pd[fit]+b*tf,yd[fit],loss)
-            g=_A.certify_action(_sc,Pc,tc,cc,yc,Pd[test],tt,loss,al,DELTA); ap=g['apply']
+            g=_A.certify_action(_sc,Pc,tc,cc,yc,Pd[test],tt,loss,al,DELTA,fit=(Pd[fit],tf,(1-b)*Pd[fit]+b*tf,yd[fit])); ap=g['apply']
             gp=np.where(ap[:,None],ct,Pd[test])
             rows.append(dict(family='opportunity',dataset='opportunity_cross_subject',condition=cfg,
                              target=r['_meta']['target'],seed=s,exchangeable=False,alpha=al,

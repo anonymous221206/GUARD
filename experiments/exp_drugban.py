@@ -25,10 +25,20 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from guard import HostOutputs, run                       # noqa: E402
+from guard.losses import accuracy as _accuracy, get as _get_loss  # noqa: E402
+from guard.pipeline import select_on_fit                 # noqa: E402
 from guard.splits import Split                           # noqa: E402
 from guard.targets import richer_is_richer               # noqa: E402
 
 CONDITIONS = ("full", "prot50", "prot25", "scaffold", "scaffold_prot50")
+# DrugBAN is published under AUROC, so that is what the retrieval settings are
+# chosen by; accuracy is reported beside it because a ranking metric can move
+# without a single decision changing.
+METRIC = "auroc"
+K_GRID = (3, 5, 8, 12, 20, 35, 50)
+SPACE_GRID = ("standardise", "cosine")
+W_GRID = ("uniform", "distance")
+T_GRID = (1.0, 2.0)
 
 
 def build(dumps: Path, cond: str, pool_from: str, seed: int):
@@ -66,7 +76,10 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=Path("results"))
     ap.add_argument("--alpha", type=float, default=0.2)
     ap.add_argument("--delta", type=float, default=0.05)
-    ap.add_argument("--k", type=int, default=50)
+    ap.add_argument("--k", type=int, default=50,
+                    help="ignored unless --no-select: the grid is searched on the fit split")
+    ap.add_argument("--no-select", action="store_true",
+                    help="pin the retrieval settings instead of choosing them on D_fit")
     ap.add_argument("--seed", type=int, default=0)
     a = ap.parse_args()
 
@@ -84,10 +97,26 @@ def main() -> None:
             print(f"  pre-flight: richer host {check['richer_accuracy']:.4f} vs "
                   f"poorer {check['poorer_accuracy']:.4f} -> "
                   f"cross-mask {'applicable' if check['precondition_met'] else 'NOT applicable'}")
-        for target in ("hard", "cross_mask"):
-            r = run(host, split, condition=cond, target=target,
-                    alpha=a.alpha, delta=a.delta, k=a.k)
-            rows.append(r.as_row())
+        for target in ("selected", "hard", "cross_mask"):
+            grid = (("hard", "cross_mask") if target == "selected" else (target,))
+            if a.no_select:
+                if target == "selected":
+                    continue
+                cfg = dict(k=a.k, target=target)
+            else:
+                cfg = select_on_fit(host, split, k_grid=K_GRID, target_grid=grid,
+                                    space_grid=SPACE_GRID, weighting_grid=W_GRID,
+                                    temperature_grid=T_GRID, metric=METRIC)
+                cfg = {kk: cfg[kk] for kk in
+                       ("k", "target", "space", "weighting", "temperature")}
+            r = run(host, split, condition=cond, alpha=a.alpha, delta=a.delta,
+                    metric=METRIC, **cfg)
+            ta = r.test_arrays
+            lo = _get_loss("cross_entropy")
+            rows.append({**r.as_row(), "policy": target, "seed": a.seed,
+                         "base_accuracy": _accuracy(ta["base_probs"], ta["labels"], lo),
+                         "gate_accuracy": _accuracy(ta["gated_probs"], ta["labels"], lo),
+                         "blanket_accuracy": _accuracy(ta["blanket_probs"], ta["labels"], lo)})
             print(f"{cond:17s} {target:11s} {r.base_metric:7.4f} {r.target_accuracy:7.3f} "
                   f"{r.beta:5.2f} {r.blanket_metric_delta:+8.4f} {r.gate_metric_delta:+8.4f} "
                   f"{r.apply_rate:6.2f} {r.joint_harm:6.3f} {r.cond_harm:6.3f}")

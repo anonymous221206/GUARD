@@ -13,6 +13,11 @@ cross_entropy softmax(z)                 one-hot(y)
 bernoulli     sigmoid(z), per coordinate  y in {0,1} per coordinate
 squared       identity                   y
 ============  =========================  =====================
+
+``bernoulli`` averages over the coordinates rather than summing them, so its
+gradient is ``(m(z) - t(y)) / K``: the canonical identity holds up to that
+positive constant. It leaves every argmin alone but it does set the scale of
+``delta``, so on a multi-label host the harm tolerance is per label.
 """
 
 from __future__ import annotations
@@ -131,9 +136,17 @@ def f1_macro(p: np.ndarray, y: np.ndarray, threshold: float = 0.5) -> float:
 
 def auroc(score: np.ndarray, y: np.ndarray) -> float:
     """Rank-based AUROC; returns NaN when one class is absent."""
-    order = np.argsort(score)
+    # average ranks, so a tie between a positive and a negative scores 0.5
+    # rather than 0 or 1 depending on which row happened to come first
+    order = np.argsort(score, kind="mergesort")
+    s_sorted = np.asarray(score, dtype=np.float64)[order]
     rank = np.empty(len(score), dtype=float)
-    rank[order] = np.arange(1, len(score) + 1)
+    plain = np.arange(1, len(score) + 1, dtype=float)
+    start = 0
+    for i in range(1, len(s_sorted) + 1):
+        if i == len(s_sorted) or s_sorted[i] != s_sorted[start]:
+            rank[order[start:i]] = plain[start:i].mean()
+            start = i
     n_pos = float((y == 1).sum())
     n_neg = len(y) - n_pos
     if n_pos == 0 or n_neg == 0:

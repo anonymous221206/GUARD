@@ -23,7 +23,7 @@ for f in ("affective", "drugban", "opportunity", "ptbxl", "ninapro", "ave"):
     rows += list(csv.DictReader(open(os.path.join(NEW, f + ".csv"))))
 ex = [r for r in rows if str(r["exchangeable"]) in ("True", "true")]
 
-FAM = [("affective", "CMU-MOSEI / IEMOCAP", "#4c6faa", "^"),
+FAM = [("affective", "CMU-MOSEI", "#4c6faa", "^"),
        ("drugban", "DrugBAN", "#8a6d3b", "o"),
        ("opportunity", "OPPORTUNITY", "#e08b00", "s"),
        ("ptbxl","PTB-XL","#b5179e","D"),

@@ -2,7 +2,7 @@
 """Add the PTB-XL driver the paper actually used to the per-cell registry."""
 import sys, json, os
 from pathlib import Path
-ROOT = Path(__file__).resolve().parents[0]
+ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'experiments'))
 os.chdir(ROOT)
 import gates_core, gates_ltt
@@ -25,7 +25,7 @@ gates_core.gate_row = _patched
 _real = json.dump
 json.dump = lambda *a, **k: None
 g = {'__name__': '__main__', '__file__': str(ROOT / 'experiments' / 'gates_ptbxl.py')}
-exec(compile(open('experiments/gates_ptbxl.py').read(), 'gates_ptbxl.py', 'exec'), g)
+exec(compile(open(str(ROOT/'experiments/gates_ptbxl.py')).read(), 'gates_ptbxl.py', 'exec'), g)
 json.dump = _real
 _real(LOG, open('results/gates/ptbxl_cells.json', 'w'))
 print('DONE', len(LOG), 'cells')

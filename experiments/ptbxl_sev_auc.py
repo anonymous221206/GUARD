@@ -22,9 +22,10 @@ def run(P,F,Y,split,loss,score):
                 sc=score((1-b)*P[fit]+b*tf,Y[fit])
                 if best is None or sc>best[0]: best=(sc,sp,wt,k,b)
     _,sp,wt,k,b=best; f=SP[sp]
+    tf=_T.knn_average(f['fit'],f['pool'],vals,k,weighting=wt)   # the chosen config, not the last one tried
     tc=_T.knn_average(f['conf'],f['pool'],vals,k,weighting=wt); tt=_T.knn_average(f['test'],f['pool'],vals,k,weighting=wt)
     cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
-    g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, ALPHA, DELTA); ap=g['apply']
+    g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, ALPHA, DELTA, fit=(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit])); ap=g['apply']
     bl=loss(P[test],Y[test]); cl=loss(ct,Y[test]); gp=np.where(ap[:,None],ct,P[test])
     return (score(P[test],Y[test]),score(ct,Y[test]),score(gp,Y[test]),float(ap.mean()),
             float((ap&((cl-bl)>DELTA)).mean()),float((((cl-bl)>DELTA)).mean()))

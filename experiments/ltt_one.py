@@ -26,7 +26,7 @@ def _patched(*a, **k):
     LOG.append(dict(driver=DRV, ctx=ctx,
                     **{kk: (list(vv) if isinstance(vv, tuple) else vv)
                        for kk, vv in r.items() if not kk.startswith('_')},
-                    rate=r['_meta']['apply']))
+                    rate=r['_meta']['apply'], base=r['_meta']['base']))
     return r
 
 gates_core.gate_row = _patched

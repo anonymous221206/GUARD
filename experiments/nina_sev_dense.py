@@ -7,7 +7,7 @@ from guard import losses as _L, targets as _T
 from guard import action as _A
 from guard.pipeline import _select_beta
 import train_ninapro_retrained as T
-B=str(ROOT / 'experiments')
+B=str(ROOT)
 ALPHA,DELTA=0.2,0.05; KS=(5,10,20,35,50); SPACES=('standardise','cosine'); WTS=('uniform','distance')
 CE=_L.get('cross_entropy'); argmax=lambda P,Y: float((P.argmax(1)==Y).mean())
 COUNTS=[16,14,12,10,8,7,6,5,4,3,2]
@@ -25,9 +25,10 @@ def run(P,F,Y,split,loss,score):
                 sc=score((1-b)*P[fit]+b*tf,Y[fit])
                 if best is None or sc>best[0]: best=(sc,sp,wt,k,b)
     _,sp,wt,k,b=best; f=SP[sp]
+    tf=_T.knn_average(f['fit'],f['pool'],vals,k,weighting=wt)   # the chosen config, not the last one tried
     tc=_T.knn_average(f['conf'],f['pool'],vals,k,weighting=wt); tt=_T.knn_average(f['test'],f['pool'],vals,k,weighting=wt)
     cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
-    g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, ALPHA, DELTA); ap=g['apply']
+    g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, ALPHA, DELTA, fit=(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit])); ap=g['apply']
     bl=loss(P[test],Y[test]); cl=loss(ct,Y[test]); gp=np.where(ap[:,None],ct,P[test])
     return (score(P[test],Y[test]),score(ct,Y[test]),score(gp,Y[test]),float(ap.mean()),
             float((ap&((cl-bl)>DELTA)).mean()),float((((cl-bl)>DELTA)).mean()))
@@ -65,5 +66,7 @@ for c in COUNTS:
     a=np.mean(store[c],0)
     res.append(dict(level=str(c),frozen=a[0],blanket=a[1],guard=a[2],apply=a[3],harm=a[4],bharm=a[5]))
     print('ninapro',c,np.round(a[:3],4),flush=True)
-json.dump(res,open(f'{B}/artifacts/ninapro_ladder_v2/severity_dense.json','w'),indent=1)
+import os as _os; _os.makedirs(f'{B}/results/ninapro', exist_ok=True)
+json.dump(res,open(f'{B}/results/ninapro/severity_dense.json','w'),indent=1)
+print('DA GHI')
 print('DA GHI')

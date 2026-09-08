@@ -28,7 +28,7 @@ for f in ("affective", "drugban", "opportunity", "ptbxl", "ninapro", "ave"):
         raise SystemExit("thieu " + q)
 
 # red and green are reserved for GUARD and the un-gated corrector, as in Figure 4
-FAM = [("affective",   "CMU-MOSEI / IEMOCAP", "#4c6faa", "^"),
+FAM = [("affective",   "CMU-MOSEI", "#4c6faa", "^"),
        ("drugban",     "DrugBAN",             "#8a6d3b", "o"),
        ("opportunity", "OPPORTUNITY",         "#e08b00", "s"),
        ("ptbxl",       "PTB-XL",              "#b5179e", "D"),

@@ -78,7 +78,7 @@ for cond in ['a','v','av']:
             return dict(cond=cond,seed=seed,gate=name,gain=acc_nz(gp,test)-base,
                         apply=float(ap.mean()),harm=float((ap&(dl>DELTA)).mean()))
         _sc=_A.fit_action_score(mf,tf,(1-b)*mf+b*tf,y[fit],loss)
-        g=_A.certify_action(_sc,mc,tc,cc,y[conf],mt,tt,loss,ALPHA,DELTA); apG=g['apply']
+        g=_A.certify_action(_sc,mc,tc,cc,y[conf],mt,tt,loss,ALPHA,DELTA,fit=(mf,tf,(1-b)*mf+b*tf,y[fit])); apG=g['apply']
         R=float(apG.mean())
         rows.append(score_row('GUARD',apG))
         rows.append(score_row('blanket',np.ones(len(test),bool)))

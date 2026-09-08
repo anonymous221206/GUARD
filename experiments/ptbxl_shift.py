@@ -34,6 +34,7 @@ for mild,severe in [(12,4),(12,2),(10,3),(9,2)]:
                     sc=ham((1-b)*Ps[fit]+b*tf,Y[fit])
                     if best is None or sc>best[0]: best=(sc,sp,wt,k3,b)
         _,sp,wt,k3,b=best; f=SP[sp]
+        tf=_T.knn_average(f['fit'],f['pool'],vals,k3,weighting=wt)   # the chosen config, not the last one tried
         tc=_T.knn_average(f['conf'],f['pool'],vals,k3,weighting=wt)
         tt=_T.knn_average(f['test'],f['pool'],vals,k3,weighting=wt)
         # calibration sees the MILD condition, deployment is SEVERE
@@ -42,7 +43,7 @@ for mild,severe in [(12,4),(12,2),(10,3),(9,2)]:
         blo=BE(Ps[test],Y[test]); cl=BE(ct,Y[test]); hurt=(cl-blo)>DELTA
         base=ham(Ps[test],Y[test])
         for al in ALPHAS:
-            g=_A.certify_action(_A.fit_action_score(Ps[fit], tf, (1-b)*Ps[fit]+b*tf, Y[fit], BE), Ps[conf], tc, cc, Y[conf], Ps[test], tt, BE, al, DELTA); ap=g['apply']
+            g=_A.certify_action(_A.fit_action_score(Ps[fit], tf, (1-b)*Ps[fit]+b*tf, Y[fit], BE), Ps[conf], tc, cc, Y[conf], Ps[test], tt, BE, al, DELTA, fit=(Ps[fit], tf, (1-b)*Ps[fit]+b*tf, Y[fit])); ap=g['apply']
             gp=np.where(ap[:,None],ct,Ps[test])
             rows.append(dict(family='ptbxl',dataset='ptbxl_severity_shift',
                              condition=f'calib{mild}_deploy{severe}',target='hard',seed=seed,

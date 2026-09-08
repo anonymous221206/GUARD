@@ -24,14 +24,18 @@ for cond, feats in (('a',['test_ac']), ('v',['test_vis']), ('av',['test_vis','te
         sp=Split(pool,fit,conf,test,origin={k:'deployment' for k in ('pool','fit','conf','test')})
         c=select_on_fit(host,sp,k_grid=(3,5,8,12,20,35,50),
                         target_grid=('hard','cross_mask'),
-                        space_grid=('cosine',), weighting_grid=('distance',),
+                        space_grid=('standardise','cosine'),
+                        weighting_grid=('uniform','distance'),
                         temperature_grid=(1.0,2.0),metric='accuracy_nonzero')
         res=run(host,sp,condition=cond,metric='accuracy_nonzero',
                 k=c['k'],target=c['target'],space=c['space'],
                 weighting=c['weighting'],temperature=c['temperature'])
         b.append(res.base_metric); g.append(res.base_metric+res.gate_metric_delta)
     measured = (100 * np.mean(b), 100 * np.mean(g))
-    expected = {"a": (63.1, 68.6), "v": (63.7, 68.3), "av": (64.5, 70.3)}[cond]
+    # These are the CMU-MOSEI rows of the per-condition table, to one decimal.
+    # They move when the selection grid moves, so this file and mosei_full.py
+    # search the same grid on purpose.
+    expected = {"a": (63.1, 67.8), "v": (63.7, 68.2), "av": (64.5, 69.6)}[cond]
     # Split-level scores are discrete, so tolerate one changed observation in
     # the ten-split mean while keeping the published one-decimal check stable.
     if not np.allclose(measured, expected, atol=0.25):
