@@ -4,8 +4,8 @@
 # C12 multi-label temperature, C13 CRC infimum, C14 screen, C15 exchangeable,
 # D6 LTT grid from the fit split, D7 stale fit target, D15 multi-label entropy.
 set -u
-cd <workspace>/guard-release
-PY=../venv-release/bin/python
+cd "$(dirname "$0")/.."
+PY=${PYTHON:-python3}
 export OMP_NUM_THREADS=3 OPENBLAS_NUM_THREADS=3 MKL_NUM_THREADS=3
 L=logs/rerun2; mkdir -p $L
 run() { local tag=$1 cores=$2; shift 2

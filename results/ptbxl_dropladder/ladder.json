@@ -1,5 +1,5 @@
 {
-  "checkpoint": "<workspace>/results/ptbxl_wang/resnet1d_wang.pt",
+  "checkpoint": "results/ptbxl_wang/resnet1d_wang.pt",
   "classes": [
     "CD",
     "HYP",
@@ -72,7 +72,7 @@
       "test_macro_auc": 0.9271350323599817,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop12.npz"
+      "path": "artifacts/ptbxl_dropladder/drop12.npz"
     },
     "drop11": {
       "retained_leads": [
@@ -105,7 +105,7 @@
       "test_macro_auc": 0.9187831724271327,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop11.npz"
+      "path": "artifacts/ptbxl_dropladder/drop11.npz"
     },
     "drop10": {
       "retained_leads": [
@@ -136,7 +136,7 @@
       "test_macro_auc": 0.8797866213123212,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop10.npz"
+      "path": "artifacts/ptbxl_dropladder/drop10.npz"
     },
     "drop9": {
       "retained_leads": [
@@ -165,7 +165,7 @@
       "test_macro_auc": 0.839967452895988,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop9.npz"
+      "path": "artifacts/ptbxl_dropladder/drop9.npz"
     },
     "drop8": {
       "retained_leads": [
@@ -192,7 +192,7 @@
       "test_macro_auc": 0.8207097474656347,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop8.npz"
+      "path": "artifacts/ptbxl_dropladder/drop8.npz"
     },
     "drop7": {
       "retained_leads": [
@@ -217,7 +217,7 @@
       "test_macro_auc": 0.7979669774182986,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop7.npz"
+      "path": "artifacts/ptbxl_dropladder/drop7.npz"
     },
     "drop6": {
       "retained_leads": [
@@ -240,7 +240,7 @@
       "test_macro_auc": 0.7433568143774301,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop6.npz"
+      "path": "artifacts/ptbxl_dropladder/drop6.npz"
     },
     "drop5": {
       "retained_leads": [
@@ -261,7 +261,7 @@
       "test_macro_auc": 0.7214999318611431,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop5.npz"
+      "path": "artifacts/ptbxl_dropladder/drop5.npz"
     },
     "drop4": {
       "retained_leads": [
@@ -280,7 +280,7 @@
       "test_macro_auc": 0.6890834797418953,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop4.npz"
+      "path": "artifacts/ptbxl_dropladder/drop4.npz"
     },
     "drop3": {
       "retained_leads": [
@@ -297,7 +297,7 @@
       "test_macro_auc": 0.65630257092834,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop3.npz"
+      "path": "artifacts/ptbxl_dropladder/drop3.npz"
     },
     "drop2": {
       "retained_leads": [
@@ -312,7 +312,7 @@
       "test_macro_auc": 0.5762102392889139,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop2.npz"
+      "path": "artifacts/ptbxl_dropladder/drop2.npz"
     },
     "drop1": {
       "retained_leads": [
@@ -325,7 +325,7 @@
       "test_macro_auc": 0.5050937084506889,
       "train_rows": 17084,
       "sess1_rows": 2158,
-      "path": "<workspace>/GUARD/artifacts/ptbxl_dropladder/drop1.npz"
+      "path": "artifacts/ptbxl_dropladder/drop1.npz"
     }
   }
 }

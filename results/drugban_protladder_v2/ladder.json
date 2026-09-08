@@ -1,7 +1,7 @@
 {
   "dataset_split": "bindingdb_s1 (BindingDB random split, seed 1)",
   "environment_note": "All eleven fractions were regenerated on CPU in one environment; no stored GPU dump was reused.",
-  "checkpoint": "<workspace>/guard-release/checkpoints/drugban/bindingdb_s1.pth",
+  "checkpoint": "checkpoints/drugban/bindingdb_s1.pth",
   "fractions_percent": [
     100,
     80,

@@ -1,8 +1,8 @@
 # DrugBAN environment installation
 
 Created: 2026-09-04
-Base interpreter: <workspace>/CURA/_home/uv/python/cpython-3.9.25-linux-x86_64-gnu/bin/python3.9
-Venv: <workspace>/GUARD/envs/drugban
+Base interpreter: CPython 3.9.25, linux-x86_64
+Venv: a dedicated environment for the DrugBAN stack
 Execution: CPU only; every host forward is run with CUDA_VISIBLE_DEVICES empty.
 
 ## Package sources and commands

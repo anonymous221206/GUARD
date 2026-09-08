@@ -15,7 +15,7 @@ The release contains the compact JSON/CSV summaries in `results/` and the reques
 | PTB-XL lead ladder | `$B/GUARD/artifacts/ptbxl_dropladder` (8.5 GB) | `guard_leadladder2.py` | `experiments/ptbxl_sev_dense.py`, `experiments/ptbxl_sev_auc.py`, `experiments/ptbxl_shift.py`, `experiments/alpha_sweep_new.py` |
 | DrugBAN protein ladder | `artifacts/drugban_protladder_v2` (269 MB of dumps) | `scripts/drugban_protladder_v2.py` | `scripts/drugban_protladder_guard.py`, `scripts/figures/make_fig_severity.py` |
 
-`$B` here is `<workspace>`. The copied drivers use `Path(__file__)` to locate the release root, so regenerated artifacts belong under `<release>/artifacts/`.
+`$B` above stands for the machine the dumps were preserved on; it is not part of this release. The drivers use `Path(__file__)` to locate the release root, so regenerated artifacts belong under `<release>/artifacts/`.
 
 ## OPPORTUNITY reproducibility correction
 
