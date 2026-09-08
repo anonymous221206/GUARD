@@ -9,6 +9,10 @@
 #   bash data/download_artifacts.sh dumps        # host outputs only (~2.5 GB)
 #   bash data/download_artifacts.sh checkpoints  # host weights only (~336 MB)
 #
+# The AVE checkpoint is not here: it belongs to the AVE authors, and this repo
+# redistributes only our own outputs. Take it from their release if you want to
+# regenerate the AVE sidecars; the sidecars themselves are our outputs and ship.
+#
 # Files land in ./artifacts, which is where every driver in experiments/ looks.
 # Set GUARD_ARTIFACTS to put them elsewhere.
 set -euo pipefail
@@ -20,7 +24,7 @@ DEST="${GUARD_ARTIFACTS:-$ROOT/artifacts}"
 
 case "$WHAT" in
   dumps)       PATTERNS="mosei_cmad/* iemocap_momke/* ave_av_att/dumps/* ptbxl_dropladder/* ptbxl_resnet1d_wang/* ninapro_cnn/seed*/* opportunity_dcl_v2/* drugban_processed/* drugban_protladder_v2/*" ;;
-  checkpoints) PATTERNS="ninapro_cnn/checkpoints/* ninapro_specialist/* ptbxl_resnet1d_wang.pt ave_av_att/checkpoints/*" ;;
+  checkpoints) PATTERNS="ninapro_cnn/checkpoints/* ninapro_specialist/* ptbxl_resnet1d_wang.pt" ;;
   all)         PATTERNS="*" ;;
   *) echo "unknown selection: $WHAT (use all | dumps | checkpoints)" >&2; exit 1 ;;
 esac
