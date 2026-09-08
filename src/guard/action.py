@@ -13,18 +13,24 @@ import numpy as np
 EPS = 1e-12
 
 
-def action_features(base: np.ndarray, target: np.ndarray) -> np.ndarray:
+def action_features(base: np.ndarray, target: np.ndarray,
+                    simplex: bool = True) -> np.ndarray:
     """Five deployment-computable summaries of the (base, target) pair.
 
     None of them reads a label, so the same code runs at calibration and at
     deployment: the base model's confidence and entropy, the target's
     confidence, whether the two already agree, and how far apart they are.
     """
-    b = np.clip(np.asarray(base, dtype=np.float64), EPS, None)
+    b = np.clip(np.asarray(base, dtype=np.float64), EPS, 1.0 - EPS)
     t = np.asarray(target, dtype=np.float64)
+    # A softmax row is one distribution; a multi-label row is a set of
+    # independent Bernoullis, whose entropy carries the (1-p) term too. Using
+    # the categorical formula on a multi-label host measured the wrong quantity.
+    ent = (-(b * np.log(b)).sum(1) if simplex
+           else -(b * np.log(b) + (1 - b) * np.log(1 - b)).sum(1))
     return np.column_stack([
         b.max(1),
-        -(b * np.log(b)).sum(1),
+        ent,
         t.max(1),
         (np.abs(b - t).mean(1) < 0.1).astype(float),
         np.abs(b - t).sum(1),
@@ -36,17 +42,17 @@ def fit_action_score(base_fit, target_fit, corrected_fit, labels_fit, loss):
     from sklearn.linear_model import LogisticRegression
 
     z = (loss(corrected_fit, labels_fit) < loss(base_fit, labels_fit)).astype(int)
-    x = action_features(base_fit, target_fit)
+    x = action_features(base_fit, target_fit, loss.simplex)
     if len(set(z.tolist())) < 2:            # nothing to learn from
         return None
     return LogisticRegression(max_iter=2000).fit(x, z)
 
 
-def score(model, base, target) -> np.ndarray:
+def score(model, base, target, simplex=True) -> np.ndarray:
     """Higher means the correction is more worth applying."""
     if model is None:
         return np.zeros(len(base))
-    return model.predict_proba(action_features(base, target))[:, 1]
+    return model.predict_proba(action_features(base, target, simplex))[:, 1]
 
 
 def crc_threshold(score_conf: np.ndarray, harmful_conf: np.ndarray,
@@ -66,8 +72,11 @@ def crc_threshold(score_conf: np.ndarray, harmful_conf: np.ndarray,
     s = np.asarray(score_conf, dtype=np.float64)
     h = np.asarray(harmful_conf, dtype=float)
     # candidates just below each observed score, so that ``> c`` admits it
-    cand = np.unique(s)
-    cand = np.concatenate([np.nextafter(cand, -np.inf), [np.nextafter(s.max(), np.inf)]])
+    # The infimum of the paper's set. risk(lambda) = |{s > lambda}|/n is a
+    # right-continuous step that only changes at an attained score, so the
+    # infimum is either one of those, minus infinity when the risk is already
+    # admissible below all of them, or a value above them all when it never is.
+    cand = np.concatenate([[-np.inf], np.unique(s), [np.nextafter(s.max(), np.inf)]])
     risk = np.array([float(h[s > c].sum()) / n for c in cand])
     ok = np.nonzero(risk <= level)[0]
     if len(ok) == 0:
@@ -93,27 +102,32 @@ def _tighten(scores, gain, lam):
     tot, se = np.array(tot), np.array(se)
     b = int(np.argmax(tot))
     if tot[b] <= 0:                      # nothing worth applying
-        return float(np.nextafter(scores.max(), np.inf))
+        # never below lam: the fit scores can top out under a calibration
+        # threshold that admitted nothing, and returning their max would widen
+        # the apply set past what conformal risk control allowed
+        return float(max(lam, np.nextafter(scores.max(), np.inf)))
     ok = np.nonzero(tot >= tot[b] - se[b])[0]
     return float(cand[ok[-1]])           # cand is ascending: last = most conservative
 
 
 def certify_action(model, base_conf, target_conf, corrected_conf, labels_conf,
-                   base_test, target_test, loss, alpha, delta,
-                   fit=None) -> dict:
+                   base_test, target_test, loss, alpha, delta, fit) -> dict:
     """Calibrate on D_conf, tighten on D_fit, then decide on the deployment split.
 
-    ``fit`` is ``(base, target, corrected, labels)`` on the fit split. Without it
-    the calibrated threshold is used as is.
+    ``fit`` is ``(base, target, corrected, labels)`` on the fit split, and it is
+    required: the tightening step is part of the policy, not an option. It was
+    once optional, and a caller that forgot it silently ran a different method
+    and reported the numbers as if it had not.
     """
     harmful = (loss(corrected_conf, labels_conf) - loss(base_conf, labels_conf)) > delta
-    s_conf = score(model, base_conf, target_conf)
+    s_conf = score(model, base_conf, target_conf, loss.simplex)
     lam = crc_threshold(s_conf, harmful, alpha)
     lam_crc = lam
-    if lam is not None and model is not None and fit is not None:
+    if lam is not None and model is not None:
         b_f, t_f, c_f, y_f = fit
-        lam = _tighten(score(model, b_f, t_f), loss(b_f, y_f) - loss(c_f, y_f), lam)
-    s_test = score(model, base_test, target_test)
+        lam = _tighten(score(model, b_f, t_f, loss.simplex),
+                       loss(b_f, y_f) - loss(c_f, y_f), lam)
+    s_test = score(model, base_test, target_test, loss.simplex)
     apply = np.zeros(len(s_test), bool) if lam is None else (s_test > lam)
     return {"apply": apply, "lambda": lam, "lambda_crc": lam_crc,
             "score_test": s_test, "calibration_risk": float(harmful.mean())}

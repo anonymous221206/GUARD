@@ -37,7 +37,7 @@ for cfg in CFG:
         wf=lambda Q: f1_score(y[test],Q.argmax(1),average='weighted')
         base=wf(P[test]); bl=wf(ct)
         for al in ALPHAS:
-            g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit], loss), P[conf], tc, cc, y[conf], P[test], tt, loss, al, DELTA); ap=g['apply']
+            g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit], loss), P[conf], tc, cc, y[conf], P[test], tt, loss, al, DELTA, fit=(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit])); ap=g['apply']
             gp=np.where(ap[:,None],ct,P[test])
             rows.append(dict(family='opportunity',dataset='opportunity',condition=cfg,
                              target=r['_meta']['target'],seed=s,exchangeable=True,alpha=al,

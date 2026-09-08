@@ -46,7 +46,7 @@ for cfg in CFG:
         b=_select_beta(P[fit],tf,y[fit],loss,'loss')
         tc=_T.knn_average(fc,fp,vals,k_,weighting=wt); tt=_T.knn_average(ft,fp,vals,k_,weighting=wt)
         cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
-        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit], loss), P[conf], tc, cc, y[conf], P[test], tt, loss, ALPHA, DELTA); ap=g['apply']
+        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit], loss), P[conf], tc, cc, y[conf], P[test], tt, loss, ALPHA, DELTA, fit=(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit])); ap=g['apply']
         blo=loss(P[test],y[test]); cl=loss(ct,y[test])
         gp=np.where(ap[:,None],ct,P[test])
         wf_=lambda Q: f1_score(y[test],Q.argmax(1),average='weighted')

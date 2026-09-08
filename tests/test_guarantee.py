@@ -101,5 +101,71 @@ def test_useless_score_costs_gain_not_safety():
     harmful = rng.random(n) < 0.5
     lam = crc_threshold(score, harmful, alpha)
     if lam is not None:
-        applied = score >= lam
+        applied = score > lam
         assert float((applied & harmful).mean()) <= alpha
+
+
+def test_ties_are_priced_on_the_set_that_is_deployed():
+    """A block of equal scores is admitted or refused whole, and paid for whole.
+
+    Pricing the risk by walking a sorted order charges only the ties it reaches;
+    the policy then deploys ``score > lambda``, which admits every one of them.
+    On a score with heavy ties that gap is a real under-count, so the threshold
+    is chosen against the set the policy will actually apply to.
+    """
+    from guard.action import crc_threshold
+    n, alpha = 100, 0.2
+    # forty points share one score, and every one of them is harmful
+    score = np.concatenate([np.zeros(60), np.full(40, 0.7)])
+    harmful = np.concatenate([np.zeros(60, bool), np.ones(40, bool)])
+    lam = crc_threshold(score, harmful, alpha)
+    applied = np.zeros(n, bool) if lam is None else (score > lam)
+    # admitting the tied block would cost 0.40, twice the budget
+    assert float((applied & harmful).mean()) <= alpha - (1 - alpha) / n
+    assert not applied[60:].any()
+
+
+def test_tightening_never_reopens_the_gate():
+    """The fit split must not be able to lower a threshold the calibration set set.
+
+    When conformal risk control admits nothing, lambda sits above every
+    calibration score. If the fit scores happen to top out below that, returning
+    their maximum would admit queries the certificate refused.
+    """
+    from guard.action import _tighten
+    scores = np.linspace(0.0, 0.4, 50)          # fit scores, all low
+    gain = -np.ones(50)                         # correction never helps
+    lam = 0.9                                   # calibration admitted nothing
+    assert _tighten(scores, gain, lam) >= lam
+
+
+def test_temperature_keeps_multilabel_outputs_independent():
+    """A multi-label row is not a distribution and must not be softmaxed."""
+    from guard.targets import temper
+    p = np.array([[0.9, 0.8, 0.7], [0.2, 0.3, 0.1]])
+    out = temper(p, 2.0, simplex=False)
+    want = 1.0 / (1.0 + np.exp(-np.log(p / (1 - p)) / 2.0))
+    assert np.allclose(out, want)                        # each label on its own logit
+    assert ((out > 0.5) == (p > 0.5)).all()              # no decision moves
+    assert not np.allclose(out.sum(1), 1.0)              # the row is not a distribution
+    soft = temper(p, 2.0, simplex=True)
+    assert np.allclose(soft.sum(1), 1.0)                 # the simplex path still normalises
+    assert not np.allclose(soft, out)
+
+
+def test_retrieval_target_does_not_depend_on_the_batch():
+    """p_corr has to be a function of the query and the pool, nothing else.
+
+    The distance kernel once took its width from the queries in the batch, so a
+    point got one target during calibration and another at deployment, and the
+    conformal argument no longer applied to it.
+    """
+    from guard.targets import knn_average
+    rng = np.random.default_rng(0)
+    pool = rng.normal(size=(300, 6))
+    values = np.eye(3)[rng.integers(0, 3, 300)]
+    q = rng.normal(size=(40, 6))
+    alone = knn_average(q[:1], pool, values, 10, weighting="distance")
+    with_others = knn_average(q, pool, values, 10, weighting="distance")[:1]
+    assert np.allclose(alone, with_others), (alone, with_others)
+

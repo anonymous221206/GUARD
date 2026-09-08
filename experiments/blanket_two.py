@@ -26,10 +26,11 @@ def three(P,F,Y,split,rich=None):
                     sc=float((((1-b)*P[fit]+b*tf).argmax(1)==Y[fit]).mean())
                     if best is None or sc>best[0]: best=(sc,tg,sp,wt,k,b)
     _,tg,sp,wt,k,b=best; f=SP[sp]
+    tf=_T.knn_average(f['fit'],f['pool'],V[tg],k,weighting=wt)   # the chosen config, not the last one tried
     tc=_T.knn_average(f['conf'],f['pool'],V[tg],k,weighting=wt)
     tt=_T.knn_average(f['test'],f['pool'],V[tg],k,weighting=wt)
     cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
-    g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, ALPHA, DELTA); ap=g['apply']
+    g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], loss), P[conf], tc, cc, Y[conf], P[test], tt, loss, ALPHA, DELTA, fit=(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit])); ap=g['apply']
     gp=np.where(ap[:,None],ct,P[test])
     a=lambda Q: float((Q.argmax(1)==Y[test]).mean())
     return a(P[test]), a(ct), a(gp)

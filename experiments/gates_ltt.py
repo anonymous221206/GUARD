@@ -37,25 +37,6 @@ def _auroc(score, pos):
     return float((r[pos].sum() - npos * (npos + 1) / 2) / (npos * nneg))
 
 
-def crc_threshold(score_c, harm_c, alpha):
-    """Largest apply set whose calibration risk stays under the CRC level.
-
-    Angelopoulos et al. (2023): with a loss bounded by B=1 and n calibration
-    points, picking the most permissive lambda whose empirical risk is at most
-    alpha - (1 - alpha)/n gives E[risk] <= alpha over calibration and test.
-    """
-    import numpy as _np
-    n = len(score_c)
-    level = alpha - (1.0 - alpha) / n
-    if level <= 0:
-        return None
-    order = _np.argsort(-score_c, kind='mergesort')       # admit high score first
-    risk = _np.cumsum(harm_c[order]) / n
-    ok = _np.nonzero(risk <= level)[0]
-    if len(ok) == 0:
-        return None
-    return float(score_c[order[ok[-1]]])
-
 def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
              keep=None, targets=('hard',), richer=None, seeds=1, groups=None):
     loss=_L.get(loss_name)
@@ -68,10 +49,10 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
         SP[sp]={n:z(feats[i]) for n,i in (('pool',pool),('fit',fit),('conf',conf),('test',test))}
     best=None
     for T in TS:
-        pr = probs if T==1.0 else _T.temper(probs,T)
+        pr = probs if T==1.0 else _T.temper(probs,T,loss.simplex)
         for tg in targets:
             vals=(_T.hard_label_values(labels[pool],n_out,loss.simplex) if tg=='hard'
-                  else _T.cross_mask_values((richer if T==1.0 else _T.temper(richer,T))[pool]))
+                  else _T.cross_mask_values((richer if T==1.0 else _T.temper(richer,T,loss.simplex))[pool]))
             for sp in SPACES:
                 for wt in WTS:
                     for k in KS:
@@ -82,15 +63,18 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
                         if best is None or s>best[0]: best=(s,T,tg,sp,wt,k,b)
     _,T,tg,sp,wt,k,b=best
     f=SP[sp]
-    pr = probs if T==1.0 else _T.temper(probs,T)
+    pr = probs if T==1.0 else _T.temper(probs,T,loss.simplex)
     vals=(_T.hard_label_values(labels[pool],n_out,loss.simplex) if tg=='hard'
-          else _T.cross_mask_values((richer if T==1.0 else _T.temper(richer,T))[pool]))
+          else _T.cross_mask_values((richer if T==1.0 else _T.temper(richer,T,loss.simplex))[pool]))
     ke=min(k,len(pool)-1)
     tt={n:_T.knn_average(f[n],f['pool'],vals,ke,weighting=wt) for n in ('fit','conf','test')}
-    mc,mt=pr[conf],pr[test]
-    cc=(1-b)*mc+b*tt['conf']; ct=(1-b)*mt+b*tt['test']
-    _sc=_A.fit_action_score(pr[fit],tt['fit'],(1-b)*pr[fit]+b*tt['fit'],labels[fit],loss)
-    g=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,ALPHA,DELTA); apG=g['apply']
+    # temperature is part of the correction, so it goes into the blend only; the
+    # baseline and the output a declined query gets are the host's own
+    mc,mt=probs[conf],probs[test]
+    cc=(1-b)*pr[conf]+b*tt['conf']; ct=(1-b)*pr[test]+b*tt['test']
+    cf=(1-b)*pr[fit]+b*tt['fit']
+    _sc=_A.fit_action_score(probs[fit],tt['fit'],cf,labels[fit],loss)
+    g=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,ALPHA,DELTA,fit=(probs[fit], tt['fit'], cf, labels[fit])); apG=g['apply']
     bl=loss(mt,labels[test]); cl=loss(ct,labels[test]); dl=cl-bl
     base=acc(mt,test); R=float(apG.mean())
     AP={}
@@ -98,23 +82,34 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
         if tag is not None: AP[tag]=ap
         return (acc(np.where(ap[:,None],ct,mt),test)-base, float((ap&(dl>DELTA)).mean()))
     out={'GUARD':row(apG,'GUARD'), 'blanket':row(np.ones(len(test),bool),'blanket')}
+    # what conformal risk control alone would apply, before the fit-split
+    # tightening: the price of that step is the difference between the two
+    _lc = g['lambda_crc']
+    out['GUARD-untightened'] = row(
+        np.zeros(len(test), bool) if _lc is None else g['score_test'] > _lc,
+        'GUARD-untightened')
     ent=-(mt*np.log(np.clip(mt,1e-12,None))).sum(1)
     multilabel = mt.shape[1]>2 and np.ndim(labels)==2
     out['confidence']=row(_at_rate(-np.abs(mt-0.5).mean(1) if multilabel else -mt.max(1),R))
     out['agreement']=row(_at_rate((np.abs(mt-tt['test']).mean(1)<0.1).astype(float),R))
     out['random']=row(_at_rate(np.random.default_rng(0).random(len(test)),R))
-    Xf=np.column_stack([pr[fit].max(1), -(pr[fit]*np.log(np.clip(pr[fit],1e-12,None))).sum(1),
-                        tt['fit'].max(1), (np.abs(pr[fit]-tt['fit']).mean(1)<0.1).astype(float),
-                        np.abs(pr[fit]-tt['fit']).sum(1)])
+    # the raw host, so this is the scorer certify_action fits, not a second one
+    pf=probs[fit]
+    Xf=np.column_stack([pf.max(1), -(pf*np.log(np.clip(pf,1e-12,None))).sum(1),
+                        tt['fit'].max(1), (np.abs(pf-tt['fit']).mean(1)<0.1).astype(float),
+                        np.abs(pf-tt['fit']).sum(1)])
     Xt=np.column_stack([mt.max(1), ent, tt['test'].max(1),
                         (np.abs(mt-tt['test']).mean(1)<0.1).astype(float),
                         np.abs(mt-tt['test']).sum(1)])
-    zf=(loss((1-b)*pr[fit]+b*tt['fit'],labels[fit])<loss(pr[fit],labels[fit])).astype(int)
+    zf=(loss(cf,labels[fit])<loss(pf,labels[fit])).astype(int)
     out['learned']=(row(_at_rate(LogisticRegression(max_iter=2000).fit(Xf,zf).predict_proba(Xt)[:,1],R))
                     if len(set(zf))>1 else (np.nan,np.nan))
     # --- Learn-then-Test: thresholds certified on D_conf ---
     harm_c = (loss(cc,labels[conf])-loss(mc,labels[conf])) > DELTA
     sc_c=_scores(mc,tt['conf'],multilabel); sc_t=_scores(mt,tt['test'],multilabel)
+    # the candidate thresholds have to be fixed before D_conf is read, so they
+    # come from the fit split, which every stage before calibration already saw
+    sc_f=_scores(probs[fit],tt['fit'],multilabel)
     # the learned gate's own score, so LTT is not handicapped by a weak family
     if len(set(zf))>1:
         lr=LogisticRegression(max_iter=2000).fit(Xf,zf)
@@ -122,14 +117,16 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
                             tt['conf'].max(1), (np.abs(mc-tt['conf']).mean(1)<0.1).astype(float),
                             np.abs(mc-tt['conf']).sum(1)])
         sc_c['LTT-learned']=lr.predict_proba(Xc)[:,1]; sc_t['LTT-learned']=lr.predict_proba(Xt)[:,1]
+        sc_f['LTT-learned']=lr.predict_proba(Xf)[:,1]
     # confidence + CRC: the same calibration, without the learned score
-    _lmc = crc_threshold(sc_c['LTT-confidence'], harm_c, ALPHA)
-    _apc = np.zeros(len(test), bool) if _lmc is None else (sc_t['LTT-confidence'] >= _lmc)
+    # same CRC routine GUARD is held to, so the two differ only in the score
+    _lmc = _A.crc_threshold(sc_c['LTT-confidence'], harm_c, ALPHA)
+    _apc = np.zeros(len(test), bool) if _lmc is None else (sc_t['LTT-confidence'] > _lmc)
     out['CRC-confidence'] = row(_apc, 'CRC-confidence')
     out['CRC-confidence-rate'] = float(_apc.mean())
 
     for name in list(sc_c):
-        lam=ltt_threshold(sc_c[name],harm_c,ALPHA,0.05)
+        lam=ltt_threshold(sc_c[name],harm_c,ALPHA,0.05,grid_scores=sc_f.get(name))
         ap = np.zeros(len(test),bool) if lam is None else (sc_t[name]>=lam)
         r=row(ap,name); out[name]=r
         out[name+'-rate']=float(ap.mean())
@@ -140,14 +137,14 @@ def gate_row(probs, feats, labels, split, loss_name='cross_entropy',
         for gv in np.unique(gt):
             sel=gc==gv
             if sel.sum()<10: continue
-            lm=ltt_threshold(sc_c[name][sel],harm_c[sel],ALPHA,0.05)
+            lm=ltt_threshold(sc_c[name][sel],harm_c[sel],ALPHA,0.05,grid_scores=sc_f.get(name))
             if lm is not None: apm |= (gt==gv)&(sc_t[name]>=lm)
         mname=name.replace('LTT-','LTT-mask-')
         out[mname]=row(apm,mname); out[mname+'-rate']=float(apm.mean())
         # GUARD's own risk-utility frontier: same corrector, alpha swept
     fr=[]
     for a_ in (0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.5,0.6):
-        gg=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,a_,DELTA)
+        gg=_A.certify_action(_sc,mc,tt['conf'],cc,labels[conf],mt,tt['test'],loss,a_,DELTA,fit=(probs[fit], tt['fit'], cf, labels[fit]))
         ap_=gg['apply']
         fr.append((a_, acc(np.where(ap_[:,None],ct,mt),test)-base,
                    float((ap_&(dl>DELTA)).mean()), float(ap_.mean())))

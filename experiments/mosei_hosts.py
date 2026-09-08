@@ -69,12 +69,19 @@ for name, cfg in HOSTS.items():
                                richer_probs=rich, raw_labels=raw)
             sp = Split(pool=pool, fit=fit, conf=conf, test=test)
             # the retrieval settings are chosen on the fit split, never on test
-            cfg_r = select_on_fit(host, sp, k_grid=(5, 10, 20, 35, 50),
+            # one grid for every benchmark, and scored the way this table is
+            # scored: CMU-MOSEI binary accuracy ignores the neutral clips, so
+            # selecting on plain accuracy would choose a setting for a metric
+            # nobody reports
+            cfg_r = select_on_fit(host, sp, k_grid=(3, 5, 8, 12, 20, 35, 50),
                                   target_grid=('hard', 'cross_mask'),
                                   space_grid=('standardise', 'cosine'),
-                                  weighting_grid=('uniform', 'distance'))
-            r = run(host, sp, alpha=ALPHA, delta=DELTA,
-                    **{k: cfg_r[k] for k in ('k', 'target', 'space', 'weighting')
+                                  weighting_grid=('uniform', 'distance'),
+                                  temperature_grid=(1.0, 2.0),
+                                  metric='accuracy_nonzero')
+            r = run(host, sp, alpha=ALPHA, delta=DELTA, metric='accuracy_nonzero',
+                    **{k: cfg_r[k] for k in
+                       ('k', 'target', 'space', 'weighting', 'temperature')
                        if k in cfg_r})
             gp = r.test_arrays['gated_probs']          # the policy's own output
             a, f = acc_f1(gp, y[test], keep[test])

@@ -28,8 +28,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from guard import HostOutputs, run                       # noqa: E402
+from guard.pipeline import select_on_fit                 # noqa: E402
 from guard.splits import Split                           # noqa: E402
 from hosts.dumps import MASKS, build                     # noqa: E402
+
+# the same grid the gate-comparison drivers search, so the two paths cannot
+# disagree because one of them was handed a better setting
+K_GRID = (3, 5, 8, 12, 20, 35, 50)
+SPACE_GRID = ("standardise", "cosine")
+W_GRID = ("uniform", "distance")
+T_GRID = (1.0, 2.0)
 
 
 def main() -> None:
@@ -41,7 +49,10 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=Path("results"))
     ap.add_argument("--alpha", type=float, default=0.2)
     ap.add_argument("--delta", type=float, default=0.05)
-    ap.add_argument("--k", type=int, default=50)
+    ap.add_argument("--k", type=int, default=50,
+                    help="ignored unless --no-select: the grid is searched on the fit split")
+    ap.add_argument("--no-select", action="store_true",
+                    help="pin the retrieval settings instead of choosing them on D_fit")
     ap.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     a = ap.parse_args()
 
@@ -73,10 +84,24 @@ def main() -> None:
                                       "fit": "deployment session",
                                       "conf": "deployment session",
                                       "test": "deployment session"})
-            for target in ("hard", "cross_mask"):
-                r = run(host, split, condition=mask, target=target,
-                        alpha=a.alpha, delta=a.delta, k=a.k)
-                rows.append({**r.as_row(), "seed": seed, "host": a.host.name})
+            # "selected" is the policy the paper reports: the target is chosen on
+            # D_fit like every other retrieval setting. The two fixed-target rows
+            # stay because Table 12 compares the targets against each other.
+            for target in ("selected", "hard", "cross_mask"):
+                grid = (("hard", "cross_mask") if target == "selected" else (target,))
+                if a.no_select:
+                    if target == "selected":
+                        continue
+                    cfg = dict(k=a.k, target=target)
+                else:
+                    cfg = select_on_fit(host, split, k_grid=K_GRID, target_grid=grid,
+                                        space_grid=SPACE_GRID, weighting_grid=W_GRID,
+                                        temperature_grid=T_GRID)
+                    cfg = {kk: cfg[kk] for kk in
+                           ("k", "target", "space", "weighting", "temperature")}
+                r = run(host, split, condition=mask, alpha=a.alpha, delta=a.delta, **cfg)
+                rows.append({**r.as_row(), "seed": seed, "host": a.host.name,
+                             "policy": target})
                 print(f"{mask:5s} {target:11s} {seed:4d} {r.base_metric:7.4f} "
                       f"{r.target_accuracy:7.3f} {r.beta:5.2f} {r.gate_metric_delta:+9.4f} "
                       f"{r.gate_loss_gain:+10.4f} {r.apply_rate:6.2f} {r.joint_harm:6.3f}")

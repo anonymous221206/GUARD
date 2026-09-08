@@ -4,6 +4,10 @@ The paper protocol retrieves from the AVE training split using the input to the
 frozen model's final ``L2`` layer. The posterior dumps alone are insufficient:
 ``export`` adds one retrieval sidecar per condition. Experiments after that are
 NumPy-only and never load a checkpoint or the AVE source data.
+
+``full`` is the intact condition and is exported the same way, with both streams
+kept. It is what the negative control in the per-condition table needs, and its
+absence is why that row could not be run from the archived sidecars alone.
 """
 from __future__ import annotations
 
@@ -16,7 +20,7 @@ from pathlib import Path
 
 import numpy as np
 
-CONDITIONS = ("audio_only", "visual_only")
+CONDITIONS = ("audio_only", "visual_only", "full")
 
 
 def _single_match(directory: Path, pattern: str) -> Path:
@@ -148,8 +152,9 @@ def export_retrieval(host_dir: Path, source: Path, conditions: list[str], batch_
         visual_all = visual_file["avadataset"]
         try:
             for condition, output_path in zip(conditions, outputs):
-                keep_audio = condition == "audio_only"
-                keep_visual = condition == "visual_only"
+                # each condition names what survives; "full" keeps both streams
+                keep_audio = condition in ("audio_only", "full")
+                keep_visual = condition in ("visual_only", "full")
                 captured: dict[str, np.ndarray] = {}
                 hook = model.L2.register_forward_hook(
                     lambda module, inputs, output: captured.__setitem__(

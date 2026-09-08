@@ -27,11 +27,12 @@ def cellrun(P,F,Y,split):
                 b=_select_beta(P[fit],tf,Y[fit],CE,'loss'); sc=amax((1-b)*P[fit]+b*tf,Y[fit])
                 if best is None or sc>best[0]: best=(sc,sp,wt,k,b)
     _,sp,wt,k,b=best; f=SP[sp]
+    tf=_T.knn_average(f['fit'],f['pool'],vals,k,weighting=wt)   # the chosen config, not the last one tried
     tc=_T.knn_average(f['conf'],f['pool'],vals,k,weighting=wt); tt=_T.knn_average(f['test'],f['pool'],vals,k,weighting=wt)
     cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
     bl=CE(P[test],Y[test]); cl=CE(ct,Y[test]); hurt=(cl-bl)>DELTA; base=amax(P[test],Y[test]); out=[]
     for al in ALPHAS:
-        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], CE), P[conf], tc, cc, Y[conf], P[test], tt, CE, al, DELTA); ap=g['apply']
+        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit], CE), P[conf], tc, cc, Y[conf], P[test], tt, CE, al, DELTA, fit=(P[fit], tf, (1-b)*P[fit]+b*tf, Y[fit])); ap=g['apply']
         gp=np.where(ap[:,None],ct,P[test])
         out.append(dict(alpha=al,apply_rate=float(ap.mean()),joint_harm=float((ap&hurt).mean()),
                         acc_gain=amax(gp,Y[test])-base,blanket_joint_harm=float(hurt.mean()),
@@ -61,6 +62,6 @@ for s in range(1,11):
         for o in cellrun(P,F,Yc,(np.arange(n),perm[:k],perm[k:2*k],perm[2*k:])):
             rows.append(dict(family='ninapro',dataset='ninapro_db5',condition=str(ne),target='hard',seed=s,exchangeable=True,**o))
     print('subject',s,'xong',flush=True)
-with open(str(_ROOT / 'results/alpha/alpha_ninapro.csv'),'w',newline='') as fh:
+with open(str(ROOT / 'results/alpha/alpha_ninapro.csv'),'w',newline='') as fh:
     w=csv.DictWriter(fh,fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
 print('DA GHI',len(rows))
