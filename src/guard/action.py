@@ -28,6 +28,13 @@ def action_features(base: np.ndarray, target: np.ndarray,
     # the categorical formula on a multi-label host measured the wrong quantity.
     ent = (-(b * np.log(b)).sum(1) if simplex
            else -(b * np.log(b) + (1 - b) * np.log(1 - b)).sum(1))
+    # The agreement column degenerates on many-class benchmarks. Two rows of a
+    # simplex satisfy sum_c |p_c - q_c| <= 2, so the mean below is at most 2/C and
+    # the indicator is identically one whenever C > 20: AVE (C=29) and NinaPro DB5
+    # are both in that regime, and there the column carries no signal. It is kept
+    # as-is because every reported number was produced with it; a scale-free
+    # replacement (total variation with a threshold selected on D_fit) would remove
+    # the degeneracy but requires re-running the suite.
     return np.column_stack([
         b.max(1),
         ent,

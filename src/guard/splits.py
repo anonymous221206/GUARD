@@ -1,6 +1,6 @@
 """Data splits, with the exchangeability requirement made explicit.
 
-The conformal gate in :mod:`guard.certify` is only valid when the calibration
+The conformal gate in :mod:`guard.action` is only valid when the calibration
 set and the deployment set are exchangeable.  During this project we found a
 real experiment where they were not -- calibration came from one subject and
 evaluation from another -- and the harm budget silently broke.  The split is

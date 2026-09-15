@@ -13,3 +13,5 @@ __pycache__/
 artifacts/
 .venv/
 data/ninapro/
+scratch_*.py
+*_preview.png

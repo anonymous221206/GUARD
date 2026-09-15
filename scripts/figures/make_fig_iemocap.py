@@ -50,7 +50,7 @@ def main():
     pub_eta = ETA[:len(MOMKE_PUB)]
     sieve_gain = np.array(SIEVE_PUB) - np.array(MOMKE_PUB)
 
-    fig, (l, r) = plt.subplots(1, 2, figsize=(6.5, 1.85))
+    fig, (l, r) = plt.subplots(1, 2, figsize=(figstyle.FULL_IN, 2.05))
 
     l.plot(pub_eta, MOMKE_PUB, color=figstyle.PALETTE[0], marker="^",
            ms=figstyle.MS, lw=figstyle.LW, ls="--", label="MoMKE (published)")
@@ -60,8 +60,8 @@ def main():
            ms=figstyle.MS, lw=figstyle.LW, label="MoMKE, our reproduction")
     l.plot(etas, guard, color=figstyle.OURS, marker="o",
            ms=figstyle.MS_OURS, lw=figstyle.LW_OURS, label="$+$ GUARD")
-    l.set_xlabel(r"missing rate $\eta$", fontsize=7, labelpad=1.5)
-    l.set_ylabel("four-class accuracy", fontsize=7, labelpad=1.5)
+    l.set_xlabel(r"missing rate $\eta$", fontsize=figstyle.LABEL, labelpad=1.5)
+    l.set_ylabel("four-class accuracy", fontsize=figstyle.LABEL, labelpad=1.5)
 
     r.axhline(0, color=figstyle.GREY, lw=0.6)
     r.plot(pub_eta, sieve_gain, color=figstyle.PALETTE[1], marker="s",
@@ -69,17 +69,18 @@ def main():
     r.errorbar(etas, gain, yerr=se, color=figstyle.OURS, marker="o",
                ms=figstyle.MS_OURS, lw=figstyle.LW_OURS, elinewidth=0.6,
                capsize=1.5, label="$+$ GUARD")
-    r.set_xlabel(r"missing rate $\eta$", fontsize=7, labelpad=1.5)
-    r.set_ylabel("gain over own backbone", fontsize=7, labelpad=1.5)
+    r.set_xlabel(r"missing rate $\eta$", fontsize=figstyle.LABEL, labelpad=1.5)
+    r.set_ylabel("gain over own backbone", fontsize=figstyle.LABEL, labelpad=1.5)
 
     for ax in (l, r):
-        ax.tick_params(labelsize=6.5, pad=1.5)
+        ax.tick_params(labelsize=figstyle.TICK, pad=1.5)
         for s in ("top", "right"):
             ax.spines[s].set_visible(False)
-    figstyle.legend_below(fig, l, 4, y=-0.05, fontsize=6.2)
+    figstyle.legend_below(fig, l, 4, y=-0.05, fontsize=figstyle.LEG)
     fig.tight_layout(rect=(0, 0.09, 1, 1), w_pad=1.6)
     OUT.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT / "fig_iemocap.pdf", bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(OUT / "fig_iemocap_preview.png", bbox_inches="tight", pad_inches=0.02, dpi=300)
     print("da ve", OUT / "fig_iemocap.pdf")
 
 

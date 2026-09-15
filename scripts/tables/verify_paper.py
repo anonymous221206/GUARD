@@ -9,7 +9,7 @@ silently passing.
 
     python scripts/tables/verify_paper.py path/to/guard_iclr2027.tex
 """
-import csv, json, re, sys, collections
+import csv, glob, json, re, sys, collections
 from pathlib import Path
 import numpy as np
 
@@ -367,8 +367,10 @@ def check(tex):
     # Table 3, the rule comparison
     gc = gate_cells()
     rows3 = table_body(tex, "tab:gates")
+    # column 4 is the untightened ablation, so GUARD moved to column 5
     RULES = [("Blanket", "blanket", 1), ("Conf.\\ $+$ CRC", "CRC-confidence", 2),
-             ("Learned $+$ LTT", "LTT-learned", 3), ("GUARD", "GUARD", 4)]
+             ("Learned $+$ LTT", "LTT-learned", 3),
+             ("GUARD w/o tighten", "GUARD-untightened", 4), ("GUARD", "GUARD", 5)]
     for name in ("CMU-MOSEI", "IEMOCAP", "OPPORTUNITY", "AVE", "NinaPro DB5",
                  "PTB-XL", "DrugBAN"):
         ln = next((l for l in rows3 if l.split("&")[0].strip() == name), None)
@@ -386,6 +388,102 @@ def check(tex):
                 continue
             cmp(f"T3 {name} {rule} gain", rm[0], v[0])
             cmp(f"T3 {name} {rule} harm", rm[1], v[1])
+
+    # Table 4, the same certificate over two correctors
+    pv = {}
+    for f in sorted(glob.glob(str(R / "gates/probe_vs_knn*.json"))):
+        pv.update(json.load(open(f)))
+    rows4 = table_body(tex, "tab:corrector")
+    FIELDS = [(1, "knn", "gain"), (2, "linear", "gain"),
+              (3, "knn", "harm"), (4, "linear", "harm"),
+              (5, "knn", "blanket_harm"), (6, "linear", "blanket_harm")]
+    for name, key in (("IEMOCAP", "IEMOCAP"), ("AVE", "AVE"), ("NinaPro DB5", "NinaPro"),
+                      ("PTB-XL", "PTB-XL"), ("DrugBAN", "DrugBAN")):
+        ln = next((l for l in rows4 if l.split("&")[0].strip() == name), None)
+        if ln is None or key not in pv:
+            fails.append(f"T4 {name}: khong tim thay dong hoac ket qua")
+            continue
+        for ci, kind, field in FIELDS:
+            cmp(f"T4 {name} {kind} {field}", pv[key][kind][field], col(ln, ci))
+
+    # the action-score ablation: every cell is gain/joint harm in one column,
+    # so the row label alone identifies the variant and the column the benchmark
+    av_ = {}
+    for f in sorted(glob.glob(str(R / "gates/action_family*.json"))):
+        for k, v in json.load(open(f)).items():
+            av_.setdefault(k, {}).update(v)
+    BENCH6 = ("AVE", "NinaPro", "PTB-XL", "IEMOCAP", "DrugBAN")
+    LAB6 = {
+        "logistic (deployed)": "logistic",
+        "decision tree, depth $3$": "tree3",
+        "random forest, $200$ trees": "forest",
+        "$k$NN, $k=25$": "knn25",
+        "MLP, one hidden layer of $16$": "mlp16",
+        "without base confidence": "drop:baseconf",
+        "without base entropy": "drop:baseent",
+        "without target confidence": "drop:targetconf",
+        "without agreement flag": "drop:agree",
+        "without $\\ell_1$ distance": "drop:l1",
+        "base confidence only": "keep:baseconf",
+        "base entropy only": "keep:baseent",
+        "target confidence only": "keep:targetconf",
+        "agreement flag only": "keep:agree",
+        "$\\ell_1$ distance only": "keep:l1",
+    }
+    if av_:
+        rows6 = table_body(tex, "tab:actionscore")
+        seen = set()
+        for ln in rows6:
+            lab = ln.split("&")[0].strip()
+            if lab not in LAB6:
+                continue
+            key = LAB6[lab]
+            seen.add(lab)
+            for ci, bm in enumerate(BENCH6, start=1):
+                v = col2(ln, ci)
+                if bm not in av_ or key not in av_[bm]:
+                    fails.append(f"T6 {lab} {bm}: khong co ket qua")
+                    continue
+                if len(v) != 2:
+                    fails.append(f"T6 {lab} {bm}: o khong phai dang gain/harm")
+                    continue
+                cmp(f"T6 {lab} {bm} gain", av_[bm][key]["gain"], v[0])
+                cmp(f"T6 {lab} {bm} harm", av_[bm][key]["harm"], v[1], 2)
+        missing = set(LAB6) - seen
+        if missing:
+            fails.append("T6 thieu dong: " + ", ".join(sorted(missing)))
+    else:
+        notes.append("Table action-score: khong tim thay results/gates/action_family*.json")
+
+    # the budget sweep table, straight from results/alpha/
+    av = []
+    for f in sorted(glob.glob(str(R / "alpha/alpha_*.csv"))):
+        av += [r for r in csv.DictReader(open(f))
+               if r["exchangeable"].strip().lower() in ("true", "1", "yes")]
+    if av:
+        bud = {}
+        for r in av:
+            bud.setdefault(float(r["alpha"]), []).append(r)
+        rows_a = table_body(tex, "tab:alpha")
+        avg = lambda v, k: float(np.mean([float(x[k]) for x in v]))
+        for a in sorted(bud):
+            v = bud[a]
+            ln = next((l for l in rows_a
+                       if col(l, 0) is not None and abs(col(l, 0) - a) < 1e-9), None)
+            if ln is None:
+                fails.append(f"T5 alpha={a}: khong tim thay dong")
+                continue
+            cmp(f"T5 a={a} harm", avg(v, "joint_harm"), col(ln, 1))
+            cmp(f"T5 a={a} gain", avg(v, "acc_gain"), col(ln, 2))
+            cmp(f"T5 a={a} apply", avg(v, "apply_rate"), col(ln, 3), 2)
+            cmp(f"T5 a={a} over", 100 * np.mean([float(x["joint_harm"]) > a for x in v]),
+                col(ln, 4), 1)
+        un = next((l for l in rows_a if l.split("&")[0].strip() == "ungated"), None)
+        if un is None:
+            fails.append("T5 ungated: khong tim thay dong")
+        else:
+            cmp("T5 ungated harm", avg(av, "blanket_joint_harm"), col(un, 1))
+            cmp("T5 ungated gain", avg(av, "blanket_acc_gain"), col(un, 2))
 
     # Table 14, the same cells without the gate
     rows14 = table_body(tex, "tab:blanket")
