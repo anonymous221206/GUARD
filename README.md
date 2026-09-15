@@ -39,7 +39,7 @@ distinction cannot be lost:
 ## Install
 
 ```bash
-pip install -e .              # the method: numpy only
+pip install -e .              # the method: numpy and scikit-learn
 pip install -e ".[hosts]"     # to re-run the frozen hosts
 pip install -e ".[dev]"       # tests
 ```
@@ -51,7 +51,7 @@ pip install -e ".[dev]"       # tests
 ```bash
 pip install -e ".[dev]"
 pytest -q                              # the guarantee itself, on synthetic data
-python experiments/exp_synthetic.py    # the synthetic table
+python experiments/exp_synthetic_sweep.py --out results/synthetic_sweep
 ```
 
 That is enough to check the central claim: the tests verify
@@ -63,8 +63,7 @@ limit are both confirmed before any dataset is involved.
 saved host outputs and run everything on numpy:
 
 ```bash
-export GUARD_ARTIFACT_URL=<release archive>
-bash data/download_artifacts.sh dumps    # ~1 GB
+bash data/download_artifacts.sh dumps    # ~2.5 GB, from a public dataset repo
 bash scripts/run_all.sh
 ```
 
@@ -87,11 +86,11 @@ into the paper's tables, so no number in the text is typed by hand.
 ## Layout
 
 ```
-src/guard/        the method.  ~600 lines, numpy only, no dataset knowledge
+src/guard/        the method.  ~600 lines, no dataset knowledge
   losses.py       canonical losses and their links
   measure.py      neighbour-pair estimate of the calibration-gap energy
   targets.py      hard-label and cross-mask retrieval targets
-  certify.py      split-conformal LAC gate and harm accounting
+  action.py       learned action score, conformal risk control, tightening
   splits.py       data roles, with exchangeability made explicit
   pipeline.py     Measure -> Recalibrate -> Certify, in one function
 hosts/            thin adapters that turn a published model into HostOutputs

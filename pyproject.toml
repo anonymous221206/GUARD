@@ -9,7 +9,9 @@ description = "Certified post-hoc correction for frozen models under missing mod
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
-dependencies = ["numpy>=1.21"]
+# the action score of Certify is a logistic model, so scikit-learn is part of
+# the method, not of the host adapters
+dependencies = ["numpy>=1.21", "scikit-learn>=1.0"]
 
 [project.optional-dependencies]
 # only needed to re-run the host models; the method itself needs numpy alone
