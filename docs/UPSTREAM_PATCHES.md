@@ -7,7 +7,7 @@ reproducing our numbers hits the same code we did.
 ## missing-aware prompts (Lee et al., CVPR 2023)
 
 *This host was retired: the submitted paper reports no vision-language
-experiment, and its driver now sits in `superseded/`. The findings below are kept
+experiment, and its driver is no longer in this tree. The findings below are kept
 because they concern the upstream repository, not ours.*
 
 The Hateful Memes preparation path has never been runnable:
