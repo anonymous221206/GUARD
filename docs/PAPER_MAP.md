@@ -141,5 +141,6 @@ drivers print their numbers to standard output and those were transcribed into
 the LaTeX source. Re-running a driver reproduces a number, it does not rewrite
 the paper.
 
-`superseded/` holds the code of the previous gate and the experiments that were
-dropped. Nothing in it produces a number in the paper.
+Code for the previous gate and for the experiments that were dropped is not in
+this tree. Nothing in it produced a number in the paper; it is reachable in the
+history if anyone wants to see what was replaced.
