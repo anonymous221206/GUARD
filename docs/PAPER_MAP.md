@@ -23,9 +23,10 @@ land under `results/`.
 | Table 1 | CMU-MOSEI against published methods | `experiments/mosei_hosts.py`, then `scripts/tables/mosei_rows.py` | `mosei_cmad`, `mosei_tmdc`, `mosei_momke` |
 | Table 2 | All benchmarks, summary | the per-benchmark drivers of Tables 9-11 | all dumps |
 | Table 3 | Intervention rules compared | `experiments/ltt_one.py <driver>` | all dumps |
-| Figure 3 | IEMOCAP against SIEVE | `experiments/iemocap_eta.py`, then `scripts/figures/make_fig_iemocap.py` | `iemocap_momke/folds` |
-| Figure 4 | Severity ladders | five ladder drivers (below), then `scripts/figures/make_fig_severity.py` | five dumps |
-| Figure 5 | Budget sweep | the eight sweep drivers, then `scripts/figures/make_fig_alpha2.py` | see below |
+| Figure 1 | Positioning against prior repair | `figures_drawio/guard_figures_v2.drawio`, page 1 | hand-drawn |
+| Figure 2 | GUARD at deployment | `figures_drawio/guard_figures_v2.drawio`, page 2 | hand-drawn |
+| Figure 3 | Synthetic sweep, gain against headroom | `experiments/exp_synthetic_sweep.py`, then `scripts/figures/make_fig_synthetic.py` | `results/synthetic_sweep/sweep.csv` |
+| Figure 4 | Severity ladders | six ladder drivers (below), then `scripts/figures/make_fig_severity.py` | six dumps |
 
 `ltt_one.py` wraps one gate driver and records every (condition, seed) cell to
 `results/gates/cells_<driver>.json`:
@@ -39,10 +40,22 @@ done
 Table 3 is the mean over those cells and Table 14 their range. They read the same
 files, so they cannot disagree.
 
-The five panels of Figure 4 come from `experiments/ptbxl_sev_dense.py`,
+The six panels of Figure 4 come from `experiments/ptbxl_sev_dense.py`,
 `experiments/nina_sev_dense.py`, `experiments/opp_dcl.py`,
-`scripts/drugban_protladder_guard.py` and `experiments/iemocap_eta.py`; the sixth
-comes from `experiments/ave_eta.py`.
+`scripts/drugban_protladder_guard.py`, `experiments/iemocap_eta.py` and
+`experiments/ave_eta.py`.
+
+DrugBAN is published under AUROC, but the shared `gate_row` scores every
+benchmark with the accuracy helper, so the ladder file it writes holds accuracy.
+`scripts/drugban_auroc_ladder.py` repeats the same corrector selection on the
+same dumps and records AUROC instead, writing `guard_results_auroc.json` beside
+it; `make_fig_severity.py` prefers that file and labels the axis accordingly.
+Run it after `drugban_protladder_guard.py`.
+
+Two copies of `drugban_protladder_v2/guard_results.json` exist, under
+`artifacts/` and under `results/`, and they disagree on the harm columns. The
+one under `artifacts/` is the one the drivers write and the figure reads; the
+other is stale.
 
 ## Appendix
 

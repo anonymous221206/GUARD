@@ -14,7 +14,7 @@ the deployed policy recomputed here, so it reproduces Table 3's GUARD column and
 acts as this module's control.
 """
 import numpy as np
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, Ridge
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -24,6 +24,7 @@ from guard import action as _A
 from guard import losses as _L, targets as _T
 from guard.pipeline import _select_beta
 from gates_core import _score, KS, TS, SPACES, WTS, ALPHA, DELTA
+from scipy.special import expit
 
 # the five columns of guard.action.action_features, in order
 FEATURES = ('baseconf', 'baseent', 'targetconf', 'agree', 'l1')
@@ -51,9 +52,15 @@ VARIANTS = {k: (k, ALL) for k in FAMILIES}
 VARIANTS.update({f'drop:{FEATURES[i]}': ('logistic', tuple(c for c in ALL if c != i))
                  for i in ALL})
 VARIANTS.update({f'keep:{FEATURES[i]}': ('logistic', (i,)) for i in ALL})
+# The deployed score is fitted against the sign of the improvement. Under a harm
+# budget the oracle policy is instead a threshold on the ratio of expected
+# benefit to the probability of exceeding the tolerance, so this variant fits
+# those two quantities separately and ranks by their ratio. It changes what the
+# score is asked to predict, not the calibration that follows it.
+VARIANTS['ratio'] = ('ratio', ALL)
 DROP = tuple(f'drop:{f}' for f in FEATURES)
 KEEP = tuple(f'keep:{f}' for f in FEATURES)
-NAMES = tuple(FAMILIES) + DROP + KEEP
+NAMES = tuple(FAMILIES) + ('ratio',) + DROP + KEEP
 
 
 class _Sub:
@@ -71,9 +78,31 @@ class _Sub:
         return self.model.predict_proba(np.asarray(X)[:, self.cols])
 
 
+class _Ratio:
+    """Rank by estimated benefit over estimated probability of excessive harm."""
+
+    def __init__(self, u, h, cols):
+        self.u, self.h, self.cols = u, h, list(cols)
+
+    def predict_proba(self, X):
+        x = np.asarray(X)[:, self.cols]
+        u = self.u.predict(x)
+        h = (self.h.predict_proba(x)[:, 1] if self.h is not None
+             else np.full(len(x), 1e-3))
+        s = expit(u / np.clip(h, 1e-3, None))
+        return np.column_stack([1.0 - s, s])
+
+
 def _fit(name, base_fit, target_fit, corrected_fit, labels_fit, loss):
     """The variant's score, fitted on D_fit against the same label the core uses."""
     family, cols = VARIANTS[name]
+    if family == 'ratio':
+        d = loss(corrected_fit, labels_fit) - loss(base_fit, labels_fit)
+        x = _A.action_features(base_fit, target_fit, loss.simplex)[:, list(cols)]
+        hz = (d > DELTA).astype(int)
+        h = (LogisticRegression(max_iter=2000).fit(x, hz)
+             if len(set(hz.tolist())) > 1 else None)
+        return _Ratio(Ridge().fit(x, -d), h, cols)
     z = (loss(corrected_fit, labels_fit) < loss(base_fit, labels_fit)).astype(int)
     if len(set(z.tolist())) < 2:                 # nothing to learn from
         return None

@@ -90,17 +90,25 @@ def opportunity():
 
 
 def drugban():
-    d = _read(A / "drugban_protladder_v2/guard_results.json") or \
+    # DrugBAN is published under AUROC, and the summary table reports it that way.
+    # The shared gate_row scores every benchmark with the accuracy helper, so the
+    # ladder file it writes holds accuracy; scripts/drugban_auroc_ladder.py repeats
+    # the same selection on the same dumps and records AUROC instead. Prefer that
+    # file when it exists, and say which metric is on the axis either way.
+    auc = _read(A / "drugban_protladder_v2/guard_results_auroc.json") or \
+          _read(R / "drugban_protladder_v2/guard_results_auroc.json")
+    d = auc or _read(A / "drugban_protladder_v2/guard_results.json") or \
         _read(R / "drugban_protladder_v2/guard_results.json")
     if d is None:
         return None
+    lab = "AUROC" if auc else "accuracy"
     pcts = sorted((int(k) for k in d["per_fraction"]), reverse=True)
     m = [d["per_fraction"][str(p)]["mean"] for p in pcts]
-    return dict(title="DrugBAN", xlabel="protein sequence kept", ylabel="accuracy",
+    return dict(title="DrugBAN", xlabel="protein sequence kept", ylabel=lab,
                 x=pcts, ticks=None, invert=True, percent=True,
-                frozen=[r["frozen_metric"] for r in m],
-                blanket=[r["guard_without_certify_metric"] for r in m],
-                guard=[r["guard_metric"] for r in m],
+                frozen=[r["frozen" if auc else "frozen_metric"] for r in m],
+                blanket=[r["blanket" if auc else "guard_without_certify_metric"] for r in m],
+                guard=[r["guard" if auc else "guard_metric"] for r in m],
                 bharm=[r["guard_without_certify_joint_harm"] for r in m],
                 harm=[r["joint_harm"] for r in m])
 
