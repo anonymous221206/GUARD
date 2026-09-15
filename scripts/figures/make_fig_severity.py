@@ -124,15 +124,21 @@ def _eta_panel(path, title, ylabel):
 
 
 def iemocap():
-    return _eta_panel(R / "iemocap_eta.json", "IEMOCAP", "four-class accuracy")
+    return _eta_panel(R / "iemocap_eta.json", "IEMOCAP", "4-class accuracy")
 
 
 def ave():
-    return _eta_panel(R / "ave_eta.json", "AVE", "$29$-way accuracy")
+    return _eta_panel(R / "ave_eta.json", "AVE", "$29$-way acc.")
 
 
 PANELS = [ptbxl, ninapro, opportunity, drugban, iemocap, ave]
 NCOL = 3
+
+
+# twelve axes at one column width, and the figure is read for the shape of the
+# curves rather than for its labels, so the axes sit below the caption size and
+# the space goes to the plots; the legend stays larger, being read as text
+LAB, TCK, LEG = 7.2, 6.4, 7.0
 
 
 def main():
@@ -147,11 +153,11 @@ def main():
         sys.exit("khong co panel nao co du lieu")
 
     nblock = (len(live) + NCOL - 1) // NCOL
-    fig = plt.figure(figsize=(6.5, 2.02 * nblock))
+    fig = plt.figure(figsize=(figstyle.FULL_IN, 1.52 * nblock))
     # one cell per benchmark, split inside into metric and harm: nesting keeps the
     # two axes of a benchmark touching without gluing separate benchmarks together
-    outer = fig.add_gridspec(nblock, NCOL, hspace=0.44, wspace=0.36,
-                             left=0.075, right=0.995, top=0.945, bottom=0.115)
+    outer = fig.add_gridspec(nblock, NCOL, hspace=0.55, wspace=0.34,
+                             left=0.085, right=0.995, top=0.950, bottom=0.125)
 
     for i, p in enumerate(live):
         r, c = divmod(i, NCOL)
@@ -165,27 +171,27 @@ def main():
                  marker="o", ms=MS, lw=LW, zorder=3)
         top.plot(x, p["blanket"], label="GUARD w/o Certify", color=BLANKET,
                  marker="s", ms=MS, lw=LW, ls=DASH_UNGATED, zorder=4)
-        top.set_title(p["title"], fontsize=8, pad=3)
-        top.set_ylabel(p["ylabel"], fontsize=6.8, labelpad=1.5)
-        top.tick_params(labelsize=6.2, pad=1.5, labelbottom=False)
+        top.set_title(p["title"], fontsize=LAB, pad=3)
+        top.set_ylabel(p["ylabel"], fontsize=LAB, labelpad=1.5)
+        top.tick_params(labelsize=TCK, pad=1.5, labelbottom=False)
 
         bot.axhline(ALPHA, color=GREY, lw=0.7, ls=DOT_BUDGET)
         bot.plot(x, p["harm"], color=OURS, marker="o", ms=MS, lw=LW, zorder=3)
         bot.plot(x, p["bharm"], color=BLANKET, marker="s", ms=MS, lw=LW,
                  ls=DASH_UNGATED, zorder=4)
-        bot.set_ylabel("joint harm", fontsize=6.8, labelpad=1.5)
-        bot.set_xlabel(p["xlabel"], fontsize=6.8, labelpad=1.5)
-        bot.tick_params(labelsize=6.2, pad=1.5)
+        bot.set_ylabel("joint harm", fontsize=LAB, labelpad=1.5)
+        bot.set_xlabel(p["xlabel"], fontsize=LAB, labelpad=1.5)
+        bot.tick_params(labelsize=TCK, pad=1.5)
         hi = max(max(p["bharm"]), ALPHA)
         bot.set_ylim(0, hi * 1.18)
         bot.set_yticks([0, ALPHA] if hi < 0.32 else [0, ALPHA, round(hi, 1)])
 
         if p["ticks"] is not None:
             bot.set_xticks(x)
-            bot.set_xticklabels(p["ticks"], rotation=20, ha="right", fontsize=5.8)
+            bot.set_xticklabels(p["ticks"], rotation=20, ha="right", fontsize=TCK)
         elif p.get("percent"):
             bot.set_xticks([100, 70, 50, 30, 10])
-            bot.set_xticklabels(["all", "70%", "50%", "30%", "10%"], fontsize=6.2)
+            bot.set_xticklabels(["all", "70%", "50%", "30%", "10%"], fontsize=TCK)
         if p["invert"]:
             top.invert_xaxis()
         for ax in (top, bot):
@@ -197,10 +203,11 @@ def main():
     h, l = [h[i] for i in order], [l[i] for i in order]
     h.append(plt.Line2D([], [], color=GREY, lw=0.7, ls=DOT_BUDGET))
     l.append(r"budget $\alpha=0.2$")
-    fig.legend(h, l, loc="lower center", ncol=4, frameon=False, fontsize=6.4,
-               bbox_to_anchor=(0.5, 0.005), handletextpad=0.5, columnspacing=1.3)
+    fig.legend(h, l, loc="lower center", ncol=4, frameon=False, fontsize=LEG,
+               bbox_to_anchor=(0.5, -0.045), handletextpad=0.5, columnspacing=1.3)
     OUT.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT / "fig_severity.pdf", bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(OUT / "fig_severity_preview.png", bbox_inches="tight", pad_inches=0.02, dpi=300)
     print("da ve", OUT / "fig_severity.pdf", f"({len(live)} panel, co dai harm)")
 
 

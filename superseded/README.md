@@ -26,3 +26,14 @@ split-conformal miscoverage, which is not the mechanism any more.
 The retired gate itself: a conformal plausible-label set and a worst-case loss
 over it. Replaced by a learned action score with a conformal-risk-control
 threshold; see `src/guard/action.py`.
+
+## exp_iemocap.py
+
+An IEMOCAP driver written against an earlier pipeline API, retired on 2026-09-11.
+It could not run: it passed `beta=` to `run()`, which takes no such argument, and
+called `_select_beta` with three positional arguments plus `alpha`/`delta`, which
+that function does not accept, asking for a `crossfit` objective it never
+implemented. Its `--help` also claimed the reported IEMOCAP rows use that
+objective. They do not: every IEMOCAP number in the paper comes from
+`experiments/iemocap_eta.py` (Figure 8, Table 12) and `experiments/gates_iemocap.py`
+(Tables 4 and 11), both of which select the blend weight by the loss rule of §4.1.
