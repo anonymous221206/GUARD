@@ -27,7 +27,7 @@ def knn_average(
     chunk: int = 1024,
     weighting: str = "uniform",
 ) -> np.ndarray:
-    """Average ``values`` over the ``k`` nearest pool rows for each query row.
+    r"""Average ``values`` over the ``k`` nearest pool rows for each query row.
 
     Distances are Euclidean in whatever space the caller passes in; standardise
     beforehand if the coordinates are on different scales.

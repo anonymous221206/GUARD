@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -24,7 +25,7 @@ HOST = B / "hosts/drugban.py"
 REPO = B.parent / "CURA/external/DrugBAN"
 CKPT = B / "checkpoints/drugban/bindingdb_s1.pth"
 CFG = B / "checkpoints/drugban/bindingdb_s1.yaml"
-STORED = B / "data/processed/drugban_bindingdb_random_s1"
+STORED = Path(os.environ.get("GUARD_ARTIFACTS", B / "artifacts")) / "drugban_processed/drugban_bindingdb_random_s1"
 OUT = B / "artifacts/drugban_protladder_v2"
 PCTS = (100, 80, 70, 60, 50, 40, 30, 25, 20, 15, 10)
 ALPHA, DELTA = 0.2, 0.05

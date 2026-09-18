@@ -7,7 +7,7 @@ _ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
 os.makedirs(_ROOT / 'results/gates', exist_ok=True)
 
-ROOT=str(_ROOT / 'data/processed')
+ROOT=str(ARTIFACTS / 'drugban_processed')
 RULES=['blanket','random','confidence','agreement','learned','GUARD']
 CELLS=[('drugban_biosnap_random_s42',c) for c in ('prot25','prot50','scaffold')] + \
       [('drugban_bindingdb_random_s42',c) for c in ('prot25','prot50','scaffold')] + \

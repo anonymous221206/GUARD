@@ -1,0 +1,7 @@
+# Numerical environment used for the final CPU review runs (CPython 3.12.13).
+-e .[dev,reproduce]
+numpy==2.5.2
+scipy==1.18.1
+scikit-learn==1.9.0
+threadpoolctl==3.6.0
+huggingface-hub==1.8.0

@@ -1,0 +1,8 @@
+{
+  "train_vis": 0.0,
+  "train_ac": 0.0,
+  "dev_vis": 0.0,
+  "dev_ac": 0.0,
+  "test_vis": 0.0,
+  "test_ac": 0.0
+}

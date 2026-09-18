@@ -1,146 +1,81 @@
-# Which script produced which number
+# Paper-to-code map
 
-Every table and figure in the paper is listed here with the driver that produced
-it and the artefacts that driver reads. Nothing reported in the paper comes from
-a script outside this repository. Figures 1 and 2 are drawn by hand in draw.io
-and are the only exception; their source is in the paper directory, not here.
+This map follows the final manuscript labels. Table numbers can shift when the
+venue style moves floats, so the LaTeX labels are the stable identifiers.
 
-Before any of it runs:
+Set up the CPU reproduction environment and frozen-output dumps with:
 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
-pip install -e ".[dev,figures]"
-bash data/download_artifacts.sh          # ~2.9 GB into ./artifacts
+pip install -r requirements-reproduce.txt
+bash data/download_artifacts.sh dumps
 ```
 
-Drivers read `./artifacts`; set `GUARD_ARTIFACTS` to point elsewhere. Outputs
-land under `results/`.
+Drivers read `artifacts/` by default. Set `GUARD_ARTIFACTS` to use another
+location. Compact outputs live under `results/`.
 
 ## Main text
 
-| # | Content | Driver | Reads |
-|---|---|---|---|
-| Table 1 | CMU-MOSEI against published methods | `experiments/mosei_hosts.py`, then `scripts/tables/mosei_rows.py` | `mosei_cmad`, `mosei_tmdc`, `mosei_momke` |
-| Table 2 | All benchmarks, summary | the per-benchmark drivers of Tables 9-11 | all dumps |
-| Table 3 | Intervention rules compared | `experiments/ltt_one.py <driver>` | all dumps |
-| Figure 1 | Positioning against prior repair | `figures_drawio/guard_figures_v2.drawio`, page 1 | hand-drawn |
-| Figure 2 | GUARD at deployment | `figures_drawio/guard_figures_v2.drawio`, page 2 | hand-drawn |
-| Figure 3 | Synthetic sweep, gain against headroom | `experiments/exp_synthetic_sweep.py`, then `scripts/figures/make_fig_synthetic.py` | `results/synthetic_sweep/sweep.csv` |
-| Figure 4 | Severity ladders | six ladder drivers (below), then `scripts/figures/make_fig_severity.py` | six dumps |
-
-`ltt_one.py` wraps one gate driver and records every (condition, seed) cell to
-`results/gates/cells_<driver>.json`:
-
-```bash
-for d in gates_mosei2 gates_iemocap gates_rest gates_drugban opp_dcl; do
-  python experiments/ltt_one.py $d
-done
-```
-
-Table 3 is the mean over those cells and Table 14 their range. They read the same
-files, so they cannot disagree.
-
-The six panels of Figure 4 come from `experiments/ptbxl_sev_dense.py`,
-`experiments/nina_sev_dense.py`, `experiments/opp_dcl.py`,
-`scripts/drugban_protladder_guard.py`, `experiments/iemocap_eta.py` and
-`experiments/ave_eta.py`.
-
-DrugBAN is published under AUROC, but the shared `gate_row` scores every
-benchmark with the accuracy helper, so the ladder file it writes holds accuracy.
-`scripts/drugban_auroc_ladder.py` repeats the same corrector selection on the
-same dumps and records AUROC instead, writing `guard_results_auroc.json` beside
-it; `make_fig_severity.py` prefers that file and labels the axis accordingly.
-Run it after `drugban_protladder_guard.py`.
-
-Two copies of `drugban_protladder_v2/guard_results.json` exist, under
-`artifacts/` and under `results/`, and they disagree on the harm columns. The
-one under `artifacts/` is the one the drivers write and the figure reads; the
-other is stale.
-
-## Appendix
-
-| # | Content | Driver | Reads |
-|---|---|---|---|
-| Table 5 | Benchmarks, hosts, degradations | descriptive; hosts listed in `docs/REPRODUCTION.md` | none |
-| Table 6 | Sample counts per role | `experiments/counts_splits.py` | `ave_av_att`, `ninapro_cnn`, `iemocap_momke` |
-| Table 7 | Synthetic study, matched raw error | `experiments/exp_synthetic_matched.py` | none, generated in-process |
-| Table 8 | IEMOCAP per missing rate | `experiments/iemocap_eta.py` | `iemocap_momke/folds` |
-| Table 9 | DrugBAN per condition | `experiments/exp_drugban.py`, then `scripts/tables/drugban_rows.py` | `drugban_processed` |
-| Table 10 | OPPORTUNITY under sensor loss | `experiments/opp_dcl.py` | `opportunity_dcl_v2` |
-| Table 11 | Per-condition results | `experiments/mosei_full.py`, `experiments/gates_iemocap.py`, `experiments/gates_ave.py`, `experiments/nina_sev_dense.py`, `experiments/ptbxl_sev_dense.py` | five dumps |
-| Table 12 | Cross-mask target | `scripts/tables/drugban_rows.py`, `experiments/opp_targets.py` | `drugban_processed`, `opportunity_dcl_v2` |
-| Table 13 | CMU-MOSEI harm and apply rate | `experiments/mosei_full.py` | `mosei_cmad` |
-| Table 14 | Removing the certificate | same cells as Table 3 | all dumps |
-| Figure 6 | Cross-mask accuracy screen | `scripts/figures/make_fig_screen.py` | `scripts/figures/ablation_data/` |
-| Figure 7 | Intervention rate | `scripts/figures/make_fig_apply.py` | `scripts/figures/ablation_data/` |
-
-`scripts/tables/alpha_stats.py` recomputes every counting claim in the
-budget-sweep subsection (how many runs, how many over budget, where the gain
-peaks) from the same CSVs Figure 5 reads.
-
-## The sweep behind Figure 5
-
-| Curve | Driver | Output |
+| Label | Final content | Driver / source |
 |---|---|---|
-| CMU-MOSEI | `experiments/affective_alpha.py` | `results/alpha/alpha_affective.csv` |
-| AVE | `experiments/ave_alpha.py` | `results/alpha/alpha_ave.csv` |
-| DrugBAN | `experiments/drugban_alpha.py` | `results/alpha/alpha_drugban.csv` |
-| NinaPro | `experiments/nina_alpha.py` | `results/alpha/alpha_ninapro.csv` |
-| OPPORTUNITY | `experiments/opp_alpha.py` | `results/alpha/alpha_opportunity.csv` |
-| OPPORTUNITY, non-exchangeable | `experiments/opp_alpha_nx.py` | `results/alpha/alpha_opp_nx.csv` |
-| PTB-XL | `experiments/alpha_sweep_new.py` | `results/alpha/alpha_new.csv` |
-| PTB-XL, shifted calibration | `experiments/ptbxl_shift.py` | `results/alpha/alpha_ptbxl_shift.csv` |
+| `tab:mosei-main` | CMU-MOSEI hosts and GUARD | `experiments/mosei_hosts.py`; `scripts/tables/mosei_rows.py` |
+| `tab:allbench` | cross-benchmark summary | per-benchmark drivers below; MOSEI is explicitly the three language-absent masks |
+| `tab:gates` | intervention rules | `experiments/ltt_one.py` over the gate drivers |
+| `tab:crossmask` | hard-label and cross-mask targets | `scripts/tables/drugban_rows.py`; `experiments/opp_targets.py` |
+| `fig:overview` | method positioning | hand-drawn publication figure |
+| `fig:guard` | deployment pipeline | hand-drawn publication figure |
+| `fig:synthetic` | gain against correctable headroom | `experiments/exp_synthetic_sweep.py`; `scripts/figures/make_fig_synthetic.py` |
+| `fig:severity` | degradation ladders | ladder drivers; `scripts/figures/make_fig_severity.py` |
 
-## Offline preparation
+## Appendix tables
 
-Two artefacts are produced rather than downloaded, because they need a
-checkpoint and the original dataset:
+| Label | Final content | Driver / evidence |
+|---|---|---|
+| `tab:notation` | notation | descriptive |
+| `tab:conditional-harm` | IEMOCAP joint and conditional harm | `experiments/review_conditional.py`; `results/review_20260917/conditional_iemocap.json` |
+| `tab:hme-paired` | HME/CMAD/GUARD on paired MOSEI partitions | `experiments/review_hme.py`; `scripts/tables/verify_hme_run.py`; `results/external_review_20260917/hme/` |
+| `tab:corrector` | retrieval and probe ablation | `experiments/probe_vs_knn.py` |
+| `tab:probe-extension` | matched MOSEI and DrugBAN probe comparison | `experiments/review_probe_extension.py`; `results/review_20260917/probe_*.json` |
+| `tab:efficiency` | correction latency and retained state | `experiments/review_efficiency.py`; `results/review_20260917/efficiency_*.json` |
+| `tab:actionscore` | action-score learners/features | `experiments/action_family.py` |
+| `tab:alpha` | harm-budget sweep | alpha drivers; `scripts/tables/alpha_stats.py` |
+| `tab:iemocap` | IEMOCAP missing-rate study | `experiments/iemocap_eta.py` |
+| `tab:main` | DrugBAN conditions | `experiments/exp_drugban.py`; `scripts/tables/drugban_rows.py` |
+| `tab:gateablation` | OPPORTUNITY sensor loss | `experiments/opp_dcl.py` |
+| `tab:fourdomains` | per-condition benchmark results | `experiments/mosei_full.py`, `gates_iemocap.py`, `gates_ave.py`, `nina_sev_dense.py`, `ptbxl_sev_dense.py` |
+| `tab:mosei-harm` | CMU-MOSEI harm/apply | `experiments/mosei_full.py` |
+| `tab:blanket` | removing the certificate | saved cells produced by the gate drivers |
+| `tab:setup` | benchmark setup | descriptive; host evidence in `docs/REPRODUCTION.md` |
+| `tab:splits` | sample counts and grids | `experiments/counts_splits.py` |
+| `tab:app-synthetic` | matched-error synthetic study | `experiments/exp_synthetic_matched.py` |
+
+## Appendix figures
+
+| Label | Content | Driver |
+|---|---|---|
+| `fig:iemocap` | IEMOCAP missing-rate curves | `scripts/figures/make_fig_iemocap.py` |
+| `fig:alpha` | harm budget sweep | alpha drivers; `scripts/figures/make_fig_alpha2.py` |
+| `fig:apply` | intervention rate | `scripts/figures/make_fig_apply.py` |
+| `fig:screen` | cross-mask accuracy screen | `scripts/figures/make_fig_screen.py` |
+
+Figure 8's 30 cells come only from binary DrugBAN and five-class OPPORTUNITY.
+The manuscript explicitly states their chance levels and that absolute accuracy
+does not transfer directly to 29-way AVE or many-class NinaPro.
+
+## Automated checks
 
 ```bash
-# the AVE retrieval sidecars, one per condition including the intact one
-python hosts/ave.py export --host artifacts/ave_av_att --source <AVE_ECCV18> \
-       --conditions full --variant paper --cuda-device 0
-# the DrugBAN protein ladder: eleven frozen dumps, then the gate over them
-python scripts/drugban_protladder_v2.py          # needs dgl, dgllife
-python scripts/drugban_protladder_guard.py       # numpy only
+pytest -q
+python experiments/repro_check.py
+python scripts/verify_submission.py /path/to/guard_iclr2027.tex
 ```
 
-The AVE exporter verifies itself: it refuses to write a sidecar whose posteriors
-do not reproduce the stored dump. The stored dumps were made on a GPU, so an
-exact reproduction needs one; on CPU the check fails at around `5e-3`.
+`verify_paper.py` checks 796 cells from the original result tables against the
+committed result files. `verify_review_additions.py` checks 88 fields in the
+conditional-harm, probe and efficiency tables. `verify_hme_table.py` checks the
+54 displayed HME/CMAD/GUARD values against the paired-comparison JSON, whose 70
+underlying HME metrics can be recomputed by `verify_hme_run.py` when the CMAD
+dumps are installed.
 
-## Numbers quoted in the running text
-
-| Claim | Driver |
-|---|---|
-| the blend weight by mask in §5.1 ($0.70$ against $0.12$) | `experiments/beta_by_mask.py` |
-| what the fit-split tightening changes (§4.2) | `experiments/tighten_effect.py` |
-| the counting claims of the budget sweep (§5.4) | `scripts/tables/alpha_stats.py` |
-
-`scripts/rerun_all_results.sh` runs every driver behind a reported number in one
-pass; `scripts/tables/verify_paper.py` then checks the LaTeX against what they
-wrote, and `scripts/tables/rebuild_tables.py` prints the replacements for any
-cell that moved.
-
-## Checked automatically
-
-```bash
-pytest -q                          # ten tests on the certified decision rule
-python experiments/repro_check.py  # frozen-host numbers against the paper
-python experiments/audit_preflight.py
-```
-
-`experiments/exp_synthetic.py` is a second, smaller synthetic check that shares
-no number with Table 7. Its skew preserves the arg-max, so it can move the loss
-but never the accuracy; it runs in seconds and doubles as an install test.
-
-## Honest limits of this map
-
-Three tables now have generators (`scripts/tables/`); the rest of the gate
-drivers print their numbers to standard output and those were transcribed into
-the LaTeX source. Re-running a driver reproduces a number, it does not rewrite
-the paper.
-
-Code for the previous gate and for the experiments that were dropped is not in
-this tree. Nothing in it produced a number in the paper; it is reachable in the
-history if anyone wants to see what was replaced.
+Several older table drivers print rows rather than editing LaTeX. The verifier,
+not automatic manuscript rewriting, is the final synchronization check.

@@ -1,0 +1,1952 @@
+{
+  "protocol": "Canonical probe_core.rows, unchanged grid and gate. Raw frozen baseline, accuracy selection on fit only. No test-label selection.",
+  "mode": "mosei",
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "sklearn": "1.9.0",
+  "source_sha256": {
+    "experiments/probe_core.py": "9443dcd01b1d67a6c7e987c21a49c68a7a9564b6c742bc2bf361a9d84cb35811",
+    "experiments/gates_core.py": "c9d68ed609a27f39ea1faaeaef745f168eccd6e4a95f84a42adfc816c73ee4f2",
+    "src/guard/action.py": "1ecb9d579d19fcf76dfe6853f8c987d0d8af2c010f308bc675572c18125e4eae"
+  },
+  "summary": {
+    "knn": {
+      "base": 0.6374186019293744,
+      "gain": 0.05055676031623862,
+      "harm": 0.10594827586206895,
+      "apply": 0.3287068965517241,
+      "blanket_gain": 0.06711974929293679,
+      "blanket_harm": 0.3305172413793104
+    },
+    "linear": {
+      "base": 0.6374186019293744,
+      "gain": 0.025849293842006828,
+      "harm": 0.08795977011494253,
+      "apply": 0.28997126436781606,
+      "blanket_gain": 0.03728519088719616,
+      "blanket_harm": 0.29982758620689653
+    }
+  },
+  "cells": [
+    {
+      "context": {
+        "condition": "a",
+        "seed": 0,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.0502232142857143,
+          0.10086206896551723,
+          0.3232758620689655
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.0502232142857143,
+          "harm": 0.10086206896551723,
+          "blanket_gain": 0.0736607142857143,
+          "blanket_harm": 0.25775862068965516,
+          "apply": 0.3232758620689655,
+          "base": 0.6305803571428571,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.03236607142857151,
+          "harm": 0.1146551724137931,
+          "blanket_gain": 0.04799107142857151,
+          "blanket_harm": 0.2939655172413793,
+          "apply": 0.3112068965517241,
+          "base": 0.6305803571428571,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 1.0,
+            "beta": 0.9750000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "241c92b70e88632224433306a3d4d7db65b1bf071be9d3bae26656d2db9480fd",
+        "fit": "9d3ba524ccc00dc1a6a1a234df69e0a4873e815d966b299aa97a2c3f3827d0b9",
+        "conf": "6341e2bf43480626b7bfe19ac3f7548150c5d82af1d17327d560fe6240f31201",
+        "test": "c7b0bd67aff3a5ba15a47624b014ab7b3e5d9a728588b028c696ae20f3af8e7b"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 1,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.055126791620727644,
+          0.08362068965517241,
+          0.23706896551724138
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.055126791620727644,
+          "harm": 0.08362068965517241,
+          "blanket_gain": 0.05402425578831316,
+          "blanket_harm": 0.2267241379310345,
+          "apply": 0.23706896551724138,
+          "base": 0.6560088202866593,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 20,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.004410143329658278,
+          "harm": 0.04913793103448276,
+          "blanket_gain": 0.030871003307607503,
+          "blanket_harm": 0.23879310344827587,
+          "apply": 0.13620689655172413,
+          "base": 0.6560088202866593,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 0.1,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "cff576d4a58458c5fca19f80156f00a95d1f9cc3c70ca5c3e43b8ad8bb0296eb",
+        "fit": "9f41334f60ce49af3dfaafda337b5c3ff43eae38aa81e73639b18e97cff0d5a7",
+        "conf": "d7b78b3d2864f358fc6dc8276e9b3a150c7dce1b6ee6279707bad08d165f727b",
+        "test": "4de35102fe1b54eefad0ea58639dc639c628354c154675a2a467de64dd68956c"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 2,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.02813852813852813,
+          0.034482758620689655,
+          0.15862068965517243
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.02813852813852813,
+          "harm": 0.034482758620689655,
+          "blanket_gain": 0.050865800865800836,
+          "blanket_harm": 0.31982758620689655,
+          "apply": 0.15862068965517243,
+          "base": 0.6396103896103896,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.75
+          }
+        },
+        "linear": {
+          "gain": 0.04870129870129869,
+          "harm": 0.10172413793103448,
+          "blanket_gain": 0.04870129870129869,
+          "blanket_harm": 0.2637931034482759,
+          "apply": 0.28706896551724137,
+          "base": 0.6396103896103896,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "7278ed2bf96ec90aa10686f88023642e2891ecc818a2cebadbfb28399c544dff",
+        "fit": "4bf0f5bf61f109280a41f09ff517beb530ee3d1afe48accca81229c618adab94",
+        "conf": "1ed960aa852460b5d8d0ae05e2ef788a0bee55a73e7aaa8df09e874c1e8710a8",
+        "test": "a878004d5130e4ec46bbe6e5255eec3b1e496522f64a6777d71e850e9b840158"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 3,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.04220779220779214,
+          0.0939655172413793,
+          0.2767241379310345
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.04220779220779214,
+          "harm": 0.0939655172413793,
+          "blanket_gain": 0.09090909090909083,
+          "blanket_harm": 0.328448275862069,
+          "apply": 0.2767241379310345,
+          "base": 0.6038961038961039,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.02056277056277056,
+          "harm": 0.052586206896551725,
+          "blanket_gain": 0.050865800865800836,
+          "blanket_harm": 0.2818965517241379,
+          "apply": 0.13879310344827586,
+          "base": 0.6038961038961039,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 0.01,
+            "temperature": 1.0,
+            "beta": 0.9500000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "1daa29b3c427c64cb682e0c96f7cdd3c5a923d08c68960d2eb8e55ac29fa8af3",
+        "fit": "555a775f3d8b5ddefb34f0688d91c3cb1e0b3335ebc4edd4ecce3bfe5ed9ac0c",
+        "conf": "8f71d20d23de100ccc09d5ca37d88e769fd8aae559c5332dbb8dc4cbc7dd678b",
+        "test": "b826ee58fd7b4f0620a2380307be85dc53fc1d362fa07a5cad2f7e559656218b"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 4,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.05771365149833518,
+          0.13275862068965516,
+          0.41379310344827586
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.05771365149833518,
+          "harm": 0.13275862068965516,
+          "blanket_gain": 0.06659267480577136,
+          "blanket_harm": 0.3112068965517241,
+          "apply": 0.41379310344827586,
+          "base": 0.6170921198668147,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 8,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.03329633740288562,
+          "harm": 0.12844827586206897,
+          "blanket_gain": 0.029966703662597127,
+          "blanket_harm": 0.2853448275862069,
+          "apply": 0.33706896551724136,
+          "base": 0.6170921198668147,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 0.01,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "eefa8b2b76297c20619e5f515cf146de27be6de163bf08737b9c23047c83687b",
+        "fit": "d0321e3f883d80a9206fa76e74d0d7ace8dea51b60c86aa0e6adb0db3f383900",
+        "conf": "30e95077175ce8f25d62b3d1e185d074eadbbb14f1e0af5b36f364cf14d0c249",
+        "test": "3103ade873b838e6248d7f40e31051464a5e4fe42053e391fa3f5e34a3efd15d"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 5,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.044420368364030294,
+          0.1146551724137931,
+          0.3431034482758621
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.044420368364030294,
+          "harm": 0.1146551724137931,
+          "blanket_gain": 0.06825568797399784,
+          "blanket_harm": 0.3267241379310345,
+          "apply": 0.3431034482758621,
+          "base": 0.6175514626218852,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "uniform",
+            "hp": 5,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.03575297941495115,
+          "harm": 0.09827586206896552,
+          "blanket_gain": 0.03358613217768147,
+          "blanket_harm": 0.2793103448275862,
+          "apply": 0.2629310344827586,
+          "base": 0.6175514626218852,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 0.01,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "a9add323f7c199856fa432931f190051bdca9ec42da5fb8f2706df3ec81888ef",
+        "fit": "9c8ef6c954c4d767c32bddc3b3f214ec481e93624810cf18b2734323a9dc8f41",
+        "conf": "d0de1398a698a535e6b7505026cb9c75567eec30eff08ac7f219e5e2b1e6122e",
+        "test": "235ce55a3946203077eaddd72a7c885ecb25016975ad9aa1cbe3e10f235bdf88"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 6,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.05676855895196509,
+          0.09827586206896552,
+          0.33793103448275863
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.05676855895196509,
+          "harm": 0.09827586206896552,
+          "blanket_gain": 0.07096069868995636,
+          "blanket_harm": 0.296551724137931,
+          "apply": 0.33793103448275863,
+          "base": 0.62882096069869,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 8,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.012008733624454093,
+          "harm": 0.05517241379310345,
+          "blanket_gain": 0.051310043668122196,
+          "blanket_harm": 0.21379310344827587,
+          "apply": 0.15086206896551724,
+          "base": 0.62882096069869,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 1.0,
+            "beta": 0.55
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "df79ec09d0da02ca9ce135723ef85327d4d7d71d4088320943b232b1b8fc0cc1",
+        "fit": "a9fe18d5f3f29c3acd3bebeb4808515a270300e57d555ab107a7b99139f704a1",
+        "conf": "70154bcae9529c55128c68149f44a7767e0f1777f61782cc135a70f062fcb9b1",
+        "test": "bc8265cdf817841e53c8e0954c4ac8978f373b6ec940c30291d03607bac08db4"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 7,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.026115342763873728,
+          0.1146551724137931,
+          0.33793103448275863
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.026115342763873728,
+          "harm": 0.1146551724137931,
+          "blanket_gain": 0.03373231773667029,
+          "blanket_harm": 0.30775862068965515,
+          "apply": 0.33793103448275863,
+          "base": 0.6517954298150164,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 8,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.027203482045701777,
+          "harm": 0.10172413793103448,
+          "blanket_gain": 0.03808487486398249,
+          "blanket_harm": 0.2810344827586207,
+          "apply": 0.2767241379310345,
+          "base": 0.6517954298150164,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "874d81183cef181f2e37a30b076b44bdddc5d9a05d7f1e73bc542a56a96b3646",
+        "fit": "23ff89d16c74b8f02b909d9cd0ffd3ef2c7a6be75b74542105822b5b6a897695",
+        "conf": "cb4b3d48efc94dab5b9773ed0d7765d1a74f19f47619aab35d53642278886175",
+        "test": "7500c1d8e17c2ad0ace74785ab8adeed8df7b52f13765d8212d2b523faa59179"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 8,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.06524184476940376,
+          0.08189655172413793,
+          0.296551724137931
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.06524184476940376,
+          "harm": 0.08189655172413793,
+          "blanket_gain": 0.08548931383577052,
+          "blanket_harm": 0.32413793103448274,
+          "apply": 0.296551724137931,
+          "base": 0.6242969628796401,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.02699662542182224,
+          "harm": 0.07931034482758621,
+          "blanket_gain": 0.050618672665916686,
+          "blanket_harm": 0.2629310344827586,
+          "apply": 0.20344827586206896,
+          "base": 0.6242969628796401,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 2.0,
+            "beta": 0.625
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "a6f11460b4098b8e21f43f512f7fb5fa32643927d9e3faa18c5cf4717fcf9b35",
+        "fit": "9c0a3d4fe3a60bb93a6305d1f211b3e0bc1c58e7d39d93fd2dac155dc42e8902",
+        "conf": "9402797f41cd02003d0a26d5672652f6748f41bc5d92c958ad04d2c73be6c83f",
+        "test": "3b6f0b27dc4b204780c864608414d6fe1b2d5659e67950a379b41c4b32c91026"
+      }
+    },
+    {
+      "context": {
+        "condition": "a",
+        "seed": 9,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.04799107142857151,
+          0.08879310344827586,
+          0.2818965517241379
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.04799107142857151,
+          "harm": 0.08879310344827586,
+          "blanket_gain": 0.0669642857142857,
+          "blanket_harm": 0.3163793103448276,
+          "apply": 0.2818965517241379,
+          "base": 0.6417410714285714,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.9
+          }
+        },
+        "linear": {
+          "gain": 0.033482142857142905,
+          "harm": 0.03706896551724138,
+          "blanket_gain": 0.056919642857142905,
+          "blanket_harm": 0.23017241379310344,
+          "apply": 0.12413793103448276,
+          "base": 0.6417410714285714,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 0.01,
+            "temperature": 1.0,
+            "beta": 0.8250000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "4fb66216ae292ebe3478e788dd6b1efa645b41fb56824559af71b4843361651a",
+        "fit": "912ec2fbb12be60d78a948826766a91dd88e9593f26fbeec6aa9ce4c8998fb62",
+        "conf": "49a8e8ca62720aff83094837c9f68c990a4121fb249f7c7efd10d81a1d179fab",
+        "test": "446e4b6692b9ac3800700fcfa14d5660c0f9a1c73c882116dda440313b3098c6"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 0,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.0636160714285714,
+          0.12586206896551724,
+          0.3931034482758621
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.0636160714285714,
+          "harm": 0.12586206896551724,
+          "blanket_gain": 0.05803571428571419,
+          "blanket_harm": 0.3396551724137931,
+          "apply": 0.3931034482758621,
+          "base": 0.6350446428571429,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.75
+          }
+        },
+        "linear": {
+          "gain": 0.017857142857142794,
+          "harm": 0.0939655172413793,
+          "blanket_gain": 0.03125,
+          "blanket_harm": 0.28620689655172415,
+          "apply": 0.20344827586206896,
+          "base": 0.6350446428571429,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 0.1,
+            "temperature": 1.0,
+            "beta": 0.55
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "241c92b70e88632224433306a3d4d7db65b1bf071be9d3bae26656d2db9480fd",
+        "fit": "9d3ba524ccc00dc1a6a1a234df69e0a4873e815d966b299aa97a2c3f3827d0b9",
+        "conf": "6341e2bf43480626b7bfe19ac3f7548150c5d82af1d17327d560fe6240f31201",
+        "test": "c7b0bd67aff3a5ba15a47624b014ab7b3e5d9a728588b028c696ae20f3af8e7b"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 1,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.05292171995589856,
+          0.1413793103448276,
+          0.38275862068965516
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.05292171995589856,
+          "harm": 0.1413793103448276,
+          "blanket_gain": 0.07717750826901881,
+          "blanket_harm": 0.3336206896551724,
+          "apply": 0.38275862068965516,
+          "base": 0.6306504961411246,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 1.0,
+            "beta": 0.775
+          }
+        },
+        "linear": {
+          "gain": 0.029768467475193017,
+          "harm": 0.08620689655172414,
+          "blanket_gain": 0.03307607497243659,
+          "blanket_harm": 0.3267241379310345,
+          "apply": 0.20689655172413793,
+          "base": 0.6306504961411246,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 1.0,
+            "beta": 0.675
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "cff576d4a58458c5fca19f80156f00a95d1f9cc3c70ca5c3e43b8ad8bb0296eb",
+        "fit": "9f41334f60ce49af3dfaafda337b5c3ff43eae38aa81e73639b18e97cff0d5a7",
+        "conf": "d7b78b3d2864f358fc6dc8276e9b3a150c7dce1b6ee6279707bad08d165f727b",
+        "test": "4de35102fe1b54eefad0ea58639dc639c628354c154675a2a467de64dd68956c"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 2,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.037878787878787956,
+          0.06982758620689655,
+          0.2
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.037878787878787956,
+          "harm": 0.06982758620689655,
+          "blanket_gain": 0.06818181818181823,
+          "blanket_harm": 0.3396551724137931,
+          "apply": 0.2,
+          "base": 0.6385281385281385,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 1.0,
+            "beta": 0.875
+          }
+        },
+        "linear": {
+          "gain": 0.02164502164502169,
+          "harm": 0.12931034482758622,
+          "blanket_gain": 0.0357142857142857,
+          "blanket_harm": 0.2508620689655172,
+          "apply": 0.5310344827586206,
+          "base": 0.6385281385281385,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 1.0,
+            "beta": 0.47500000000000003
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "7278ed2bf96ec90aa10686f88023642e2891ecc818a2cebadbfb28399c544dff",
+        "fit": "4bf0f5bf61f109280a41f09ff517beb530ee3d1afe48accca81229c618adab94",
+        "conf": "1ed960aa852460b5d8d0ae05e2ef788a0bee55a73e7aaa8df09e874c1e8710a8",
+        "test": "a878004d5130e4ec46bbe6e5255eec3b1e496522f64a6777d71e850e9b840158"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 3,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.04220779220779214,
+          0.08706896551724137,
+          0.26120689655172413
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.04220779220779214,
+          "harm": 0.08706896551724137,
+          "blanket_gain": 0.09848484848484851,
+          "blanket_harm": 0.3422413793103448,
+          "apply": 0.26120689655172413,
+          "base": 0.6266233766233766,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.8500000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.009740259740259716,
+          "harm": 0.07844827586206897,
+          "blanket_gain": 0.030303030303030276,
+          "blanket_harm": 0.2525862068965517,
+          "apply": 0.19051724137931034,
+          "base": 0.6266233766233766,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 1.0,
+            "beta": 0.525
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "1daa29b3c427c64cb682e0c96f7cdd3c5a923d08c68960d2eb8e55ac29fa8af3",
+        "fit": "555a775f3d8b5ddefb34f0688d91c3cb1e0b3335ebc4edd4ecce3bfe5ed9ac0c",
+        "conf": "8f71d20d23de100ccc09d5ca37d88e769fd8aae559c5332dbb8dc4cbc7dd678b",
+        "test": "b826ee58fd7b4f0620a2380307be85dc53fc1d362fa07a5cad2f7e559656218b"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 4,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.03440621531631516,
+          0.09827586206896552,
+          0.27586206896551724
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.03440621531631516,
+          "harm": 0.09827586206896552,
+          "blanket_gain": 0.059933407325194143,
+          "blanket_harm": 0.32155172413793104,
+          "apply": 0.27586206896551724,
+          "base": 0.6182019977802442,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.009988901220865709,
+          "harm": 0.14310344827586208,
+          "blanket_gain": 0.018867924528301883,
+          "blanket_harm": 0.3163793103448276,
+          "apply": 0.4267241379310345,
+          "base": 0.6182019977802442,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 1.0,
+            "beta": 0.8
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "eefa8b2b76297c20619e5f515cf146de27be6de163bf08737b9c23047c83687b",
+        "fit": "d0321e3f883d80a9206fa76e74d0d7ace8dea51b60c86aa0e6adb0db3f383900",
+        "conf": "30e95077175ce8f25d62b3d1e185d074eadbbb14f1e0af5b36f364cf14d0c249",
+        "test": "3103ade873b838e6248d7f40e31051464a5e4fe42053e391fa3f5e34a3efd15d"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 5,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.04008667388949072,
+          0.10258620689655172,
+          0.30344827586206896
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.04008667388949072,
+          "harm": 0.10258620689655172,
+          "blanket_gain": 0.05200433369447455,
+          "blanket_harm": 0.34655172413793106,
+          "apply": 0.30344827586206896,
+          "base": 0.6511375947995667,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.9750000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.004333694474539462,
+          "harm": 0.11637931034482758,
+          "blanket_gain": 0.006500541711809249,
+          "blanket_harm": 0.2853448275862069,
+          "apply": 0.371551724137931,
+          "base": 0.6511375947995667,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 0.1,
+            "temperature": 1.0,
+            "beta": 0.75
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "a9add323f7c199856fa432931f190051bdca9ec42da5fb8f2706df3ec81888ef",
+        "fit": "9c8ef6c954c4d767c32bddc3b3f214ec481e93624810cf18b2734323a9dc8f41",
+        "conf": "d0de1398a698a535e6b7505026cb9c75567eec30eff08ac7f219e5e2b1e6122e",
+        "test": "235ce55a3946203077eaddd72a7c885ecb25016975ad9aa1cbe3e10f235bdf88"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 6,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.05240174672489084,
+          0.15258620689655172,
+          0.41724137931034483
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.05240174672489084,
+          "harm": 0.15258620689655172,
+          "blanket_gain": 0.05458515283842791,
+          "blanket_harm": 0.3275862068965517,
+          "apply": 0.41724137931034483,
+          "base": 0.6342794759825328,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.7250000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.024017467248908297,
+          "harm": 0.034482758620689655,
+          "blanket_gain": 0.026200873362445365,
+          "blanket_harm": 0.14396551724137932,
+          "apply": 0.28448275862068967,
+          "base": 0.6342794759825328,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 1.0,
+            "beta": 0.30000000000000004
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "df79ec09d0da02ca9ce135723ef85327d4d7d71d4088320943b232b1b8fc0cc1",
+        "fit": "a9fe18d5f3f29c3acd3bebeb4808515a270300e57d555ab107a7b99139f704a1",
+        "conf": "70154bcae9529c55128c68149f44a7767e0f1777f61782cc135a70f062fcb9b1",
+        "test": "bc8265cdf817841e53c8e0954c4ac8978f373b6ec940c30291d03607bac08db4"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 7,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.044613710554951114,
+          0.09741379310344828,
+          0.27844827586206894
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.044613710554951114,
+          "harm": 0.09741379310344828,
+          "blanket_gain": 0.04026115342763881,
+          "blanket_harm": 0.3922413793103448,
+          "apply": 0.27844827586206894,
+          "base": 0.6507072905331882,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.02393906420021763,
+          "harm": 0.12931034482758622,
+          "blanket_gain": 0.02393906420021763,
+          "blanket_harm": 0.38448275862068965,
+          "apply": 0.5836206896551724,
+          "base": 0.6507072905331882,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 2.0,
+            "beta": 0.525
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "874d81183cef181f2e37a30b076b44bdddc5d9a05d7f1e73bc542a56a96b3646",
+        "fit": "23ff89d16c74b8f02b909d9cd0ffd3ef2c7a6be75b74542105822b5b6a897695",
+        "conf": "cb4b3d48efc94dab5b9773ed0d7765d1a74f19f47619aab35d53642278886175",
+        "test": "7500c1d8e17c2ad0ace74785ab8adeed8df7b52f13765d8212d2b523faa59179"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 8,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.040494938132733416,
+          0.05603448275862069,
+          0.18275862068965518
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.040494938132733416,
+          "harm": 0.05603448275862069,
+          "blanket_gain": 0.055118110236220486,
+          "blanket_harm": 0.33706896551724136,
+          "apply": 0.18275862068965518,
+          "base": 0.6377952755905512,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "uniform",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.8250000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.019122609673790758,
+          "harm": 0.06465517241379311,
+          "blanket_gain": 0.02924634420697414,
+          "blanket_harm": 0.3706896551724138,
+          "apply": 0.35258620689655173,
+          "base": 0.6377952755905512,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 2.0,
+            "beta": 0.5750000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "a6f11460b4098b8e21f43f512f7fb5fa32643927d9e3faa18c5cf4717fcf9b35",
+        "fit": "9c0a3d4fe3a60bb93a6305d1f211b3e0bc1c58e7d39d93fd2dac155dc42e8902",
+        "conf": "9402797f41cd02003d0a26d5672652f6748f41bc5d92c958ad04d2c73be6c83f",
+        "test": "3b6f0b27dc4b204780c864608414d6fe1b2d5659e67950a379b41c4b32c91026"
+      }
+    },
+    {
+      "context": {
+        "condition": "v",
+        "seed": 9,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.05357142857142849,
+          0.14396551724137932,
+          0.47413793103448276
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.05357142857142849,
+          "harm": 0.14396551724137932,
+          "blanket_gain": 0.0625,
+          "blanket_harm": 0.3146551724137931,
+          "apply": 0.47413793103448276,
+          "base": 0.6428571428571429,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.8500000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.024553571428571397,
+          "harm": 0.14396551724137932,
+          "blanket_gain": 0.025669642857142794,
+          "blanket_harm": 0.3870689655172414,
+          "apply": 0.5689655172413793,
+          "base": 0.6428571428571429,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 2.0,
+            "beta": 0.9
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "4fb66216ae292ebe3478e788dd6b1efa645b41fb56824559af71b4843361651a",
+        "fit": "912ec2fbb12be60d78a948826766a91dd88e9593f26fbeec6aa9ce4c8998fb62",
+        "conf": "49a8e8ca62720aff83094837c9f68c990a4121fb249f7c7efd10d81a1d179fab",
+        "test": "446e4b6692b9ac3800700fcfa14d5660c0f9a1c73c882116dda440313b3098c6"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 0,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.0546875,
+          0.16982758620689656,
+          0.5456896551724137
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.0546875,
+          "harm": 0.16982758620689656,
+          "blanket_gain": 0.078125,
+          "blanket_harm": 0.3913793103448276,
+          "apply": 0.5456896551724137,
+          "base": 0.6473214285714286,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 8,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.041294642857142794,
+          "harm": 0.08879310344827586,
+          "blanket_gain": 0.0580357142857143,
+          "blanket_harm": 0.34655172413793106,
+          "apply": 0.23793103448275862,
+          "base": 0.6473214285714286,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 1.0,
+            "beta": 0.8500000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "241c92b70e88632224433306a3d4d7db65b1bf071be9d3bae26656d2db9480fd",
+        "fit": "9d3ba524ccc00dc1a6a1a234df69e0a4873e815d966b299aa97a2c3f3827d0b9",
+        "conf": "6341e2bf43480626b7bfe19ac3f7548150c5d82af1d17327d560fe6240f31201",
+        "test": "c7b0bd67aff3a5ba15a47624b014ab7b3e5d9a728588b028c696ae20f3af8e7b"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 1,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.06063947078280041,
+          0.09137931034482759,
+          0.2810344827586207
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.06063947078280041,
+          "harm": 0.09137931034482759,
+          "blanket_gain": 0.08158765159867698,
+          "blanket_harm": 0.33448275862068966,
+          "apply": 0.2810344827586207,
+          "base": 0.6427783902976847,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 8,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.027563395810363822,
+          "harm": 0.052586206896551725,
+          "blanket_gain": 0.05292171995589856,
+          "blanket_harm": 0.27586206896551724,
+          "apply": 0.15775862068965518,
+          "base": 0.6427783902976847,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 1.0,
+            "beta": 0.47500000000000003
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "cff576d4a58458c5fca19f80156f00a95d1f9cc3c70ca5c3e43b8ad8bb0296eb",
+        "fit": "9f41334f60ce49af3dfaafda337b5c3ff43eae38aa81e73639b18e97cff0d5a7",
+        "conf": "d7b78b3d2864f358fc6dc8276e9b3a150c7dce1b6ee6279707bad08d165f727b",
+        "test": "4de35102fe1b54eefad0ea58639dc639c628354c154675a2a467de64dd68956c"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 2,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.04329004329004327,
+          0.07413793103448275,
+          0.25689655172413794
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.04329004329004327,
+          "harm": 0.07413793103448275,
+          "blanket_gain": 0.08549783549783552,
+          "blanket_harm": 0.34051724137931033,
+          "apply": 0.25689655172413794,
+          "base": 0.6515151515151515,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.775
+          }
+        },
+        "linear": {
+          "gain": 0.0357142857142857,
+          "harm": 0.05,
+          "blanket_gain": 0.04870129870129869,
+          "blanket_harm": 0.2663793103448276,
+          "apply": 0.1336206896551724,
+          "base": 0.6515151515151515,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 1.0,
+            "beta": 0.55
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "7278ed2bf96ec90aa10686f88023642e2891ecc818a2cebadbfb28399c544dff",
+        "fit": "4bf0f5bf61f109280a41f09ff517beb530ee3d1afe48accca81229c618adab94",
+        "conf": "1ed960aa852460b5d8d0ae05e2ef788a0bee55a73e7aaa8df09e874c1e8710a8",
+        "test": "a878004d5130e4ec46bbe6e5255eec3b1e496522f64a6777d71e850e9b840158"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 3,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.09848484848484851,
+          0.15689655172413794,
+          0.45517241379310347
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.09848484848484851,
+          "harm": 0.15689655172413794,
+          "blanket_gain": 0.09740259740259738,
+          "blanket_harm": 0.3594827586206897,
+          "apply": 0.45517241379310347,
+          "base": 0.6255411255411255,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.03463203463203468,
+          "harm": 0.09482758620689655,
+          "blanket_gain": 0.04761904761904767,
+          "blanket_harm": 0.3775862068965517,
+          "apply": 0.3629310344827586,
+          "base": 0.6255411255411255,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 2.0,
+            "beta": 0.9750000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "1daa29b3c427c64cb682e0c96f7cdd3c5a923d08c68960d2eb8e55ac29fa8af3",
+        "fit": "555a775f3d8b5ddefb34f0688d91c3cb1e0b3335ebc4edd4ecce3bfe5ed9ac0c",
+        "conf": "8f71d20d23de100ccc09d5ca37d88e769fd8aae559c5332dbb8dc4cbc7dd678b",
+        "test": "b826ee58fd7b4f0620a2380307be85dc53fc1d362fa07a5cad2f7e559656218b"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 4,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.031076581576026552,
+          0.09827586206896552,
+          0.3275862068965517
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.031076581576026552,
+          "harm": 0.09827586206896552,
+          "blanket_gain": 0.06770255271920089,
+          "blanket_harm": 0.30775862068965515,
+          "apply": 0.3275862068965517,
+          "base": 0.6281908990011099,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 1.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.01664816870144281,
+          "harm": 0.08620689655172414,
+          "blanket_gain": 0.021087680355160843,
+          "blanket_harm": 0.3887931034482759,
+          "apply": 0.3,
+          "base": 0.6281908990011099,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 0.01,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "eefa8b2b76297c20619e5f515cf146de27be6de163bf08737b9c23047c83687b",
+        "fit": "d0321e3f883d80a9206fa76e74d0d7ace8dea51b60c86aa0e6adb0db3f383900",
+        "conf": "30e95077175ce8f25d62b3d1e185d074eadbbb14f1e0af5b36f364cf14d0c249",
+        "test": "3103ade873b838e6248d7f40e31051464a5e4fe42053e391fa3f5e34a3efd15d"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 5,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.024918743228602436,
+          0.18879310344827585,
+          0.5344827586206896
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.024918743228602436,
+          "harm": 0.18879310344827585,
+          "blanket_gain": 0.02275189599133265,
+          "blanket_harm": 0.38017241379310346,
+          "apply": 0.5344827586206896,
+          "base": 0.6598049837486457,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 8,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.01625135427952329,
+          "harm": 0.11206896551724138,
+          "blanket_gain": 0.009750812567713929,
+          "blanket_harm": 0.3620689655172414,
+          "apply": 0.30344827586206896,
+          "base": 0.6598049837486457,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 1.0,
+            "beta": 0.8250000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "a9add323f7c199856fa432931f190051bdca9ec42da5fb8f2706df3ec81888ef",
+        "fit": "9c8ef6c954c4d767c32bddc3b3f214ec481e93624810cf18b2734323a9dc8f41",
+        "conf": "d0de1398a698a535e6b7505026cb9c75567eec30eff08ac7f219e5e2b1e6122e",
+        "test": "235ce55a3946203077eaddd72a7c885ecb25016975ad9aa1cbe3e10f235bdf88"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 6,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.07423580786026207,
+          0.09482758620689655,
+          0.33448275862068966
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.07423580786026207,
+          "harm": 0.09482758620689655,
+          "blanket_gain": 0.07641921397379914,
+          "blanket_harm": 0.3629310344827586,
+          "apply": 0.33448275862068966,
+          "base": 0.6451965065502183,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 1.0,
+            "beta": 0.875
+          }
+        },
+        "linear": {
+          "gain": 0.03493449781659386,
+          "harm": 0.11206896551724138,
+          "blanket_gain": 0.04148471615720528,
+          "blanket_harm": 0.24741379310344827,
+          "apply": 0.5043103448275862,
+          "base": 0.6451965065502183,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 1.0,
+            "beta": 0.45
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "df79ec09d0da02ca9ce135723ef85327d4d7d71d4088320943b232b1b8fc0cc1",
+        "fit": "a9fe18d5f3f29c3acd3bebeb4808515a270300e57d555ab107a7b99139f704a1",
+        "conf": "70154bcae9529c55128c68149f44a7767e0f1777f61782cc135a70f062fcb9b1",
+        "test": "bc8265cdf817841e53c8e0954c4ac8978f373b6ec940c30291d03607bac08db4"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 7,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.09575625680087052,
+          0.1146551724137931,
+          0.33275862068965517
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.09575625680087052,
+          "harm": 0.1146551724137931,
+          "blanket_gain": 0.07290533188248094,
+          "blanket_harm": 0.3870689655172414,
+          "apply": 0.33275862068965517,
+          "base": 0.6441784548422198,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 5,
+            "temperature": 2.0,
+            "beta": 1.0
+          }
+        },
+        "linear": {
+          "gain": 0.03373231773667029,
+          "harm": 0.05344827586206897,
+          "blanket_gain": 0.06093579978237218,
+          "blanket_harm": 0.31982758620689655,
+          "apply": 0.14051724137931035,
+          "base": 0.6441784548422198,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 1.0,
+            "beta": 0.7000000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "874d81183cef181f2e37a30b076b44bdddc5d9a05d7f1e73bc542a56a96b3646",
+        "fit": "23ff89d16c74b8f02b909d9cd0ffd3ef2c7a6be75b74542105822b5b6a897695",
+        "conf": "cb4b3d48efc94dab5b9773ed0d7765d1a74f19f47619aab35d53642278886175",
+        "test": "7500c1d8e17c2ad0ace74785ab8adeed8df7b52f13765d8212d2b523faa59179"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 8,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.04724409448818889,
+          0.1,
+          0.3146551724137931
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.04724409448818889,
+          "harm": 0.1,
+          "blanket_gain": 0.07761529808773904,
+          "blanket_harm": 0.3146551724137931,
+          "apply": 0.3146551724137931,
+          "base": 0.6467941507311586,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.875
+          }
+        },
+        "linear": {
+          "gain": 0.023622047244094446,
+          "harm": 0.07758620689655173,
+          "blanket_gain": 0.02699662542182224,
+          "blanket_harm": 0.3922413793103448,
+          "apply": 0.2681034482758621,
+          "base": 0.6467941507311586,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 0.01,
+            "temperature": 2.0,
+            "beta": 0.65
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "a6f11460b4098b8e21f43f512f7fb5fa32643927d9e3faa18c5cf4717fcf9b35",
+        "fit": "9c0a3d4fe3a60bb93a6305d1f211b3e0bc1c58e7d39d93fd2dac155dc42e8902",
+        "conf": "9402797f41cd02003d0a26d5672652f6748f41bc5d92c958ad04d2c73be6c83f",
+        "test": "3b6f0b27dc4b204780c864608414d6fe1b2d5659e67950a379b41c4b32c91026"
+      }
+    },
+    {
+      "context": {
+        "condition": "av",
+        "seed": 9,
+        "control_matches_saved": true,
+        "historical_control": [
+          0.0502232142857143,
+          0.0706896551724138,
+          0.30258620689655175
+        ],
+        "difference_from_saved": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "independent_current_core_checked": false
+      },
+      "results": {
+        "knn": {
+          "gain": 0.0502232142857143,
+          "harm": 0.0706896551724138,
+          "blanket_gain": 0.0658482142857143,
+          "blanket_harm": 0.3267241379310345,
+          "apply": 0.30258620689655175,
+          "base": 0.6540178571428571,
+          "meta": {
+            "target": "cross",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.8500000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.05133928571428581,
+          "harm": 0.07327586206896551,
+          "blanket_gain": 0.05133928571428581,
+          "blanket_harm": 0.38275862068965516,
+          "apply": 0.3422413793103448,
+          "base": 0.6540178571428571,
+          "meta": {
+            "target": "cross",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 0.01,
+            "temperature": 2.0,
+            "beta": 0.8500000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1161,
+        "fit": 1161,
+        "conf": 1161,
+        "test": 1160
+      },
+      "split_sha256": {
+        "pool": "4fb66216ae292ebe3478e788dd6b1efa645b41fb56824559af71b4843361651a",
+        "fit": "912ec2fbb12be60d78a948826766a91dd88e9593f26fbeec6aa9ce4c8998fb62",
+        "conf": "49a8e8ca62720aff83094837c9f68c990a4121fb249f7c7efd10d81a1d179fab",
+        "test": "446e4b6692b9ac3800700fcfa14d5660c0f9a1c73c882116dda440313b3098c6"
+      }
+    }
+  ]
+}

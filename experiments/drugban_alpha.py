@@ -7,7 +7,7 @@ from gates_core import gate_row
 from guard import losses as _L, targets as _T
 from guard import action as _A
 from guard.pipeline import _select_beta
-DATA_ROOT=ROOT / 'data/processed'
+DATA_ROOT=Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts')) / 'drugban_processed'
 CELLS=[('drugban_biosnap_random_s42',c) for c in ('prot25','prot50','scaffold')] +       [('drugban_bindingdb_random_s42',c) for c in ('prot25','prot50','scaffold')] +       [('drugban_human_random_s42',c) for c in ('prot25','prot50')] +       [('drugban_biosnap_cluster_s42','prot50')]
 loss=_L.get('cross_entropy'); DELTA=0.05; ALPHAS=[0.05,0.10,0.20,0.30,0.50]
 acc=lambda Q,Y: float((Q.argmax(1)==Y).mean())

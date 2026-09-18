@@ -1,71 +1,106 @@
-# What you can reproduce, and what it costs
+# Reproducing the release
 
-Three tiers, from "works the moment you clone" to "retrain every host".  Be
-honest with yourself about which one you need; the first tier already checks
-the paper's central claim.
+The release separates a fast method check, CPU reruns from frozen-host outputs,
+and host training. This matters because GUARD's certificate can be checked
+without retraining any multimodal model.
 
-## Tier 1 — no downloads, no GPU, about a minute
+## 1. Fast check: no downloads or GPU
 
 ```bash
+python3 -m venv .venv
+. .venv/bin/activate
 pip install -e ".[dev]"
-pytest -q                              # the guarantee, on synthetic data
-python experiments/exp_synthetic.py    # the synthetic table
+pytest -q
+python experiments/exp_synthetic.py
+python experiments/exp_synthetic_sweep.py --out results/synthetic_sweep
 ```
 
-`pytest` checks `P(Delta_loss > delta AND applied) <= alpha` directly, at three
-values of `alpha`, and separately checks that conditional harm is *not*
-bounded — so the paper's central claim, and the limit of that claim, are both
-verifiable without touching a dataset.
+The current suite has 13 tests. They exercise the finite-sample decision rule,
+including the distinction between joint and conditional harm. The guarantee is
+marginal over the calibration draw and a fresh exchangeable deployment point;
+it does not require every realised test split to have `joint_harm <= alpha`.
 
-`exp_synthetic.py` reproduces the synthetic table: measured gap grows with the
-injected calibration gap and the recovered loss tracks it, while a host whose
-error is label noise shows neither.
+## 2. Validate the committed paper results
 
-## Tier 2 — saved host outputs, no GPU, about ten minutes
+For the exact numerical environment used in the final CPU review runs:
 
 ```bash
-bash data/download_artifacts.sh            # ~2.5 GB into ./artifacts
-bash scripts/run_all.sh
+pip install -r requirements-reproduce.txt
+python scripts/verify_submission.py /path/to/guard_iclr2027.tex
 ```
 
-`docs/PAPER_MAP.md` names, for every table and figure in the paper, the driver
-that produced it and the artefacts that driver reads.
+The unified verifier checks the original paper tables, the conditional-harm,
+probe and efficiency additions, and the paired HME table. The LaTeX source is
+passed explicitly because the anonymous submission source is not bundled in
+this code repository.
 
-The dumps are the frozen hosts' outputs and representations under each
-deployment condition.  Everything downstream of a dump is pure numpy, so this
-tier reproduces every certification number in the paper on a laptop: the
-per-benchmark tables for all seven benchmarks, the intervention-rule comparison,
-OPPORTUNITY under both calibration protocols, the budget sweep, the selector and
-plug-in ablations, the label-efficiency and contraction study, and the three
-studies below.
+The compact JSON/CSV/NPZ evidence required for these checks is committed under
+`results/`. The HME prediction archive is 169 KiB; its 583 MiB checkpoint and
+524 MiB prepared-data cache are intentionally excluded.
+
+## 3. Re-run GUARD from saved host outputs, no GPU
 
 ```bash
-bash scripts/run_all.sh frontier    # alpha and delta sweeps, the validity figure
-bash scripts/run_all.sh modules     # Measure x Certify, nulls as the deciding cells
-bash scripts/run_all.sh groupwise   # class-conditional harm; harm spread vs n_conf
+pip install -r requirements-reproduce.txt
+bash data/download_artifacts.sh dumps
+python experiments/repro_check.py
+bash scripts/rerun_all_results.sh
 ```
 
-Two things in there are worth knowing before you read the output.
+`repro_check.py` must print the current CMAD rows:
 
-* **The alpha frontier turns over above alpha ~ 0.4.**  At large alpha the
-  conformal quantile shrinks until the plausible set would be empty, and
-  `certify` never returns an empty set, so those points fall back to the worst
-  case over *all* labels and are refused.  Apply rate and harm both fall as a
-  result.  That is the convention showing through, not the guarantee failing.
-* **The budget sweep runs with `--fixed-host`.**  The host keeps whichever epoch
-  scores best on its validation split, and that split is carved out of the
-  labelled budget -- so without the flag a larger budget silently buys a better
-  frozen host, base accuracy climbs across the sweep, and the table can no
-  longer say whether the gain belongs to GUARD or to the host.  With the flag
-  the model-selection split is the full one at every budget, base accuracy is
-  bit-identical across levels for every (configuration, seed), and only what
-  GUARD is given varies.  The honest reading of that table is therefore "labels
-  GUARD needs, given a host that is already frozen".
+```text
+a    released code 63.1 -> 67.8
+v    released code 63.7 -> 68.2
+av   released code 64.5 -> 69.6
+```
 
-This is the tier we recommend.  The method is what the paper is about, and the
-method never sees a GPU.
+`rerun_all_results.sh` is deliberately portable, sequential and fail-fast. Logs
+are written under `logs/rerun/`. This tier reproduces the CPU-side correction and
+calibration results from saved outputs. It does not retrain HME or the frozen
+hosts. The latency table is hardware-dependent and is left untouched unless
+`RUN_TIMINGS=1` is set.
 
-## Tier 3 — retrain the hosts, GPU, one to two days
+The older convenience runner remains useful for adapter smoke tests:
+
+```bash
+bash scripts/run_all.sh synthetic
+bash scripts/run_all.sh drugban
+bash scripts/run_all.sh affective
+bash scripts/run_all.sh opportunity
+```
+
+Only `all`, `drugban`, `affective`, `opportunity`, and `synthetic` are accepted.
+Its affective and OPPORTUNITY modes use the documented legacy adapter layouts;
+they are not a substitute for the final-paper driver above.
+
+## 4. Re-run the HME contextual comparator
+
+HME is a retrained comparator, not a frozen-host baseline. Its exact protocol,
+inputs, selected checkpoint and saved predictions are documented in
+`REVIEW_ADDITIONS.md`. Use a separate Python 3.9 environment and install the
+CUDA build of PyTorch 1.12.1 before `requirements-hme.txt`.
+
+```bash
+export HME_REPO=/path/to/HME
+export HME_BERT_DIR=/path/to/BERT_EN
+export HME_MOSEI_PICKLE=/path/to/mosei.pkl
+python experiments/review_hme.py prepare
+python experiments/review_hme.py smoke
+python experiments/review_hme.py train
+python experiments/review_hme.py evaluate
+python experiments/review_hme_audit.py \
+  --hme-repo "$HME_REPO" --bert-dir "$HME_BERT_DIR" --dataset "$HME_MOSEI_PICKLE"
+python scripts/tables/verify_hme_run.py
+```
+
+The final paper reports one HME training seed and five deployment partitions;
+those partitions are not independent retraining runs.
+
+## 5. Retrain frozen hosts
+
+Host retraining uses each upstream implementation and has separate dependencies.
+Examples:
 
 ```bash
 bash data/download_drugban.sh
@@ -73,58 +108,10 @@ python hosts/drugban.py train --dataset biosnap --split random --seed 42
 
 bash data/download_opportunity.sh
 python hosts/opportunity_prepare.py
-python hosts/opportunity.py --source data/processed/opportunity_features.npz \
-    --configs configs/opportunity.json
+python hosts/opportunity_dcl_train.py --help
 ```
 
-Training calls each host's own entry point with its own configuration; we pass
-only the dataset, split and seed.  Expect small differences from our numbers:
-host training is stochastic.  `docs/REPRODUCTION.md` records each frozen host
-against its published numbers, including the check that failed.
-
-## Licensed source data
-
-The release contains the preprocessing and experiment drivers for every paper
-experiment.  Four source datasets must first be obtained by the reader because
-their licences do not permit us to redistribute them: IEMOCAP from **USC SAIL**
-(signed release agreement), NinaPro DB5 from the **NinaPro project at
-HEIA-FR/HES-SO** (registered download), CMU-MOSEI from the **CMU MultiComp Lab**
-through the Multimodal SDK, and AVE from the **AVE-ECCV18 authors** through their
-access-controlled Drive links.  After that one licence step, the corresponding
-script checks the documented layout and continues with preparation and the
-released run; it does not merely stop.
-
-The affective hosts (MoMKE, TMDC, CMAD, IMDer, LNLN) are consumed through their
-published-output layout. `hosts/dumps.py` documents that layout and the release
-drivers run the complete GUARD experiment on those outputs.
-
-
-## Paper coverage matrix
-
-The release can run the synthetic study, DrugBAN, affective hosts (from their published-output layout), vision--language, and the MLP variant of OPPORTUNITY when their data/checkpoints or dumps are supplied.
-
-The paper's reported OPPORTUNITY row is DeepConvLSTM and is now weights-backed.  The release includes retrained `opportunity_dcl_v2` checkpoints and their coherent DCL_HOSTS2-format dumps; regenerate a checkpoint's dumps with `python hosts/opportunity_dcl_infer.py --checkpoint <checkpoint.pt> --data <opportunity_ours3.npz> --repo <DeepConvLSTM_py3-repo> --out <DCL_HOSTS2>`.  The released checkpoints come from a new retraining run, rather than the unrecoverable original frozen hosts, and the paper reports this retraining run's numbers.  Training is available as `hosts/opportunity_dcl_train.py`; it saves a full-host checkpoint and one `condition_specialist` checkpoint for every configuration and seed, including the preprocessing metadata inference needs.
-
-AVE, NinaPro DB5, and PTB-XL are also archived-dumps-only in this release. Their drivers are respectively `exp_ave.py`, `exp_ninapro.py`, and `exp_ptbxl.py`; each takes `--dumps`. AVE is preserved as frozen audio/visual-attention outputs; NinaPro's archive contains retrained seeds rather than the original paper checkpoint; PTB-XL is preserved as frozen ResNet-1D and reduced-lead outputs. These drivers reproduce the method on those saved hosts and do not claim to retrain the paper runs.
-
-Thus every paper benchmark is either covered by a runnable release driver or explicitly identified above as dump-backed because the original frozen host cannot honestly be regenerated here.
-
-## Source-download coverage
-
-| Benchmark | Data tier | Driver | Available with no manual step |
-|---|---|---|---|
-| PTB-XL | automatic | `experiments/exp_ptbxl.py` | raw PTB-XL data and the public PTB-XL predictor |
-| OPPORTUNITY | automatic | `experiments/exp_opportunity_dcl.py` | raw UCI data and 15 DeepConvLSTM checkpoints |
-| DrugBAN | automatic | `experiments/exp_drugban.py` | authors' source/data and the release checkpoints |
-| NinaPro DB5 | registered download from NinaPro/HEIA-FR | `scripts/download/ninapro_db5.sh` | preprocesses and runs after DB5 is installed |
-| CMU-MOSEI / CMAD | SDK access from CMU MultiComp Lab | `scripts/download/cmu_mosei.sh` / `experiments/repro_check.py` | runs after MOSEI is installed; CMAD check dumps are public |
-| AVE / AV-att | access-controlled Drive from AVE-ECCV18 authors | `scripts/download/ave.sh` | runs after the documented AVE layout is installed |
-| IEMOCAP / MoMKE / TMDC / GCNet | signed USC SAIL agreement | `scripts/download/iemocap.sh` | runs after IEMOCAP is installed |
-
-Run public downloads with `bash scripts/download/all.sh`; use `--dry-run` to check endpoints only. The only manual actions are accepting the named data licences and placing the resulting files in the documented layouts.
-
-## Two-level check
-
-Level one needs no dataset: `pytest -q` (10 tests), then `python experiments/repro_check.py`. The latter must print the committed-dump paper row: `a 63.1 -> 68.6`, `v 63.7 -> 68.3`, and `av 64.5 -> 70.3`.
-
-Level two is the full rerun from raw data, using the source-download scripts and the driver in the table.
+IEMOCAP, NinaPro DB5, CMU-MOSEI and AVE require the reader to obtain the data
+under their original licences. `scripts/download/` documents the expected
+layouts. `docs/REPRODUCTION.md` compares the frozen hosts with published
+anchors and records the BioSNAP-cluster shortfall rather than hiding it.

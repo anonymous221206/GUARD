@@ -1,0 +1,6 @@
+# HME was run in a separate Python 3.9/CUDA environment.
+# Install the CUDA build of torch 1.12.1 appropriate for the machine first.
+numpy==1.26.4
+transformers==4.30.2
+scikit-learn==1.5.2
+einops==0.8.0
