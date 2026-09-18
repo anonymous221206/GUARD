@@ -406,6 +406,39 @@ def check(tex):
         for ci, kind, field in FIELDS:
             cmp(f"T4 {name} {kind} {field}", pv[key][kind][field], col(ln, ci))
 
+    # Table 1 comes from scripts/tables/mosei_rows.py, which the coverage never
+    # checked; four cells had drifted from it before this was added
+    gen1 = []
+    try:
+        import subprocess as _sp2, sys as _sys
+        _out = _sp2.run([_sys.executable, str(ROOT / "scripts/tables/mosei_rows.py")],
+                        capture_output=True, text=True, cwd=str(ROOT), timeout=900)
+        gen1 = [l for l in _out.stdout.splitlines() if "&" in l and "\\\\" in l]
+        if not gen1:
+            notes.append("Table 1: mosei_rows.py khong in ra hang nao")
+    except Exception as exc:
+        notes.append(f"Table 1: khong chay duoc mosei_rows.py ({type(exc).__name__}: {exc})")
+    if gen1:
+        strip = lambda c: re.sub(r"\\textbf\{|\\bm\{|\}", "", c).strip()
+        want1 = {}
+        for l in gen1:
+            cs = [strip(c) for c in l.replace("\\\\", "").split("&")]
+            want1[re.sub(r"~\\citep\{[^}]*\}|\$\^\{\\dagger\}\$", "", cs[0]).strip()] = cs[1:]
+        hit = 0
+        for l in table_body(tex, "tab:mosei-main"):
+            cs = [strip(c) for c in l.replace("\\\\", "").replace("\\midrule", "").split("&")]
+            nm = re.sub(r"~\\citep\{[^}]*\}|\$\^\{\\dagger\}\$", "", cs[0]).strip()
+            if nm not in want1:
+                continue
+            hit += 1
+            for ci, (a, b) in enumerate(zip(cs[1:], want1[nm])):
+                for si, (x, y) in enumerate(zip(a.split("/"), b.split("/"))):
+                    mx, my = re.search(r"\d+\.\d+", x), re.search(r"\d+\.\d+", y)
+                    if mx and my:
+                        cmp(f"T1 {nm} c{ci+1}.{si+1}", float(my.group()), float(mx.group()), 1)
+        if hit != len(want1):
+            fails.append(f"T1: khop {hit}/{len(want1)} hang voi generator")
+
     # the action-score ablation: every cell is gain/joint harm in one column,
     # so the row label alone identifies the variant and the column the benchmark
     av_ = {}

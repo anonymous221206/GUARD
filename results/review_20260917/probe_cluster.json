@@ -1,0 +1,356 @@
+{
+  "protocol": "Canonical probe_core.rows, unchanged grid and gate. Raw frozen baseline, accuracy selection on fit only. No test-label selection.",
+  "mode": "cluster",
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "sklearn": "1.9.0",
+  "source_sha256": {
+    "experiments/probe_core.py": "9443dcd01b1d67a6c7e987c21a49c68a7a9564b6c742bc2bf361a9d84cb35811",
+    "experiments/gates_core.py": "c9d68ed609a27f39ea1faaeaef745f168eccd6e4a95f84a42adfc816c73ee4f2",
+    "src/guard/action.py": "1ecb9d579d19fcf76dfe6853f8c987d0d8af2c010f308bc675572c18125e4eae"
+  },
+  "summary": {
+    "knn": {
+      "base": 0.5164797809554443,
+      "gain": 0.15724078064577568,
+      "harm": 0.14589273898450603,
+      "apply": 0.5841600286242018,
+      "blanket_gain": 0.16313181738271584,
+      "blanket_harm": 0.3243370375810401
+    },
+    "linear": {
+      "base": 0.5164797809554443,
+      "gain": 0.17718765151604354,
+      "harm": 0.129692672010154,
+      "apply": 0.5778068647264762,
+      "blanket_gain": 0.18146826702727872,
+      "blanket_harm": 0.3279181615561022
+    }
+  },
+  "cells": [
+    {
+      "context": {
+        "dataset": "biosnap",
+        "condition": "prot50",
+        "seed": 0,
+        "pool": "deployment"
+      },
+      "results": {
+        "knn": {
+          "gain": 0.10915104740904075,
+          "harm": 0.12238147739801543,
+          "blanket_gain": 0.12568908489525904,
+          "blanket_harm": 0.3836824696802646,
+          "apply": 0.37045203969129,
+          "base": 0.4961411245865491,
+          "meta": {
+            "target": "hard",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 2.0,
+            "beta": 0.47500000000000003
+          }
+        },
+        "linear": {
+          "gain": 0.12789415656008823,
+          "harm": 0.14553472987872107,
+          "blanket_gain": 0.1312017640573318,
+          "blanket_harm": 0.43329658213891953,
+          "apply": 0.43770672546857775,
+          "base": 0.4961411245865491,
+          "meta": {
+            "target": "hard",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 2.0,
+            "beta": 0.47500000000000003
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1209,
+        "fit": 1209,
+        "conf": 1209,
+        "test": 907
+      },
+      "split_sha256": {
+        "pool": "59acaad1ec330e4f4874fef5fdaf01fb6a4ec39d1fc3eded1b165cfb0bb18208",
+        "fit": "d8b4f2a1fade37ed7443c615600448d0a37593e3a1627c05c3689c21be983392",
+        "conf": "a7b28e071865c0a1a01453d42ea835db101b3ae31f56851d0126ca2c6673f50a",
+        "test": "1fb31185753175024bf876363794d57da2370206dc1f08bfcfa18e095e1223ad"
+      }
+    },
+    {
+      "context": {
+        "dataset": "biosnap",
+        "condition": "prot50",
+        "seed": 1,
+        "pool": "deployment"
+      },
+      "results": {
+        "knn": {
+          "gain": 0.08048511576626244,
+          "harm": 0.1730981256890849,
+          "blanket_gain": 0.09151047409040797,
+          "blanket_harm": 0.42668136714443217,
+          "apply": 0.4498346196251378,
+          "base": 0.4961411245865491,
+          "meta": {
+            "target": "hard",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 12,
+            "temperature": 1.0,
+            "beta": 0.8250000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.12127894156560087,
+          "harm": 0.11686879823594266,
+          "blanket_gain": 0.12458654906284455,
+          "blanket_harm": 0.43660418963616315,
+          "apply": 0.38588754134509373,
+          "base": 0.4961411245865491,
+          "meta": {
+            "target": "hard",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 2.0,
+            "beta": 0.675
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1209,
+        "fit": 1209,
+        "conf": 1209,
+        "test": 907
+      },
+      "split_sha256": {
+        "pool": "fbd22fefaee10e8ff81abd7a1b439a1b335768359b07db93d4fdd1164dff59b8",
+        "fit": "9d2fbf4d9d37160738b5257883fe57511fd3c072d2df9f6ce84c0d8ff5c6a08e",
+        "conf": "f130d632f3648637fd5c233e61fad80048018c19447d1c154a02cf0b5a6465b8",
+        "test": "1fb31185753175024bf876363794d57da2370206dc1f08bfcfa18e095e1223ad"
+      }
+    },
+    {
+      "context": {
+        "dataset": "biosnap",
+        "condition": "prot50",
+        "seed": 2,
+        "pool": "deployment"
+      },
+      "results": {
+        "knn": {
+          "gain": 0.11356119073869902,
+          "harm": 0.1256890848952591,
+          "blanket_gain": 0.11797133406835719,
+          "blanket_harm": 0.4189636163175303,
+          "apply": 0.37045203969129,
+          "base": 0.4961411245865491,
+          "meta": {
+            "target": "hard",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 8,
+            "temperature": 1.0,
+            "beta": 0.75
+          }
+        },
+        "linear": {
+          "gain": 0.14222712238147733,
+          "harm": 0.1278941565600882,
+          "blanket_gain": 0.14443219404630653,
+          "blanket_harm": 0.4101433296582139,
+          "apply": 0.4189636163175303,
+          "base": 0.4961411245865491,
+          "meta": {
+            "target": "hard",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 1.0,
+            "temperature": 1.0,
+            "beta": 0.775
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 1209,
+        "fit": 1209,
+        "conf": 1209,
+        "test": 907
+      },
+      "split_sha256": {
+        "pool": "837655189bae06d4256391cd4815a79b682139413953627f8311670871a87125",
+        "fit": "53177f96201cba83365bd21d458eb70ab5946baf2acea1aff11d4d89418cb7ef",
+        "conf": "a23d98b307a28c4ad03eabf34b8df55f7a866937af3193f9803bb36a596b2571",
+        "test": "1fb31185753175024bf876363794d57da2370206dc1f08bfcfa18e095e1223ad"
+      }
+    },
+    {
+      "context": {
+        "dataset": "bindingdb",
+        "condition": "prot50",
+        "seed": 0,
+        "pool": "deployment"
+      },
+      "results": {
+        "knn": {
+          "gain": 0.2107925801011804,
+          "harm": 0.15458122540753233,
+          "blanket_gain": 0.20348510399100617,
+          "blanket_harm": 0.2450815064643058,
+          "apply": 0.7734682405845981,
+          "base": 0.5368184373243395,
+          "meta": {
+            "target": "hard",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.75
+          }
+        },
+        "linear": {
+          "gain": 0.21810005621135464,
+          "harm": 0.13209668353007306,
+          "blanket_gain": 0.22203485103991005,
+          "blanket_harm": 0.23777403035413153,
+          "apply": 0.7284991568296796,
+          "base": 0.5368184373243395,
+          "meta": {
+            "target": "hard",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 2.0,
+            "beta": 0.8500000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 2371,
+        "fit": 2371,
+        "conf": 2371,
+        "test": 1779
+      },
+      "split_sha256": {
+        "pool": "1d7ef23964ed1c35eaa6cdad414fc9be6668daaec76147cab6a582c19fe45a55",
+        "fit": "ab3aec7e264f3e92f1bbae998ec08c0193b0e331007475b509797d3145147ff8",
+        "conf": "072f588a7d4f28f71f29117ca3b3a68d9606767db66261486998231a6a1dc759",
+        "test": "6f69392a24bcd13f262b3bda46c9ae946119f96eae9963e59705117690ffbec8"
+      }
+    },
+    {
+      "context": {
+        "dataset": "bindingdb",
+        "condition": "prot50",
+        "seed": 1,
+        "pool": "deployment"
+      },
+      "results": {
+        "knn": {
+          "gain": 0.22428330522765594,
+          "harm": 0.15345699831365936,
+          "blanket_gain": 0.22203485103991005,
+          "blanket_harm": 0.23552557616638561,
+          "apply": 0.7897695334457561,
+          "base": 0.5368184373243395,
+          "meta": {
+            "target": "hard",
+            "space": "standardise",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 2.0,
+            "beta": 0.7000000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.22990444069702076,
+          "harm": 0.12478920741989882,
+          "blanket_gain": 0.24058459808881394,
+          "blanket_harm": 0.22540753232152894,
+          "apply": 0.7549184935356942,
+          "base": 0.5368184373243395,
+          "meta": {
+            "target": "hard",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 2.0,
+            "beta": 0.8
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 2371,
+        "fit": 2371,
+        "conf": 2371,
+        "test": 1779
+      },
+      "split_sha256": {
+        "pool": "bad49728e564e90628e8dec1c14874160648da2bab58af9345ee7215ba3c94b7",
+        "fit": "2311b3343d086d8862c6f0a1703f2168706a5a7b92aa5d10f4aa523e0da8ba12",
+        "conf": "9cce6d68b435221ef63d2342ee444b6eaa48ee9eeff03a12e9e954e99d7345fe",
+        "test": "6f69392a24bcd13f262b3bda46c9ae946119f96eae9963e59705117690ffbec8"
+      }
+    },
+    {
+      "context": {
+        "dataset": "bindingdb",
+        "condition": "prot50",
+        "seed": 2,
+        "pool": "deployment"
+      },
+      "results": {
+        "knn": {
+          "gain": 0.20517144463181558,
+          "harm": 0.1461495222034851,
+          "blanket_gain": 0.21810005621135464,
+          "blanket_harm": 0.23608768971332209,
+          "apply": 0.7509836987071389,
+          "base": 0.5368184373243395,
+          "meta": {
+            "target": "hard",
+            "space": "cosine",
+            "weighting": "distance",
+            "hp": 3,
+            "temperature": 1.0,
+            "beta": 0.7250000000000001
+          }
+        },
+        "linear": {
+          "gain": 0.22372119168071947,
+          "harm": 0.13097245643620012,
+          "blanket_gain": 0.22596964586846546,
+          "blanket_harm": 0.224283305227656,
+          "apply": 0.7408656548622822,
+          "base": 0.5368184373243395,
+          "meta": {
+            "target": "hard",
+            "space": "standardise",
+            "weighting": null,
+            "hp": 10.0,
+            "temperature": 2.0,
+            "beta": 0.8500000000000001
+          }
+        }
+      },
+      "split_sizes": {
+        "pool": 2371,
+        "fit": 2371,
+        "conf": 2371,
+        "test": 1779
+      },
+      "split_sha256": {
+        "pool": "e8e5446c315c52d0fbd9d84cbc62562ff4b81aa60b172368b3c4055631517abf",
+        "fit": "fe0c4fca6fb58437068bfd7af2956dc26d507efb7cb137198ccfa708c15ea8ab",
+        "conf": "5981146224e8c31b1e766bf212008c8fa3cd5bbdea9c261bf4361854a87a16d2",
+        "test": "6f69392a24bcd13f262b3bda46c9ae946119f96eae9963e59705117690ffbec8"
+      }
+    }
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "case": "PTB-XL",
+  "condition": "a",
+  "n_pool": 17084,
+  "feature_dimension": 256,
+  "outputs": 5,
+  "settings": {
+    "k": 20,
+    "weighting": "uniform",
+    "space": "standardise",
+    "target": "hard",
+    "temperature": 1,
+    "linear_C": 1,
+    "alpha": 0.2,
+    "delta": 0.05
+  },
+  "scope": "Controlled fixed-configuration microbenchmark, not timings of per-cell Table 6 selected winners. Frozen feature extraction, disk I/O, fitting and calibration excluded. Canonical kNN includes pool-norm recomputation. State bytes exclude Python/interpreter overhead; traced peak is temporary allocation, not process RSS.",
+  "probe_fit_seconds": 4.515158743131906,
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "sklearn": "1.9.0",
+  "cpu": "Intel(R) Xeon(R) Gold 6244 CPU @ 3.60GHz",
+  "affinity": [
+    2
+  ],
+  "threadpools": [
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "<review-environment>/numpy.libs/libscipy_openblas64_-61654e39.so",
+      "version": "0.3.34.0.0",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "<review-environment>/scipy.libs/libscipy_openblas-5f890258.so",
+      "version": "0.3.31.dev",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    },
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 1,
+      "prefix": "libgomp",
+      "filepath": "<review-environment>/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+      "version": null
+    }
+  ],
+  "results": {
+    "knn": {
+      "beta": 0.875,
+      "scorer_constant": false,
+      "numerical_state_bytes": 35675556,
+      "timings": [
+        {
+          "batch": 1,
+          "repeats": 200,
+          "p50_batch_ms": 17.517233,
+          "p95_batch_ms": 17.899955000000002,
+          "p50_per_query_ms": 17.517233,
+          "peak_traced_allocation_bytes": 35127872
+        },
+        {
+          "batch": 64,
+          "repeats": 50,
+          "p50_batch_ms": 31.8033035,
+          "p95_batch_ms": 32.314091,
+          "p50_per_query_ms": 0.4969266171875,
+          "peak_traced_allocation_bytes": 35256896
+        }
+      ]
+    },
+    "linear": {
+      "beta": 0.9500000000000001,
+      "scorer_constant": false,
+      "numerical_state_bytes": 697904,
+      "timings": [
+        {
+          "batch": 1,
+          "repeats": 200,
+          "p50_batch_ms": 0.89767,
+          "p95_batch_ms": 0.9377595999999999,
+          "p50_per_query_ms": 0.89767,
+          "peak_traced_allocation_bytes": 5392
+        },
+        {
+          "batch": 64,
+          "repeats": 50,
+          "p50_batch_ms": 1.07207,
+          "p95_batch_ms": 1.1125738,
+          "p50_per_query_ms": 0.01675109375,
+          "peak_traced_allocation_bytes": 328976
+        }
+      ]
+    }
+  }
+}

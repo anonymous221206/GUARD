@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "train_label_order_matches_cmad": true,
+    "dev_label_order_matches_cmad": true,
+    "test_label_order_matches_cmad": true,
+    "t_masked_input_invariance": 0.0,
+    "a_masked_input_invariance": 0.0,
+    "v_masked_input_invariance": 0.0,
+    "ta_masked_input_invariance": 0.0,
+    "tv_masked_input_invariance": 0.0,
+    "av_masked_input_invariance": 0.0,
+    "split0_sizes": [1161, 1161, 1161, 1160],
+    "split1_sizes": [1161, 1161, 1161, 1160],
+    "split2_sizes": [1161, 1161, 1161, 1160],
+    "split3_sizes": [1161, 1161, 1161, 1160],
+    "split4_sizes": [1161, 1161, 1161, 1160]
+  },
+  "versions": {
+    "numpy": "1.26.4",
+    "torch": "1.12.1+cu113",
+    "transformers": "4.30.2",
+    "sklearn": "1.5.2",
+    "einops": "0.8.0"
+  },
+  "status": "PASS"
+}

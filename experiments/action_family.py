@@ -133,7 +133,7 @@ if 'IEMOCAP' in WANT:
     report('IEMOCAP', acc)
 
 if 'DrugBAN' in WANT:
-    ROOT = str(_ROOT / 'data/processed')
+    ROOT = str(ARTIFACTS / 'drugban_processed')
     CELLS = ([('drugban_biosnap_random_s42', c) for c in ('prot25', 'prot50', 'scaffold')] +
              [('drugban_bindingdb_random_s42', c) for c in ('prot25', 'prot50', 'scaffold')] +
              [('drugban_human_random_s42', c) for c in ('prot25', 'prot50')] +

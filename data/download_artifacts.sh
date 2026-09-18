@@ -31,7 +31,10 @@ esac
 
 "${PYTHON:-python3}" - "$REPO" "$DEST" $PATTERNS <<'PY'
 import sys
-from huggingface_hub import snapshot_download
+try:
+    from huggingface_hub import snapshot_download
+except ImportError:
+    sys.exit('missing dependency: install it with `pip install -e ".[reproduce]"`')
 try:
     from huggingface_hub.utils import GatedRepoError, RepositoryNotFoundError
 except ImportError:                       # older hub versions

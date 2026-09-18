@@ -1,37 +1,37 @@
 #!/usr/bin/env bash
-# Every DrugBAN cell behind Table 9 and the DrugBAN row of Table 2.
-# Random splits draw the retrieval pool from the source population; the cluster
-# splits are run both ways, because which pool a cross-domain deployment can
-# reach is one of the paper's findings.
-set -u
+# Every DrugBAN cell behind the per-condition and summary tables.
+set -euo pipefail
 cd "$(dirname "$0")/.."
-PY=${PY:-../venv-release/bin/python}
-JOBS=${JOBS:-3}
+PY=${PY:-${PYTHON:-python3}}
 OUT=${OUT:-results}
-export OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 MKL_NUM_THREADS=2
+DUMP_ROOT=${GUARD_DRUGBAN_DUMPS:-${GUARD_ARTIFACTS:-artifacts}/drugban_processed}
+export OMP_NUM_THREADS=${OMP_NUM_THREADS:-1}
+export OPENBLAS_NUM_THREADS=${OPENBLAS_NUM_THREADS:-1}
+export MKL_NUM_THREADS=${MKL_NUM_THREADS:-1}
+mkdir -p logs
 
 run() {
-  d=$1; pool=$2
-  echo "START $d $pool"
-  $PY experiments/exp_drugban.py --dumps "data/processed/$d" --pool "$pool" --out "$OUT" \
-      > "logs/drugban_${d}_${pool}.log" 2>&1 && echo "DONE $d $pool" || echo "FAIL $d $pool"
+  local name=$1 pool=$2 dumps="$DUMP_ROOT/$1"
+  if [ ! -d "$dumps" ]; then
+    echo "SKIP $name (missing $dumps)"
+    return
+  fi
+  echo "START $name $pool"
+  "$PY" experiments/exp_drugban.py --dumps "$dumps" --pool "$pool" --out "$OUT" \
+    > "logs/${name}_${pool}.log" 2>&1
+  echo "DONE  $name $pool"
 }
 
-mkdir -p logs
-for s in s1 s2 s42; do
-  for ds in biosnap bindingdb human; do
-    echo "${ds}_random_$s source"
+for seed in s1 s2 s42; do
+  for dataset in biosnap bindingdb human; do
+    run "drugban_${dataset}_random_${seed}" source
   done
-done > /tmp/guard_db_jobs.$$
-for s in s1 s2 s42; do echo "biosnap_cluster_$s source"; echo "biosnap_cluster_$s deployment"; done >> /tmp/guard_db_jobs.$$
-echo "bindingdb_cluster_s42 source" >> /tmp/guard_db_jobs.$$
-echo "bindingdb_cluster_s42 deployment" >> /tmp/guard_db_jobs.$$
+done
+for seed in s1 s2 s42; do
+  run "drugban_biosnap_cluster_${seed}" source
+  run "drugban_biosnap_cluster_${seed}" deployment
+done
+run drugban_bindingdb_cluster_s42 source
+run drugban_bindingdb_cluster_s42 deployment
 
-while read -r name pool; do
-  [ -d "data/processed/drugban_$name" ] || { echo "SKIP drugban_$name (khong co dump)"; continue; }
-  while [ "$(jobs -rp | wc -l)" -ge "$JOBS" ]; do wait -n; done
-  run "drugban_$name" "$pool" &
-done < /tmp/guard_db_jobs.$$
-wait
-rm -f /tmp/guard_db_jobs.$$
-echo "ALL DONE"
+echo "All available DrugBAN cells completed."

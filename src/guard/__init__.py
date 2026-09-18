@@ -5,10 +5,11 @@ Three steps, one function::
     from guard import HostOutputs, random_split, run
 
     split  = random_split(np.arange(n), seed=0)
-    result = run(HostOutputs(probs, features, labels), split, target="cross_mask")
+    result = run(HostOutputs(probs, features, labels), split, target="hard")
 
-``result.joint_harm <= alpha`` is the guarantee; ``result.gate_metric_delta`` is
-what you gained.  See :mod:`guard.pipeline` for the whole method in one file.
+The guarantee is marginal over the calibration draw and a fresh exchangeable
+deployment point; ``result.joint_harm`` is only the realised statistic on the
+provided test split. See :mod:`guard.pipeline` for the whole method in one file.
 """
 
 from .losses import CROSS_ENTROPY, BERNOULLI, SQUARED, accuracy, auroc, f1_macro, get

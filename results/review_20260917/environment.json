@@ -1,0 +1,50 @@
+{
+  "executable": "<review-environment>/bin/python",
+  "python": "3.12.13",
+  "numpy": "2.5.2",
+  "sklearn": "1.9.0",
+  "scipy": "1.18.1",
+  "threadpoolctl": "3.6.0",
+  "threadpools": [
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 32,
+      "prefix": "libscipy_openblas",
+      "filepath": "<review-environment>/numpy.libs/libscipy_openblas64_-61654e39.so",
+      "version": "0.3.34.0.0",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 32,
+      "prefix": "libscipy_openblas",
+      "filepath": "<review-environment>/scipy.libs/libscipy_openblas-5f890258.so",
+      "version": "0.3.31.dev",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    },
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 32,
+      "prefix": "libgomp",
+      "filepath": "<review-environment>/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+      "version": null
+    }
+  ],
+  "git_head": "f1788b05788f92cc3da28bd19e905752e83ce4c6",
+  "source_sha256": {
+    "src/guard/action.py": "1ecb9d579d19fcf76dfe6853f8c987d0d8af2c010f308bc675572c18125e4eae",
+    "src/guard/targets.py": "0c2d0e9be40b361d426802d3bae057eb45ea1c1cf212949fdc2078110885a665",
+    "src/guard/losses.py": "ccee09c815879fa91baa19b75d7c9e0c70168cdf16f3efa987d1d6732b0d549f",
+    "src/guard/pipeline.py": "b5fe3fc8222424a01d86a74c2369f80c2b53ade909772112d53d5a609583d3b7",
+    "experiments/gates_core.py": "c9d68ed609a27f39ea1faaeaef745f168eccd6e4a95f84a42adfc816c73ee4f2",
+    "experiments/probe_core.py": "9443dcd01b1d67a6c7e987c21a49c68a7a9564b6c742bc2bf361a9d84cb35811",
+    "experiments/gates_mosei2.py": "41bcd7d5c3916a8c1ccf2836861c906c4e6593845f2aefa1b09832def9fb7693",
+    "experiments/exp_drugban.py": "fee4310dff3316e7c86152645d9b3e2e2ff26a2c97d46ccb92a004b8bc0c8aa5"
+  },
+  "provenance_note": "Source hashes identify the exact review-run checkout. The public targets.py differs only by a raw-docstring escape fix."
+}
