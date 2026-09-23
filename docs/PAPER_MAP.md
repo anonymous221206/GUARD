@@ -36,6 +36,7 @@ location. Compact outputs live under `results/`.
 | `tab:hme-paired` | HME/CMAD/GUARD on paired MOSEI partitions | `experiments/review_hme.py`; `scripts/tables/verify_hme_run.py`; `results/external_review_20260917/hme/` |
 | `tab:corrector` | retrieval and probe ablation | `experiments/probe_vs_knn.py` |
 | `tab:probe-extension` | matched MOSEI and DrugBAN probe comparison | `experiments/review_probe_extension.py`; `results/review_20260917/probe_*.json` |
+| `tab:source-pool` | varying the retrieval pool, its labels, its origin and the calibration size | `experiments/exp_source_pool.py`; `scripts/tables/source_pool_rows.py`; `results/source_pool/*.csv` |
 | `tab:efficiency` | correction latency and retained state | `experiments/review_efficiency.py`; `results/review_20260917/efficiency_*.json` |
 | `tab:actionscore` | action-score learners/features | `experiments/action_family.py` |
 | `tab:alpha` | harm-budget sweep | alpha drivers; `scripts/tables/alpha_stats.py` |
