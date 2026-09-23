@@ -103,6 +103,7 @@ def run(
     space: str = "standardise",
     weighting: str = "uniform",
     temperature: float = 1.0,
+    reference: str = "raw",
 ) -> Result:
     """Run GUARD end to end on one frozen host under one deployment condition.
 
@@ -110,6 +111,14 @@ def run(
     the host's confidence. Their defaults reproduce the plain construction; the
     values that earn their keep are chosen on ``split.fit`` by
     :func:`select_on_fit`, never on the test split.
+
+    ``reference`` picks the prediction that harm is measured against, that the
+    action features read, and that a declined query keeps. The default ``"raw"``
+    keeps the host's own output as that reference and lets a selected
+    temperature act only inside the candidate, which is the separation
+    ``gates_core.gate_row`` implements and the one the paper describes.
+    ``"tempered"`` is the earlier behaviour, in which a selected temperature
+    moved the reference as well; it is kept so that older runs can be repeated.
     """
     loss = _losses.get(loss_name)
     n_out = host.probs.shape[1]
@@ -147,23 +156,31 @@ def run(
     y_fit, y_conf, y_test = (host.labels[split.fit], host.labels[split.conf],
                              host.labels[split.test])
 
+    if reference == "raw":
+        ref = host.probs
+    elif reference == "tempered":
+        ref = probs
+    else:
+        raise ValueError(f"unknown reference {reference!r}")
+    b_fit, b_conf, b_test = (ref[split.fit], ref[split.conf], ref[split.test])
+
     beta = _select_beta(m_fit, t_fit, y_fit, loss, beta_objective)
     corrected_conf = (1 - beta) * m_conf + beta * t_conf
     corrected_test = (1 - beta) * m_test + beta * t_test
 
     corrected_fit = (1 - beta) * m_fit + beta * t_fit
-    scorer = _action.fit_action_score(m_fit, t_fit, corrected_fit, y_fit, loss)
-    gate = _action.certify_action(scorer, m_conf, t_conf, corrected_conf, y_conf,
-                                  m_test, t_test, loss, alpha, delta,
-                                  fit=(m_fit, t_fit, corrected_fit, y_fit))
+    scorer = _action.fit_action_score(b_fit, t_fit, corrected_fit, y_fit, loss)
+    gate = _action.certify_action(scorer, b_conf, t_conf, corrected_conf, y_conf,
+                                  b_test, t_test, loss, alpha, delta,
+                                  fit=(b_fit, t_fit, corrected_fit, y_fit))
     apply = gate["apply"]
 
-    base_loss = loss(m_test, y_test)
+    base_loss = loss(b_test, y_test)
     corrected_loss = loss(corrected_test, y_test)
     gated_loss = np.where(apply, corrected_loss, base_loss)
     delta_loss = gated_loss - base_loss
     blanket_delta = corrected_loss - base_loss
-    gated_probs = np.where(apply[:, None], corrected_test, m_test)
+    gated_probs = np.where(apply[:, None], corrected_test, b_test)
 
     if metric == "accuracy":
         score = lambda p: _losses.accuracy(p, y_test, loss)
@@ -184,13 +201,13 @@ def run(
     sub = np.random.default_rng(0).permutation(len(y_test))[:6000]
     nn = _measure.nearest_neighbour_index(f_test[sub])
     t_self = loss.target(y_test[sub], n_out)
-    ph = _measure.potential_headroom(m_test[sub], t_self, loss.target(y_test[sub][nn], n_out),
+    ph = _measure.potential_headroom(b_test[sub], t_self, loss.target(y_test[sub][nn], n_out),
                                      scale=1.0 if loss.simplex else n_out)
     if ph["negative_and_significant"]:
         notes.append("PH significantly negative: neighbours carry opposing labels, "
                      "retrieval-based correction is not applicable here")
 
-    base = score(m_test)
+    base = score(b_test)
     res = Result(
         condition=condition, target=target, beta=beta,
         base_metric=base,
@@ -214,7 +231,7 @@ def run(
     # Ranking metrics such as AUROC need the scores themselves, which no scalar
     # in ``Result`` can reconstruct.
     res.test_arrays = {
-        "base_probs": m_test,
+        "base_probs": b_test,
         "blanket_probs": corrected_test,
         "gated_probs": gated_probs,
         "applied": apply,

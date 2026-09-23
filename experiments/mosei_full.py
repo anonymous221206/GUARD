@@ -3,6 +3,7 @@
 Same path as repro_check.py, so the numbers reconcile with Table 1 by construction.
 """
 import sys, json, numpy as np
+REF = sys.argv[1] if len(sys.argv) > 1 else 'raw'
 from guard import HostOutputs, run
 from guard.pipeline import select_on_fit
 from guard.splits import Split
@@ -32,7 +33,7 @@ for cond, feats in (('a',['test_ac']), ('v',['test_vis']), ('av',['test_vis','te
                         temperature_grid=(1.0,2.0),metric='accuracy_nonzero')
         res=run(host,sp,condition=cond,metric='accuracy_nonzero',
                 k=c['k'],target=c['target'],space=c['space'],
-                weighting=c['weighting'],temperature=c['temperature'])
+                weighting=c['weighting'],temperature=c['temperature'],reference=REF)
         b.append(res.base_metric); g.append(res.base_metric+res.gate_metric_delta)
         h.append(res.joint_harm); ap.append(res.apply_rate)
         bh.append(getattr(res,'blanket_joint_harm',float('nan')))
@@ -41,5 +42,6 @@ for cond, feats in (('a',['test_ac']), ('v',['test_vis']), ('av',['test_vis','te
     o=out[cond]
     print("%-4s base %.4f  GUARD %.4f  harm %.4f  apply %.3f  blanket_harm %.4f"
           %(cond,o['base'],o['guard'],o['harm'],o['apply'],o['blanket_harm']),flush=True)
-json.dump(out,open(str(_ROOT / 'results/gates/mosei_full.json'),'w'),indent=1)
+_name = 'mosei_full.json' if REF=='raw' else f'mosei_full_ref-{REF}.json'
+json.dump(out,open(str(_ROOT / 'results/gates' / _name),'w'),indent=1)
 print("DA GHI")

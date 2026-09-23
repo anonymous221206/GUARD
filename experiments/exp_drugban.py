@@ -81,9 +81,13 @@ def main() -> None:
     ap.add_argument("--no-select", action="store_true",
                     help="pin the retrieval settings instead of choosing them on D_fit")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--reference", default="raw", choices=["raw", "tempered"],
+                    help="prediction that harm is measured against and kept when declined")
     a = ap.parse_args()
 
     name = f"{a.dumps.name}_pool-{a.pool}"
+    if a.reference != "raw":
+        name += f"_ref-{a.reference}"
     out_dir = a.out / name
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = []
@@ -110,7 +114,7 @@ def main() -> None:
                 cfg = {kk: cfg[kk] for kk in
                        ("k", "target", "space", "weighting", "temperature")}
             r = run(host, split, condition=cond, alpha=a.alpha, delta=a.delta,
-                    metric=METRIC, **cfg)
+                    metric=METRIC, reference=a.reference, **cfg)
             ta = r.test_arrays
             lo = _get_loss("cross_entropy")
             rows.append({**r.as_row(), "policy": target, "seed": a.seed,
