@@ -7,6 +7,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from guard import HostOutputs, run
 from guard.splits import Split
+from opp_split import deploy_split
 CONFIGS = ("low_cost_accels_only", "no_imu_family", "no_shoes", "severe_three_sensors")
 def weighted_f1(y, pred):
     vals, counts = [], []
@@ -26,8 +27,7 @@ def main():
         for seed in a.seeds:
             probs=np.load(a.dumps/f"probs_condition_specialist_{cfg}_deploy_s{seed}.npy").astype(np.float64)
             rich=np.load(a.dumps/f"richer_deploy_s{seed}.npy").astype(np.float64); scores.append(weighted_f1(y,probs.argmax(1)))
-            perm=np.random.default_rng(seed).permutation(len(y)); q=len(y)//4
-            split=Split(perm[:q],perm[q:2*q],perm[2*q:3*q],perm[3*q:],origin={k:"OPPORTUNITY deployment subject" for k in ("pool","fit","conf","test")})
+            split=Split(*deploy_split(len(y),seed),origin={k:"OPPORTUNITY deployment subject" for k in ("pool","fit","conf","test")})
             host=HostOutputs(probs=probs,features=f,labels=y,richer_probs=rich)
             for target in ("hard","cross_mask"):
                 r=run(host,split,condition=cfg,target=target,alpha=a.alpha,delta=a.delta,k=a.k)

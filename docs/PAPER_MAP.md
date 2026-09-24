@@ -37,6 +37,7 @@ location. Compact outputs live under `results/`.
 | `tab:corrector` | retrieval and probe ablation | `experiments/probe_vs_knn.py` |
 | `tab:probe-extension` | matched MOSEI and DrugBAN probe comparison | `experiments/review_probe_extension.py`; `results/review_20260917/probe_*.json` |
 | `tab:source-pool` | varying the retrieval pool, its labels, its origin and the calibration size | `experiments/exp_source_pool.py`; `scripts/tables/source_pool_rows.py`; `results/source_pool/*.csv` |
+| `tab:delta` | harm tolerance and decision flips | `experiments/exp_delta.py`; `scripts/tables/delta_rows.py`; `results/delta/*.csv` |
 | `tab:efficiency` | correction latency and retained state | `experiments/review_efficiency.py`; `results/review_20260917/efficiency_*.json` |
 | `tab:actionscore` | action-score learners/features | `experiments/action_family.py` |
 | `tab:alpha` | harm-budget sweep | alpha drivers; `scripts/tables/alpha_stats.py` |
@@ -59,7 +60,7 @@ location. Compact outputs live under `results/`.
 | `fig:apply` | intervention rate | `scripts/figures/make_fig_apply.py` |
 | `fig:screen` | cross-mask accuracy screen | `scripts/figures/make_fig_screen.py` |
 
-Figure 8's 30 cells come only from binary DrugBAN and five-class OPPORTUNITY.
+Figure 8's 28 cells come only from binary DrugBAN and five-class OPPORTUNITY; the OPPORTUNITY rows are written by `experiments/opp_targets.py` to `results/gates/opp_targets_cells.json`.
 The manuscript explicitly states their chance levels and that absolute accuracy
 does not transfer directly to 29-way AVE or many-class NinaPro.
 
@@ -80,3 +81,12 @@ dumps are installed.
 
 Several older table drivers print rows rather than editing LaTeX. The verifier,
 not automatic manuscript rewriting, is the final synchronization check.
+
+## OPPORTUNITY split
+
+Deployment windows are in temporal order and consecutive windows overlap. Every
+OPPORTUNITY driver takes its roles from `experiments/opp_split.py`: contiguous
+200-window blocks assigned at random to pool, fit, conf and test, with two windows
+dropped at each block end. `experiments/opp_dcl_blocks.py` compares this split with
+a split by row and with other block sizes (`results/gates/opportunity_dcl_blocks.json`).
+The Figure 3 correlation interval is printed by `scripts/tables/synthetic_ci.py`.

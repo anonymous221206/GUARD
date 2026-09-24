@@ -11,6 +11,7 @@ ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts'))
 sys.path.insert(0,str(ROOT / 'experiments'))
 sys.path.insert(0,str(ROOT / 'src'))
 from gates_core import gate_row
+from opp_split import deploy_split
 from guard import losses as _L, targets as _T
 from guard import action as _A
 from guard.pipeline import _select_beta
@@ -30,8 +31,7 @@ for cfg in CFG:
         rich=np.load(f'{D}/richer_deploy_s{s}.npy').astype(np.float64)
         acc=float((P.argmax(1)==y).mean()); wf=f1_score(y,P.argmax(1),average='weighted')
         print(f'{cfg:24}{s:5d}{acc:10.4f}{wf:9.4f}',flush=True)
-        rng=np.random.default_rng(s); perm=rng.permutation(len(y)); q=len(y)//4
-        split=(perm[:q],perm[q:2*q],perm[2*q:3*q],perm[3*q:])
+        split=deploy_split(len(y),s)
         r=gate_row(P,F,y,split,targets=('hard','cross'),richer=rich)
         for k in RULES: gates[k].append(r[k])
         gates['_a'].append(r['_meta']['apply'])
@@ -43,10 +43,10 @@ for cfg in CFG:
               else _T.cross_mask_values(rich[pool]))
         k_=r['_meta']['k']; wt=r['_meta']['weighting']
         tf=_T.knn_average(ff,fp,vals,k_,weighting=wt)
-        b=_select_beta(P[fit],tf,y[fit],loss,'loss')
+        T_=r['_meta']['temperature']; Pt=P if T_==1.0 else _T.temper(P,T_,loss.simplex); b=r['_meta']['beta']
         tc=_T.knn_average(fc,fp,vals,k_,weighting=wt); tt=_T.knn_average(ft,fp,vals,k_,weighting=wt)
-        cc=(1-b)*P[conf]+b*tc; ct=(1-b)*P[test]+b*tt
-        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit], loss), P[conf], tc, cc, y[conf], P[test], tt, loss, ALPHA, DELTA, fit=(P[fit], tf, (1-b)*P[fit]+b*tf, y[fit])); ap=g['apply']
+        cc=(1-b)*Pt[conf]+b*tc; ct=(1-b)*Pt[test]+b*tt
+        g=_A.certify_action(_A.fit_action_score(P[fit], tf, (1-b)*Pt[fit]+b*tf, y[fit], loss), P[conf], tc, cc, y[conf], P[test], tt, loss, ALPHA, DELTA, fit=(P[fit], tf, (1-b)*Pt[fit]+b*tf, y[fit])); ap=g['apply']
         blo=loss(P[test],y[test]); cl=loss(ct,y[test])
         gp=np.where(ap[:,None],ct,P[test])
         wf_=lambda Q: f1_score(y[test],Q.argmax(1),average='weighted')
