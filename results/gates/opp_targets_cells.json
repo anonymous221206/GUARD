@@ -1,0 +1,122 @@
+[
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "low_cost_accels_only",
+  "seed": 0,
+  "richer_acc": 0.6284271284271284,
+  "poorer_acc": 0.5537518037518038,
+  "precondition_met": true,
+  "gain_hard": 0.2878603329273244,
+  "gain_cross": 0.07064555420219243
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "low_cost_accels_only",
+  "seed": 1,
+  "richer_acc": 0.577922077922078,
+  "poorer_acc": 0.46645021645021645,
+  "precondition_met": true,
+  "gain_hard": 0.2164027608607389,
+  "gain_cross": 0.06536743808363782
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "low_cost_accels_only",
+  "seed": 2,
+  "richer_acc": 0.6726794438181135,
+  "poorer_acc": 0.5400225479143179,
+  "precondition_met": true,
+  "gain_hard": 0.1048951048951049,
+  "gain_cross": 0.14141414141414144
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "no_imu_family",
+  "seed": 0,
+  "richer_acc": 0.6284271284271284,
+  "poorer_acc": 0.601010101010101,
+  "precondition_met": true,
+  "gain_hard": 0.34429557450263903,
+  "gain_cross": 0.053999187982135655
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "no_imu_family",
+  "seed": 1,
+  "richer_acc": 0.577922077922078,
+  "poorer_acc": 0.5555555555555556,
+  "precondition_met": true,
+  "gain_hard": 0.33333333333333337,
+  "gain_cross": 0.01624035728786033
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "no_imu_family",
+  "seed": 2,
+  "richer_acc": 0.6726794438181135,
+  "poorer_acc": 0.5452837279218339,
+  "precondition_met": true,
+  "gain_hard": 0.16627816627816627,
+  "gain_cross": 0.16550116550116545
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "no_shoes",
+  "seed": 0,
+  "richer_acc": 0.6284271284271284,
+  "poorer_acc": 0.6125541125541125,
+  "precondition_met": true,
+  "gain_hard": 0.22533495736906217,
+  "gain_cross": -0.01786439301664633
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "no_shoes",
+  "seed": 1,
+  "richer_acc": 0.577922077922078,
+  "poorer_acc": 0.6327561327561327,
+  "precondition_met": false,
+  "gain_hard": 0.031262687779131104,
+  "gain_cross": -0.011774259033698775
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "no_shoes",
+  "seed": 2,
+  "richer_acc": 0.6726794438181135,
+  "poorer_acc": 0.5862457722660653,
+  "precondition_met": true,
+  "gain_hard": 0.19425019425019419,
+  "gain_cross": 0.14024864024864026
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "severe_three_sensors",
+  "seed": 0,
+  "richer_acc": 0.6284271284271284,
+  "poorer_acc": 0.6601731601731602,
+  "precondition_met": false,
+  "gain_hard": 0.20462850182704018,
+  "gain_cross": 0.00487210718635811
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "severe_three_sensors",
+  "seed": 1,
+  "richer_acc": 0.577922077922078,
+  "poorer_acc": 0.6363636363636364,
+  "precondition_met": false,
+  "gain_hard": 0.006902151847340554,
+  "gain_cross": 0.006090133982947554
+ },
+ {
+  "dataset": "OPPORTUNITY",
+  "row": "severe_three_sensors",
+  "seed": 2,
+  "richer_acc": 0.6726794438181135,
+  "poorer_acc": 0.7065013152950019,
+  "precondition_met": false,
+  "gain_hard": 0.015928515928515963,
+  "gain_cross": 0.031857031857031815
+ }
+]

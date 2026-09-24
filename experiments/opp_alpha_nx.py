@@ -7,6 +7,7 @@ ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', ROOT / 'artifacts'))
 sys.path.insert(0,str(ROOT / 'experiments'))
 sys.path.insert(0,str(ROOT / 'src'))
 from gates_core import gate_row
+from opp_split import deploy_split
 from guard import action as _A
 from guard import losses as _L, targets as _T
 from guard.pipeline import _select_beta
@@ -23,25 +24,25 @@ for cfg in CFG:
         Pd=np.load(f'{D}/probs_condition_specialist_{cfg}_deploy_s{s}.npy').astype(np.float64)
         Pc=np.load(f'{D}/probs_condition_specialist_{cfg}_calib_s{s}.npy').astype(np.float64)
         Rd=np.load(f'{D}/richer_deploy_s{s}.npy').astype(np.float64)
-        rng=np.random.default_rng(s); perm=rng.permutation(len(yd)); q=len(yd)//4
-        r=gate_row(Pd,Fd,yd,(perm[:q],perm[q:2*q],perm[2*q:3*q],perm[3*q:]),
+        split=deploy_split(len(yd),s)
+        r=gate_row(Pd,Fd,yd,split,
                    targets=('hard','cross'),richer=Rd)
-        pool,fit,test=perm[:q],perm[q:2*q],perm[3*q:]
+        pool,fit,_,test=split
         z=_T.retrieval_space(Fd[pool],r['_meta']['space'])
         fp,ff,ft=z(Fd[pool]),z(Fd[fit]),z(Fd[test]); fc=z(Fc)      # conf = subject 3
         vals=(_T.hard_label_values(yd[pool],Pd.shape[1],loss.simplex)
               if r['_meta']['target']=='hard' else _T.cross_mask_values(Rd[pool]))
         k_=r['_meta']['k']; wt=r['_meta']['weighting']
         tf=_T.knn_average(ff,fp,vals,k_,weighting=wt)
-        b=_select_beta(Pd[fit],tf,yd[fit],loss,'loss')
+        T_=r['_meta']['temperature']; tp=(lambda Q: Q if T_==1.0 else _T.temper(Q,T_,loss.simplex)); Pdt,Pct=tp(Pd),tp(Pc); b=r['_meta']['beta']
         tc=_T.knn_average(fc,fp,vals,k_,weighting=wt); tt=_T.knn_average(ft,fp,vals,k_,weighting=wt)
-        cc=(1-b)*Pc+b*tc; ct=(1-b)*Pd[test]+b*tt
+        cc=(1-b)*Pct+b*tc; ct=(1-b)*Pdt[test]+b*tt
         blo=loss(Pd[test],yd[test]); cl=loss(ct,yd[test]); hurt=(cl-blo)>DELTA
         wf=lambda Q: f1_score(yd[test],Q.argmax(1),average='weighted')
         base=wf(Pd[test]); bl=wf(ct)
         for al in ALPHAS:
-            _sc=_A.fit_action_score(Pd[fit],tf,(1-b)*Pd[fit]+b*tf,yd[fit],loss)
-            g=_A.certify_action(_sc,Pc,tc,cc,yc,Pd[test],tt,loss,al,DELTA,fit=(Pd[fit],tf,(1-b)*Pd[fit]+b*tf,yd[fit])); ap=g['apply']
+            _sc=_A.fit_action_score(Pd[fit],tf,(1-b)*Pdt[fit]+b*tf,yd[fit],loss)
+            g=_A.certify_action(_sc,Pc,tc,cc,yc,Pd[test],tt,loss,al,DELTA,fit=(Pd[fit],tf,(1-b)*Pdt[fit]+b*tf,yd[fit])); ap=g['apply']
             gp=np.where(ap[:,None],ct,Pd[test])
             rows.append(dict(family='opportunity',dataset='opportunity_cross_subject',condition=cfg,
                              target=r['_meta']['target'],seed=s,exchangeable=False,alpha=al,
