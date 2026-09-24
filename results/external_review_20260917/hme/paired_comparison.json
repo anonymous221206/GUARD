@@ -5,7 +5,7 @@
   "epochs_run": 64,
   "train_validation_seconds": 9728.883590459824,
   "feature_alignment": "all six source mean/std arrays match CMAD dumps exactly",
-  "cmad_controls": "six masks match saved CMAD means; t is recomputed on paired quarters for both CMAD and GUARD",
+  "cmad_controls": "six masks match saved CMAD means; t recomputed on paired quarters for both CMAD and GUARD",
   "training_seeds": 1,
   "deployment_partitions": 5,
   "rows": {
@@ -33,8 +33,8 @@
         58.86958485349228
       ],
       "CMAD_GUARD": [
-        67.23763461190376,
-        64.63606976259076
+        67.61195537107844,
+        65.13877017273145
       ]
     },
     "v": {
@@ -61,8 +61,8 @@
         86.70163929087875
       ],
       "CMAD_GUARD": [
-        86.8472811643621,
-        86.81884431775731
+        86.78031687864782,
+        86.7527204412866
       ]
     },
     "tv": {
@@ -75,8 +75,8 @@
         86.76798726048335
       ],
       "CMAD_GUARD": [
-        86.69062411605992,
-        86.65985438073962
+        86.64622899952275,
+        86.61682774814105
       ]
     },
     "av": {
@@ -89,8 +89,8 @@
         62.98260400109298
       ],
       "CMAD_GUARD": [
-        69.36003800198361,
-        68.35771461147631
+        69.67050878120439,
+        68.76769814486372
       ]
     },
     "tav": {
@@ -103,8 +103,8 @@
         86.75903860937817
       ],
       "CMAD_GUARD": [
-        86.6926985337112,
-        86.68769667146881
+        86.82662710513975,
+        86.82132553152509
       ]
     },
     "incomplete_six": {
@@ -117,8 +117,8 @@
         73.91535898632812
       ],
       "CMAD_GUARD": [
-        77.39411689469085,
-        76.5481367723152
+        77.48968891738153,
+        76.68205901139169
       ]
     },
     "language_absent": {
@@ -131,8 +131,8 @@
         61.14666754022132
       ],
       "CMAD_GUARD": [
-        68.06641912941174,
-        66.40919906315055
+        68.29468297554355,
+        66.7134270443266
       ]
     }
   }
