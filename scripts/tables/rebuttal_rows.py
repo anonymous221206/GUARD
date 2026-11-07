@@ -74,14 +74,24 @@ for b, name in BENCH:
     aco = mean([r['x']['fact']['confidence'].get('auc_help') for r in c])
     rel.append(f"{name} & ${100*H/A_:.1f}$ & ${100*wc:.1f}$ & ${mean([x.get('mean_d') for x in xs]):+.2f}$ & ${fm:.3f}$ & ${fp:.3f}$ & " + ('---' if b == 'ptbxl' else f"${100*er:.1f}$") + ' & ' + ('---' if b == 'ptbxl' else f"${100*hr/hk:.0f}$") + f" & ${aucs[0]:.2f}$ & ${aco:.2f}$ & ${aucs[1]:.2f}$ & ${over}/{len(c)}$ \\\\")
 OUT['tab:reliability'] = rel
-mt = []
+mt = []; ck = lambda d: json.dumps(d, sort_keys=True)
+ML = collections.defaultdict(dict)
+for r in jl(O / 'matched_l1.jsonl'): ML[r['driver']][ck(r['ctx'])] = r
+st = []
 for b, name in BENCH:
     c = F[b]; R_ = mean([r['rate'] for r in c]); cells = []
-    for k in ('GUARD', 'confidence', 'agreement', 'random'):
-        g, h = mean([r[k][0] for r in c]), mean([r[k][1] for r in c])
+    for k in ('GUARD', 'l1', 'confidence', 'agreement', 'random'):
+        val = (lambda r: ML[b][ck(r['ctx'])]['l1']) if k == 'l1' else (lambda r: r[k])
+        g, h = mean([val(r)[0] for r in c]), mean([val(r)[1] for r in c])
         cells.append(f'${g3(g)}$/${h3(h)}$/${100*h/R_:.1f}$')
     mt.append(f'{name} & ${100*R_:.1f}$ & ' + ' & '.join(cells) + r' \\')
-OUT['tab:matched'] = mt
+    for lab, fa, fb, rate in (('guard rate', lambda r: r['GUARD'], lambda r: ML[b][ck(r['ctx'])]['l1'], R_),
+                              ('l1 rate', lambda r: ML[b][ck(r['ctx'])]['at_l1']['learned'], lambda r: ML[b][ck(r['ctx'])]['at_l1']['l1'], mean([ML[b][ck(r['ctx'])]['rate_l1'] for r in c]))):
+        g = collections.defaultdict(list)
+        for r in c: g[KEY[b](r)].append(np.array(fa(r)[:2]) - np.array(fb(r)[:2]))
+        v = np.array([np.mean(x, 0) for x in g.values()]); e = v.std(0, ddof=1) / np.sqrt(len(v))
+        st.append(f'% {b} {lab}: learned - l1 gain {100*v[:, 0].mean():+.2f}+-{100*e[0]:.2f}, harm {100*v[:, 1].mean():+.2f}+-{100*e[1]:.2f}, conditional {100*v[:, 1].mean()/rate:+.2f}')
+OUT['tab:matched'] = mt; OUT['stats:matched'] = st
 # ---- paired
 def paired(c, key, a, b, f):
     g = collections.defaultdict(list)

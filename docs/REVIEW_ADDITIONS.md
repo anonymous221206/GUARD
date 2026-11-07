@@ -43,7 +43,9 @@ I/O and calibration. It is not a timing of the per-cell selected winners.
 
 `experiments/rebuttal_factorial.py` fixes one corrector per benchmark and crosses
 score, calibration and tightening, and also compares the rules at GUARD's own
-intervention rate. `experiments/rebuttal_budget.py` varies the total number of
+intervention rate. `experiments/rebuttal_matched.py` adds the l1 distance to that
+comparison, at GUARD's rate and at the rate of the calibrated l1 rule, without
+selecting any setting again. `experiments/rebuttal_budget.py` varies the total number of
 deployment labels. The 84 BindingDB cluster cells of that grid are absent because
 their dumps are not in the artifact set. `experiments/rebuttal_shift.py` covers
 mixed availability and adapters reused at another condition; results across

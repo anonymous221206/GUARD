@@ -35,6 +35,10 @@ def summary(arms):
     dh = np.array([a['harm_crc'] - a['harm_ltt'] for a in arms])
     return dict(arms=len(arms), crc_higher=int((dg > 1e-4).sum()), equal=int((abs(dg) <= 1e-4).sum()),
                 ltt_higher=int((dg < -1e-4).sum()), mean_gain_diff=float(dg.mean()),
+                table_crc_higher=sum(round(a['gain_crc'], 3) > round(a['gain_ltt'], 3) for a in arms),
+                table_equal=sum(round(a['gain_crc'], 3) == round(a['gain_ltt'], 3) for a in arms),
+                table_ltt_higher=sum(round(a['gain_crc'], 3) < round(a['gain_ltt'], 3) for a in arms),
+                crc_harm_higher=int((dh > 0).sum()),
                 mean_harm_diff=float(dh.mean()), max_harm_guard=max(a['harm_crc'] for a in arms))
 
 

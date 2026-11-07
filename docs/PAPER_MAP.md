@@ -36,6 +36,7 @@ location. Compact outputs live under `results/`.
 | `tab:conditional-harm` | IEMOCAP joint and conditional harm | `experiments/review_conditional.py`; `results/review_20260917/conditional_iemocap.json` |
 | `tab:reliability` | what applied corrections do, all benchmarks | `experiments/rebuttal_factorial.py` |
 | `tab:paired` | paired differences on one corrector | `experiments/rebuttal_factorial.py` |
+| `tab:matched` | rules at one intervention rate | `experiments/rebuttal_factorial.py`; `experiments/rebuttal_matched.py`; `results/rebuttal/matched_l1.jsonl` |
 | `tab:budget-full`, `tab:budget-pool` | label budget in full | `experiments/rebuttal_budget.py` |
 | `tab:mixed`, `tab:reuse` | mixed availability; adapter reused at another condition | `experiments/rebuttal_shift.py`; `results/rebuttal/shift.jsonl` |
 | Sec. 5.6, App. B text | the two calibrators across budget settings; worst-pattern standard errors | `experiments/rebuttal_crc_ltt.py`; `results/rebuttal/crc_ltt.json` |

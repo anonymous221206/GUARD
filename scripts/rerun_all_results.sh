@@ -44,6 +44,7 @@ run review_probe_mosei experiments/review_probe_extension.py mosei
 run review_probe_cluster experiments/review_probe_extension.py cluster
 P=${GUARD_PROCS:-8}
 run rebuttal_factorial experiments/rebuttal_factorial.py mosei iemocap opportunity ave ninapro ptbxl drugban --procs "$P"
+run rebuttal_matched experiments/rebuttal_matched.py --procs "$P"
 run rebuttal_action experiments/rebuttal_iemocap_tables.py action "$P"
 run rebuttal_probe experiments/rebuttal_iemocap_tables.py probe "$P"
 run rebuttal_budget experiments/rebuttal_budget.py --procs "$P"
