@@ -10,6 +10,3 @@ if [ ! -d DrugBAN ]; then
 fi
 echo "DrugBAN ready at $ROOT/DrugBAN"
 echo "  datasets: $(ls "$ROOT"/DrugBAN/datasets | tr '\n' ' ')"
-echo
-echo "NOTE  Two upstream fixes are needed to run the released code on a modern"
-echo "      stack; see docs/UPSTREAM_PATCHES.md.  They do not change any result."

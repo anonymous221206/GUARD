@@ -1,4 +1,4 @@
-"""Alpha sweep for CMU-MOSEI on the authoritative repro_check path."""
+"""Alpha sweep for CMU-MOSEI on the same path as mosei_full.py."""
 import sys, csv, numpy as np
 from guard import HostOutputs, run
 from guard.pipeline import select_on_fit

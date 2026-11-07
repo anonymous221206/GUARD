@@ -51,4 +51,4 @@ except (GatedRepoError, RepositoryNotFoundError) as exc:
 print(f"artefacts in {dest}")
 PY
 
-echo "next: python experiments/repro_check.py"
+echo "next: bash scripts/rerun_all_results.sh"

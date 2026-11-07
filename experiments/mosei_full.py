@@ -1,7 +1,4 @@
-"""Base metric, gated metric, joint harm and apply rate on CMU-MOSEI.
-
-Same path as repro_check.py, so the numbers reconcile with Table 1 by construction.
-"""
+"""Base metric, gated metric, joint harm and apply rate on CMU-MOSEI."""
 import sys, json, numpy as np
 REF = sys.argv[1] if len(sys.argv) > 1 else 'raw'
 from guard import HostOutputs, run
