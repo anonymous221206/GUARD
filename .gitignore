@@ -17,3 +17,4 @@ data/ninapro/
 scratch_*.py
 *_preview.png
 results/gates/gates_*.json
+results/gates/ltt_cells.json
