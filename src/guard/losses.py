@@ -91,6 +91,31 @@ BRIER = Loss("brier", _brier_pointwise, _ce_target, simplex=True)
 REGISTRY = {loss.name: loss for loss in (CROSS_ENTROPY, BERNOULLI, SQUARED, BRIER)}
 
 
+def softmax(logits: np.ndarray) -> np.ndarray:
+    """Softmax over the last axis, in float64."""
+    x = np.asarray(logits, dtype=np.float64)
+    x = x - x.max(axis=-1, keepdims=True)
+    e = np.exp(x)
+    return e / e.sum(axis=-1, keepdims=True)
+
+
+def check_outputs(p: np.ndarray, loss: Loss, name: str = "probs") -> None:
+    """Refuse a frozen output that is not a prediction under this loss.
+
+    The pointwise losses clip their input, so logits passed in by mistake raise
+    no error and yield a number that is not cross-entropy. Fail here instead.
+    """
+    if loss.name == "squared":
+        return
+    q = np.asarray(p, dtype=np.float64)
+    if not np.isfinite(q).all():
+        raise ValueError(f"{name}: non-finite values")
+    if q.min() < -1e-6 or q.max() > 1 + 1e-6:
+        raise ValueError(f"{name}: values outside [0, 1]; logits passed as probabilities?")
+    if loss.simplex and np.abs(q.sum(1) - 1).max() > 1e-3:
+        raise ValueError(f"{name}: rows do not sum to one; logits passed as probabilities?")
+
+
 def get(name: str) -> Loss:
     """Look a loss up by name, failing loudly on a typo."""
     if name not in REGISTRY:

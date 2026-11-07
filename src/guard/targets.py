@@ -57,6 +57,10 @@ def knn_average(
         elif weighting == "distance":
             d = np.sqrt(np.maximum(np.take_along_axis(d2, idx, 1), 0.0))
             w = np.exp(-d / tau)
+            # a query far from the whole pool underflows every weight to zero
+            dead = w.sum(1) == 0
+            if dead.any():
+                w[dead] = np.exp(-(d[dead] - d[dead].min(1, keepdims=True)) / tau)
             w /= w.sum(1, keepdims=True)
             out[i:i + chunk] = (values[idx] * w[:, :, None]).sum(1)
         else:

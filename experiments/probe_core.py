@@ -83,6 +83,8 @@ def rows(probs, feats, labels, split, loss_name='cross_entropy', keep=None,
     splits, so it reproduces Table 3's GUARD column and acts as a control.
     """
     loss = _L.get(loss_name)
+    _L.check_outputs(probs, loss)
+    if richer is not None: _L.check_outputs(richer, loss, 'richer')
     pool, fit, conf, test = split
     acc = lambda P, idx: _score(P, labels[idx], None if keep is None else keep[idx])
     n_out = probs.shape[1]

@@ -13,6 +13,7 @@ import numpy as np, sys, json, os
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from gates_ltt import gate_row
+from guard.losses import softmax
 
 _ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
@@ -44,9 +45,9 @@ def _aligned(fold):
         d = np.load(f'{D}/fold{fold}_{m}.npz', allow_pickle=True)
         it = np.array([kt[k] for k in _order(d['vid'])])
         ip = np.array([kp[k] for k in _order(d['pool_vid'])])
-        pr = np.zeros((nt, d['probs'].shape[1])); pr[it] = d['probs']
+        pr = np.zeros((nt, d['probs'].shape[1])); pr[it] = softmax(d['probs'])
         ft = np.zeros((nt, d['feats'].shape[1])); ft[it] = d['feats']
-        pp = np.zeros((np_, d['pool_probs'].shape[1])); pp[ip] = d['pool_probs']
+        pp = np.zeros((np_, d['pool_probs'].shape[1])); pp[ip] = softmax(d['pool_probs'])
         pf = np.zeros((np_, d['pool_feats'].shape[1])); pf[ip] = d['pool_feats']
         P[m] = (pr.astype(np.float64), ft.astype(np.float64),
                 pp.astype(np.float64), pf.astype(np.float64))

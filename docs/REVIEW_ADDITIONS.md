@@ -3,16 +3,27 @@
 ## Joint versus conditional harm
 
 `tab:conditional-harm` reports exact applied and harmful occurrence counts for
-all seven IEMOCAP masks over 25 fold-cut runs. The key sparse-intervention case
-is audio+text: mean joint harm is 0.031, mean apply rate is 3.74%, and the
-pooled conditional harm is 296/356 = 83.15%. This does not violate the joint
-budget. It shows why a low marginal rate is not an operational promise that an
+all seven IEMOCAP masks over 25 fold-cut runs. On audio+text, mean joint harm is
+0.057, mean apply rate is 21.0%, and the pooled conditional harm is 535/1911 = 28.00%.
+The largest pooled rate is audio+visual at 36.32%. This does not violate the joint
+budget. It shows why a low joint rate is not an operational promise that an
 applied correction is usually safe.
 
 `experiments/review_conditional.py` reconstructs the integer counts from the
 unrounded saved rates and original held-out lengths, rejecting any non-integral
 reconstruction. Repeated cuts overlap, so pooled counts are evaluated
 occurrences rather than unique people; no iid confidence interval is claimed.
+
+## Corrections to IEMOCAP
+
+The submitted IEMOCAP results had two errors. The MoMKE fold dumps store logits
+under `probs`, and these were read as probabilities. Each mask dump also orders
+its retrieval pool differently, so richer-view outputs were paired with the wrong
+pool rows. The drivers now apply `guard.losses.softmax` and align rows through
+`experiments/iemocap_io.py`, and `guard.losses.check_outputs` refuses any output
+that is not a probability. Frozen accuracies do not change. The 83.15% conditional
+harm first reported for audio+text was largely this error. The IEMOCAP latency row
+was measured before the fix and was not repeated.
 
 ## Matched probe and efficiency studies
 

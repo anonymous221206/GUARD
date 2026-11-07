@@ -30,7 +30,7 @@ def load(case):
         pP,P=d['train_a'],d['sess1_a']; pF,F=r['train_a'],r['sess1_a']; pY,Y=r['train_y'],r['sess1_y'];name='a'
     elif case=='IEMOCAP':
         d=np.load(ART/'iemocap_momke/folds/fold0_a.npz',allow_pickle=True)
-        pP,P=d['pool_probs'],d['probs'];pF,F=d['pool_feats'],d['feats'];pY,Y=d['pool_labels'],d['labels'];name='fold0_audio'
+        pP,P=L.softmax(d['pool_probs']),L.softmax(d['probs']);pF,F=d['pool_feats'],d['feats'];pY,Y=d['pool_labels'],d['labels'];name='fold0_audio'
     elif case=='NinaPro':
         sub=sorted(sorted((ART/'ninapro_cnn').glob('seed*'))[0].glob('subject*'))[0]
         d=np.load(sub/'preds.npz',allow_pickle=True);r=np.load(sub/'masked_embeddings.npz',allow_pickle=True)

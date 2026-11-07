@@ -9,6 +9,8 @@ import sys, os, json, glob, collections
 import numpy as np
 from pathlib import Path
 from probe_core import rows
+from guard.losses import softmax
+from iemocap_io import align_pool
 
 _ROOT = Path(__file__).resolve().parents[1]
 ARTIFACTS = Path(os.environ.get('GUARD_ARTIFACTS', _ROOT / 'artifacts'))
@@ -110,16 +112,16 @@ if 'IEMOCAP' in WANT:
     for f_ in range(5):
         ref = np.load(f'{D}/fold{f_}_atv.npz', allow_pickle=True)
         kr = {k: i for i, k in enumerate(key(ref))}; n = len(ref['labels'])
-        rich = np.zeros((n, ref['probs'].shape[1])); rich[[kr[k] for k in key(ref)]] = ref['probs']
+        rich = np.zeros((n, ref['probs'].shape[1])); rich[[kr[k] for k in key(ref)]] = softmax(ref['probs'])
         for m in ['a', 't', 'v', 'at', 'av', 'tv', 'atv']:
             d = np.load(f'{D}/fold{f_}_{m}.npz', allow_pickle=True)
             idx = np.array([kr[k] for k in key(d)])
-            pr = np.zeros((n, d['probs'].shape[1])); pr[idx] = d['probs']
+            pr = np.zeros((n, d['probs'].shape[1])); pr[idx] = softmax(d['probs'])
             ft = np.zeros((n, d['feats'].shape[1])); ft[idx] = d['feats']
             pf, pl = d['pool_feats'].astype(np.float64), d['pool_labels']
-            P = np.concatenate([d['pool_probs'].astype(np.float64), pr])
+            P = np.concatenate([softmax(d['pool_probs']), pr])
             F = np.concatenate([pf, ft]); Y = np.concatenate([pl, ref['labels']])
-            Rh = np.concatenate([ref['pool_probs'].astype(np.float64), rich])
+            Rh = np.concatenate([softmax(ref['pool_probs'])[align_pool(ref, d)], rich])
             npool = len(pl)
             for cut in range(5):
                 uv = np.unique(ref['vid']); perm = np.random.default_rng(cut).permutation(len(uv))

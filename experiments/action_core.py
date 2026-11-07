@@ -120,6 +120,8 @@ def rows(probs, feats, labels, split, loss_name='cross_entropy', keep=None,
          targets=('hard',), richer=None, variants=NAMES):
     """{variant: dict(gain, harm, ...)} on one condition, one corrector for all."""
     loss = _L.get(loss_name)
+    _L.check_outputs(probs, loss)
+    if richer is not None: _L.check_outputs(richer, loss, 'richer')
     pool, fit, conf, test = split
     acc = lambda P, idx: _score(P, labels[idx], None if keep is None else keep[idx])
     n_out = probs.shape[1]

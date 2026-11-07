@@ -6,6 +6,7 @@ sys.path.insert(0,str(ROOT / 'src'))
 from guard import losses as _L, targets as _T
 from guard import action as _A
 from guard.pipeline import _select_beta
+from guard.losses import softmax
 B=str(ROOT)
 loss=_L.get('cross_entropy'); ALPHA,DELTA=0.2,0.05
 KS=(5,10,20,35,50); SPACES=('standardise','cosine'); WTS=('uniform','distance')
@@ -73,9 +74,9 @@ for m_ in MS:
         ref=np.load(f'{D}/fold{fo}_atv.npz',allow_pickle=True); kr={k:i for i,k in enumerate(key(ref))}
         d=np.load(f'{D}/fold{fo}_{m_}.npz',allow_pickle=True)
         idx=np.array([kr[k] for k in key(d)]); N=len(ref['labels'])
-        pr=np.zeros((N,d['probs'].shape[1])); pr[idx]=d['probs']
+        pr=np.zeros((N,d['probs'].shape[1])); pr[idx]=softmax(d['probs'])
         ft=np.zeros((N,d['feats'].shape[1])); ft[idx]=d['feats']
-        P=np.concatenate([d['pool_probs'].astype(np.float64),pr])
+        P=np.concatenate([softmax(d['pool_probs']),pr])
         F2=np.concatenate([d['pool_feats'].astype(np.float64),ft])
         Y2=np.concatenate([d['pool_labels'],ref['labels']]); npool=len(d['pool_labels'])
         uv=np.unique(ref['vid']); perm=np.random.default_rng(0).permutation(len(uv))

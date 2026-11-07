@@ -127,6 +127,14 @@ def certify_action(model, base_conf, target_conf, corrected_conf, labels_conf,
     and reported the numbers as if it had not.
     """
     harmful = (loss(corrected_conf, labels_conf) - loss(base_conf, labels_conf)) > delta
+    if model is None:
+        # One-class fit labels leave nothing to rank. This happens when the blend
+        # is selected to zero and the candidate equals the frozen output, so
+        # counting it as an intervention would report applications that change
+        # no prediction.
+        return {"apply": np.zeros(len(base_test), bool), "lambda": None,
+                "lambda_crc": None, "score_test": np.zeros(len(base_test)),
+                "calibration_risk": float(harmful.mean())}
     s_conf = score(model, base_conf, target_conf, loss.simplex)
     lam = crc_threshold(s_conf, harmful, alpha)
     lam_crc = lam

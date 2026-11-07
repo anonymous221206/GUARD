@@ -1,10 +1,9 @@
 """Learn-then-Test comparator: a selective policy family calibrated to the same budget.
 
-GUARD screens each sample against every label its plausible set admits. The natural
-guaranteed alternative tunes one scalar threshold on a heuristic score until a
-risk-control procedure certifies the resulting policy. This builds that alternative on
-the same frozen model, the same corrector and the same calibration third, so the two
-differ only in how the decision is made.
+GUARD calibrates a threshold on a learned score by conformal risk control. The natural
+alternative certifies the same kind of threshold by Learn-then-Test. This builds that
+alternative on the same frozen model, the same corrector and the same calibration
+third, so the two differ only in how the threshold is certified.
 
 Risk is the joint harm GUARD controls: apply and raise the loss by more than delta.
 Thresholds are tested from the most conservative down, in fixed sequence, and testing
