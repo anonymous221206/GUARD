@@ -30,7 +30,8 @@ python scripts/verify_submission.py /path/to/guard_iclr2027.tex
 ```
 
 The unified verifier checks the original paper tables, the conditional-harm,
-probe and efficiency additions, and the paired HME table. The LaTeX source is
+probe and efficiency additions, the paired HME table, and every row generated
+for the revised tables. The LaTeX source is
 passed explicitly because the anonymous submission source is not bundled in
 this code repository.
 

@@ -1,0 +1,93 @@
+{
+ "mosei": {
+  "cells": 6,
+  "finite": true,
+  "range_ok": true,
+  "max_simplex_err": 0.0,
+  "roles_disjoint": true,
+  "min_knn": 0.593965517241,
+  "max_knn_shuffled": 0.513793103448,
+  "min_margin": 0.092241379311,
+  "min_richer_pool": 0.725236864772,
+  "max_richer_shuffled": 0.49698535745,
+  "max_old_pairing": null
+ },
+ "iemocap": {
+  "cells": 35,
+  "finite": true,
+  "range_ok": true,
+  "max_simplex_err": 0.0,
+  "roles_disjoint": true,
+  "min_knn": 0.359477124183,
+  "max_knn_shuffled": 0.402116402116,
+  "min_margin": 0.091503267974,
+  "min_richer_pool": 0.941070625281,
+  "max_richer_shuffled": 0.282420091324,
+  "max_old_pairing": 0.294520547945
+ },
+ "opportunity": {
+  "cells": 12,
+  "finite": true,
+  "range_ok": true,
+  "max_simplex_err": 1.94134e-07,
+  "roles_disjoint": true,
+  "min_knn": 0.609013398295,
+  "max_knn_shuffled": 0.445998445998,
+  "min_margin": 0.282828282829,
+  "min_richer_pool": 0.658369408369,
+  "max_richer_shuffled": 0.352092352092,
+  "max_old_pairing": null
+ },
+ "ave": {
+  "cells": 2,
+  "finite": true,
+  "range_ok": true,
+  "max_simplex_err": 2.53973e-07,
+  "roles_disjoint": true,
+  "min_knn": 0.499253731343,
+  "max_knn_shuffled": 0.125373134328,
+  "min_margin": 0.373880597015,
+  "min_richer_pool": null,
+  "max_richer_shuffled": null,
+  "max_old_pairing": null
+ },
+ "ninapro": {
+  "cells": 40,
+  "finite": true,
+  "range_ok": true,
+  "max_simplex_err": 0.0,
+  "roles_disjoint": true,
+  "min_knn": 0.671581769437,
+  "max_knn_shuffled": 0.658603199376,
+  "min_margin": 0.057542768274,
+  "min_richer_pool": null,
+  "max_richer_shuffled": null,
+  "max_old_pairing": null
+ },
+ "ptbxl": {
+  "cells": 6,
+  "finite": true,
+  "range_ok": true,
+  "max_simplex_err": null,
+  "roles_disjoint": true,
+  "min_knn": 0.806944444444,
+  "max_knn_shuffled": 0.741666666667,
+  "min_margin": 0.065277777777,
+  "min_richer_pool": null,
+  "max_richer_shuffled": null,
+  "max_old_pairing": null
+ },
+ "drugban": {
+  "cells": 9,
+  "finite": true,
+  "range_ok": true,
+  "max_simplex_err": 8.5682e-08,
+  "roles_disjoint": true,
+  "min_knn": 0.57552370452,
+  "max_knn_shuffled": 0.564837398374,
+  "min_margin": 0.050716648291,
+  "min_richer_pool": 0.697317223019,
+  "max_richer_shuffled": 0.512,
+  "max_old_pairing": null
+ }
+}

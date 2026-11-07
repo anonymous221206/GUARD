@@ -20,7 +20,8 @@ location. Compact outputs live under `results/`.
 |---|---|---|
 | `tab:mosei-main` | CMU-MOSEI hosts and GUARD | `experiments/mosei_hosts.py`; `scripts/tables/mosei_rows.py` |
 | `tab:allbench` | cross-benchmark summary | per-benchmark drivers below; MOSEI is explicitly the three language-absent masks |
-| `tab:gates` | intervention rules | `experiments/ltt_one.py` over the gate drivers |
+| `tab:gates` | score, calibration and tightening on one corrector | `experiments/rebuttal_factorial.py`; `scripts/tables/rebuttal_rows.py`; `results/rebuttal/factorial_*.jsonl` |
+| `tab:budget` | total deployment-label budget | `experiments/rebuttal_budget.py`; `scripts/tables/rebuttal_rows.py`; `results/rebuttal/budget.jsonl` |
 | `tab:crossmask` | hard-label and cross-mask targets | `scripts/tables/drugban_rows.py`; `experiments/opp_targets.py` |
 | `fig:overview` | method positioning | hand-drawn publication figure |
 | `fig:guard` | deployment pipeline | hand-drawn publication figure |
@@ -33,6 +34,12 @@ location. Compact outputs live under `results/`.
 |---|---|---|
 | `tab:notation` | notation | descriptive |
 | `tab:conditional-harm` | IEMOCAP joint and conditional harm | `experiments/review_conditional.py`; `results/review_20260917/conditional_iemocap.json` |
+| `tab:reliability` | what applied corrections do, all benchmarks | `experiments/rebuttal_factorial.py` |
+| `tab:paired` | paired differences on one corrector | `experiments/rebuttal_factorial.py` |
+| `tab:budget-full`, `tab:budget-pool` | label budget in full | `experiments/rebuttal_budget.py` |
+| `tab:mixed`, `tab:reuse` | mixed availability; adapter reused at another condition | `experiments/rebuttal_shift.py`; `results/rebuttal/shift.jsonl` |
+| Sec. 5.6, App. B text | the two calibrators across budget settings; worst-pattern standard errors | `experiments/rebuttal_crc_ltt.py`; `results/rebuttal/crc_ltt.json` |
+| App. A text | input audit of all seven benchmarks | `experiments/rebuttal_audit.py`; `results/rebuttal/audit*.json` |
 | `tab:hme-paired` | HME/CMAD/GUARD on paired MOSEI partitions | `experiments/review_hme.py`; `scripts/tables/verify_hme_run.py`; `results/external_review_20260917/hme/` |
 | `tab:corrector` | retrieval and probe ablation | `experiments/probe_vs_knn.py` |
 | `tab:probe-extension` | matched MOSEI and DrugBAN probe comparison | `experiments/review_probe_extension.py`; `results/review_20260917/probe_*.json` |
@@ -71,6 +78,11 @@ pytest -q
 python experiments/repro_check.py
 python scripts/verify_submission.py /path/to/guard_iclr2027.tex
 ```
+
+`scripts/tables/rebuttal_rows.py --check TEX` requires every row of the tables added in
+the revision to appear verbatim in the manuscript. Table 3 is checked there, not in
+`verify_paper.py`. The latency figures of `tab:efficiency` were not re-measured after the
+softmax fix: the fixed configuration does the same arithmetic on the same shapes.
 
 `verify_paper.py` checks 796 cells from the original result tables against the
 committed result files. `verify_review_additions.py` checks 88 fields in the

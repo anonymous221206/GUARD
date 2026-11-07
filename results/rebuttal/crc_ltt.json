@@ -1,0 +1,425 @@
+{
+ "all": {
+  "arms": 102,
+  "crc_higher": 92,
+  "equal": 1,
+  "ltt_higher": 9,
+  "mean_gain_diff": 0.006355506104337365,
+  "mean_harm_diff": 0.032269781516225865,
+  "max_harm_guard": 0.19882396177866668
+ },
+ "by_n_conf": {
+  "n_conf<=25": {
+   "arms": 9,
+   "crc_higher": 7,
+   "equal": 0,
+   "ltt_higher": 2,
+   "mean_gain_diff": 0.017131551878391355,
+   "mean_harm_diff": 0.06281094450761233,
+   "max_harm_guard": 0.1316565984655
+  },
+  "25<n_conf<=60": {
+   "arms": 21,
+   "crc_higher": 17,
+   "equal": 0,
+   "ltt_higher": 4,
+   "mean_gain_diff": 0.009221932218832277,
+   "mean_harm_diff": 0.039501277773907134,
+   "max_harm_guard": 0.143329658214
+  },
+  "60<n_conf<=130": {
+   "arms": 15,
+   "crc_higher": 13,
+   "equal": 0,
+   "ltt_higher": 2,
+   "mean_gain_diff": 0.0059442462215025926,
+   "mean_harm_diff": 0.042519212800356664,
+   "max_harm_guard": 0.17736318407950002
+  },
+  "130<n_conf<=350": {
+   "arms": 25,
+   "crc_higher": 24,
+   "equal": 1,
+   "ltt_higher": 0,
+   "mean_gain_diff": 0.005239320859904892,
+   "mean_harm_diff": 0.02913108758559,
+   "max_harm_guard": 0.17861080485133332
+  },
+  "n_conf>350": {
+   "arms": 32,
+   "crc_higher": 31,
+   "equal": 0,
+   "ltt_higher": 1,
+   "mean_gain_diff": 0.002508448885039063,
+   "mean_harm_diff": 0.016582093724668057,
+   "max_harm_guard": 0.19882396177866668
+  }
+ },
+ "plain_over_budget": [
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "hard",
+   "120",
+   3,
+   0.259,
+   0.032
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "cross",
+   "60",
+   3,
+   0.244,
+   0.074
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "hard",
+   "960",
+   3,
+   0.241,
+   0.008
+  ],
+  [
+   "opportunity",
+   "linear",
+   "hard",
+   "60",
+   12,
+   0.236,
+   0.036
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "cross",
+   "120",
+   3,
+   0.23,
+   0.053
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "hard",
+   "480",
+   3,
+   0.225,
+   0.012
+  ],
+  [
+   "ave",
+   "knn",
+   "auto",
+   "160",
+   6,
+   0.223,
+   0.017
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "cross",
+   "960",
+   3,
+   0.222,
+   0.015
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "cross",
+   "1800",
+   3,
+   0.221,
+   0.007
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "cross",
+   "full",
+   3,
+   0.218,
+   0.006
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "hard",
+   "1800",
+   3,
+   0.215,
+   0.013
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "cross",
+   "1800",
+   3,
+   0.215,
+   0.011
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "cross",
+   "480",
+   3,
+   0.214,
+   0.02
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "cross",
+   "full",
+   3,
+   0.214,
+   0.009
+  ],
+  [
+   "mosei",
+   "linear",
+   "cross",
+   "240",
+   15,
+   0.212,
+   0.012
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "cross",
+   "960",
+   3,
+   0.212,
+   0.015
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "hard",
+   "1800",
+   3,
+   0.212,
+   0.009
+  ],
+  [
+   "opportunity",
+   "knn",
+   "hard",
+   "120",
+   12,
+   0.211,
+   0.031
+  ],
+  [
+   "opportunity",
+   "linear",
+   "hard",
+   "1800",
+   12,
+   0.211,
+   0.028
+  ],
+  [
+   "mosei",
+   "knn",
+   "hard",
+   "1800",
+   15,
+   0.21,
+   0.005
+  ],
+  [
+   "opportunity",
+   "knn",
+   "hard",
+   "1800",
+   12,
+   0.209,
+   0.016
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "hard",
+   "full",
+   3,
+   0.209,
+   0.016
+  ],
+  [
+   "mosei",
+   "linear",
+   "cross",
+   "480",
+   15,
+   0.208,
+   0.008
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "hard",
+   "960",
+   3,
+   0.208,
+   0.002
+  ],
+  [
+   "ave",
+   "knn",
+   "auto",
+   "320",
+   6,
+   0.208,
+   0.015
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "knn",
+   "cross",
+   "480",
+   3,
+   0.206,
+   0.014
+  ],
+  [
+   "opportunity",
+   "knn",
+   "hard",
+   "240",
+   12,
+   0.205,
+   0.022
+  ],
+  [
+   "opportunity",
+   "linear",
+   "hard",
+   "960",
+   12,
+   0.203,
+   0.025
+  ],
+  [
+   "opportunity",
+   "linear",
+   "hard",
+   "full",
+   12,
+   0.202,
+   0.024
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "cross",
+   "240",
+   3,
+   0.202,
+   0.018
+  ],
+  [
+   "mosei",
+   "linear",
+   "cross",
+   "960",
+   15,
+   0.201,
+   0.005
+  ],
+  [
+   "mosei",
+   "linear",
+   "hard",
+   "full",
+   15,
+   0.201,
+   0.005
+  ],
+  [
+   "mosei",
+   "knn",
+   "hard",
+   "full",
+   15,
+   0.201,
+   0.003
+  ],
+  [
+   "drugban_deploy/biosnap",
+   "linear",
+   "cross",
+   "120",
+   3,
+   0.201,
+   0.012
+  ],
+  [
+   "mosei",
+   "knn",
+   "cross",
+   "960",
+   15,
+   0.2,
+   0.006
+  ]
+ ],
+ "worst_patterns": {
+  "mosei/pooled_crc": {
+   "pattern": "a",
+   "mean": 0.2395270895945,
+   "runs": 10,
+   "se": 0.009919345398475778
+  },
+  "mosei/mask_crc": {
+   "pattern": "a",
+   "mean": 0.20663644831410002,
+   "runs": 10,
+   "se": 0.007704399355755939
+  },
+  "ninapro/pooled_crc": {
+   "pattern": "12",
+   "mean": 0.1979842652744,
+   "runs": 10,
+   "se": 0.015976051356651606
+  },
+  "ninapro/mask_crc": {
+   "pattern": "12",
+   "mean": 0.17592928887630002,
+   "runs": 10,
+   "se": 0.009317619265050762
+  },
+  "iemocap_03/pooled_crc": {
+   "pattern": "v",
+   "mean": 0.29318885526631816,
+   "runs": 22,
+   "se": 0.03433805954594535
+  },
+  "iemocap_03/mask_crc": {
+   "pattern": "v",
+   "mean": 0.18349082300363637,
+   "runs": 22,
+   "se": 0.027023194338144742
+  },
+  "iemocap_05/pooled_crc": {
+   "pattern": "a",
+   "mean": 0.26909098026428,
+   "runs": 25,
+   "se": 0.026409928334673073
+  },
+  "iemocap_05/mask_crc": {
+   "pattern": "v",
+   "mean": 0.18554763535516,
+   "runs": 25,
+   "se": 0.019849476961920243
+  }
+ }
+}

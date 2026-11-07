@@ -39,6 +39,25 @@ settings. It includes feature standardisation, target construction, blending,
 scoring and gating, while excluding frozen feature extraction, fitting, disk
 I/O and calibration. It is not a timing of the per-cell selected winners.
 
+## Studies answering the reviews
+
+`experiments/rebuttal_factorial.py` fixes one corrector per benchmark and crosses
+score, calibration and tightening, and also compares the rules at GUARD's own
+intervention rate. `experiments/rebuttal_budget.py` varies the total number of
+deployment labels. The 84 BindingDB cluster cells of that grid are absent because
+their dumps are not in the artifact set. `experiments/rebuttal_shift.py` covers
+mixed availability and adapters reused at another condition; results across
+conditions are empirical and carry no guarantee. `experiments/rebuttal_crc_ltt.py`
+summarizes the two calibrators across budget settings.
+
+`experiments/rebuttal_audit.py` checks the inputs of all seven benchmarks directly:
+probability ranges, disjoint data roles, retrieval against shuffled pool labels,
+and richer-view accuracy on paired and shuffled pool rows. It also re-creates the
+old IEMOCAP pairing, so the check is shown to detect that error.
+
+Outputs are in `results/rebuttal/`. `scripts/tables/rebuttal_rows.py --check`
+requires every generated row to appear verbatim in the manuscript.
+
 ## HME comparator
 
 HME is included as experimental context, not as a like-for-like GUARD baseline.

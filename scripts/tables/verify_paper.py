@@ -364,30 +364,9 @@ def check(tex):
         cmp("T2 DrugBAN apply hi", 100 * max(d["apply"] for d in db),
             ar[1] if len(ar) > 1 else None, 0)
 
-    # Table 3, the rule comparison
+    # Table 3 now holds nine columns on one fixed corrector. Its rows come from
+    # results/rebuttal/factorial_*.jsonl and rebuttal_rows.py --check verifies them.
     gc = gate_cells()
-    rows3 = table_body(tex, "tab:gates")
-    # column 4 is the untightened ablation, so GUARD moved to column 5
-    RULES = [("Blanket", "blanket", 1), ("Conf.\\ $+$ CRC", "CRC-confidence", 2),
-             ("Learned $+$ LTT", "LTT-learned", 3),
-             ("GUARD w/o tighten", "GUARD-untightened", 4), ("GUARD", "GUARD", 5)]
-    for name in ("CMU-MOSEI", "IEMOCAP", "OPPORTUNITY", "AVE", "NinaPro DB5",
-                 "PTB-XL", "DrugBAN"):
-        ln = next((l for l in rows3 if l.split("&")[0].strip() == name), None)
-        if ln is None or name not in gc:
-            fails.append(f"T3 {name}: khong tim thay dong hoac cell")
-            continue
-        for _, rule, ci in RULES:
-            rm = rule_means(gc[name], rule)
-            if rm is None:
-                fails.append(f"T3 {name} {rule}: cell khong co luat nay")
-                continue
-            v = col2(ln, ci)
-            if len(v) < 2:
-                fails.append(f"T3 {name} {rule}: cot thieu so")
-                continue
-            cmp(f"T3 {name} {rule} gain", rm[0], v[0])
-            cmp(f"T3 {name} {rule} harm", rm[1], v[1])
 
     # Table 4, the same certificate over two correctors
     pv = {}

@@ -15,6 +15,7 @@ def main():
         [sys.executable, root/'scripts/tables/verify_review_additions.py', tex,
          root/'results/review_20260917'],
         [sys.executable, root/'scripts/tables/verify_hme_table.py', tex],
+        [sys.executable, root/'scripts/tables/rebuttal_rows.py', '--check', tex],
     ]
     for command in commands:
         print('+', ' '.join(map(str, command)), flush=True)

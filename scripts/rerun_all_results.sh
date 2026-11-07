@@ -42,6 +42,15 @@ OUT=results PY="$PY" bash scripts/run_drugban_all.sh
 run review_conditional experiments/review_conditional.py
 run review_probe_mosei experiments/review_probe_extension.py mosei
 run review_probe_cluster experiments/review_probe_extension.py cluster
+P=${GUARD_PROCS:-8}
+run rebuttal_factorial experiments/rebuttal_factorial.py mosei iemocap opportunity ave ninapro ptbxl drugban --procs "$P"
+run rebuttal_action experiments/rebuttal_iemocap_tables.py action "$P"
+run rebuttal_probe experiments/rebuttal_iemocap_tables.py probe "$P"
+run rebuttal_budget experiments/rebuttal_budget.py --procs "$P"
+run rebuttal_shift experiments/rebuttal_shift.py --procs "$P"
+run rebuttal_audit experiments/rebuttal_audit.py
+run rebuttal_crc_ltt experiments/rebuttal_crc_ltt.py
+
 if [ "${RUN_TIMINGS:-0}" = 1 ]; then
   for case in AVE PTB-XL IEMOCAP NinaPro; do
     run "review_efficiency_${case//-/_}" experiments/review_efficiency.py "$case"
